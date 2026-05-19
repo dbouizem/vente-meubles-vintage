@@ -1,5 +1,6 @@
 const connect  = require('../sql/connexion');
 const bcrypt = require('bcrypt');
+const { createAdminToken } = require('../middleware/auth.middleware');
 
 const SALT_ROUNDS = 10;
 
@@ -98,7 +99,15 @@ const checkLogin = ((req, res, next) => {
     }
 
 		if (results.length > 0 && await bcrypt.compare(password, results[0].mdp)) {
-      return res.status(200).send({message: "Connexion réussie"});
+      const user = results[0];
+      const isAdmin = user.role === 'admin';
+      const token = isAdmin ? createAdminToken(user) : null;
+
+      return res.status(200).send({
+        message: "Connexion réussie",
+        isAdmin,
+        token,
+      });
 		}
 
     res.status(401).send({message: "Email ou mot de passe incorrect"});

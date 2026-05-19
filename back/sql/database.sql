@@ -14,9 +14,23 @@ CREATE TABLE IF NOT EXISTS test_users (
   prenom VARCHAR(100) NOT NULL,
   email VARCHAR(255) NOT NULL,
   mdp VARCHAR(255) NOT NULL,
+  role VARCHAR(20) NOT NULL DEFAULT 'user',
   PRIMARY KEY (id),
   UNIQUE KEY unique_email (email)
 );
+
+ALTER TABLE test_users
+  ADD COLUMN IF NOT EXISTS role VARCHAR(20) NOT NULL DEFAULT 'user';
+
+INSERT INTO test_users (nom, prenom, email, mdp, role)
+VALUES (
+  'Admin',
+  'Vintage',
+  'admin@example.com',
+  '$2b$10$XCWp1nY//wH5WZxkVy7Jlu1p6UZr3PM.C3nwftcBOZLoPFWPxF8SO',
+  'admin'
+)
+ON DUPLICATE KEY UPDATE mdp = VALUES(mdp), role = 'admin';
 
 CREATE TABLE IF NOT EXISTS testmeubles (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,

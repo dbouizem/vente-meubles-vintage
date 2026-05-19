@@ -29,6 +29,12 @@ function Login() {
       });
       let resJson = await res.json();
       if (res.status === 200) {
+        if (resJson.token) {
+          localStorage.setItem("adminToken", resJson.token);
+        } else {
+          localStorage.removeItem("adminToken");
+        }
+
         alert(resJson.message) // message de réussite envoyé par le back, affiché en alerte
         window.location.href = "/accueil" // Après ajout dans la base, l'utilisateur est renvoyé sur la page login
       } else {

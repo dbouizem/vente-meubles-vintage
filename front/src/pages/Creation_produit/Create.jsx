@@ -24,6 +24,7 @@ function Create() {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
                 },
                 body: JSON.stringify({
                     titre: titre,

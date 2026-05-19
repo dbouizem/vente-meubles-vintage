@@ -4,10 +4,10 @@ function deleteMeuble(id){
     const url = `http://localhost:${port}/admin/${id}`
 
     fetch(url, {
-        method: 'POST'
-        // headers: {
-        //     'Content-Type': 'application/json', 
-        //   }
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        }
       })
         .then(response => {
             console.log(response)

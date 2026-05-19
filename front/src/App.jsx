@@ -1,4 +1,4 @@
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Navigate, Routes, Route} from "react-router-dom";
 import Login from "./pages/Login/Login";
 import Accueil from "./pages/Accueil/Accueil";
 import Admin from "./pages/Admin/Admin";
@@ -19,6 +19,10 @@ function App() {
   
   const [panier, setPanier] = useState([]);
 
+  const ProtectedAdminRoute = ({ children }) => {
+    return localStorage.getItem("adminToken") ? children : <Navigate to="/" replace />;
+  };
+
   return (
     <panierContext.Provider value={{panier, setPanier}}>
       <reductionContext.Provider value = {10}>
@@ -26,12 +30,12 @@ function App() {
     <Routes>
       <Route path="/" element={<Login/>}/> 
       <Route path="/accueil" element={<Accueil/>}/>
-      <Route path="/admin" element={<Admin/>}/>
+      <Route path="/admin" element={<ProtectedAdminRoute><Admin/></ProtectedAdminRoute>}/>
       <Route path="/produit/:id" element={<Produit/>}/>
       <Route path="/panier/" element={<Panier/>}/>
       <Route path="/signup" element={<Signup/>}/>
-      <Route path="/create" element={<Create/>}/>
-      <Route path="/modif/:id" element={<ModifAdmin/>}/>
+      <Route path="/create" element={<ProtectedAdminRoute><Create/></ProtectedAdminRoute>}/>
+      <Route path="/modif/:id" element={<ProtectedAdminRoute><ModifAdmin/></ProtectedAdminRoute>}/>
     </Routes>
     </BrowserRouter>    
       </reductionContext.Provider>

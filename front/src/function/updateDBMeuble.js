@@ -25,6 +25,7 @@ function updateMeubleInfo(id){
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json', 
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
           },
           body: JSON.stringify(data)
         })
