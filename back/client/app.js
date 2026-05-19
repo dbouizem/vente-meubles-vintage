@@ -21,7 +21,6 @@ function test(){
       })
         .then(response => response.json()) // Traitement de la réponse comme JSON
         .then(data => {
-          console.log("data",data)
           alert(data.message)
           if (data.message== "Utilisateur ok LOGIN") {
             const redirectionUrl = "/inscription?nom=" + encodeURIComponent(nom) + "&prenom=" + encodeURIComponent(prenom) + "&email=" + encodeURIComponent(email);
@@ -36,7 +35,6 @@ function test(){
           console.error(error);
         });
 }
-
 
 
 

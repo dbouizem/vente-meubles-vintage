@@ -1,15 +1,13 @@
 const connect  = require('../sql/connexion');
 
-const displayObjectmeubles = ((req,res,next)=>{
-    connect.query('SELECT id,titre,prix,description,photo FROM testmeubles', (error, results) => {
-      if (error) {
-        console.error("Erreur de récupération du meuble", error);
-      } else {
-        console.log(results)
-        res.status(200).send(results);
-        // Effectuer d'autres actions si nécessaire
-      }
-      });
-})
+const displayObjectmeubles = async (req,res,next)=>{
+  try {
+    const [results] = await connect.query('SELECT id,titre,prix,description,photo FROM testmeubles');
+    res.status(200).send(results);
+  } catch (error) {
+    console.error("Erreur de récupération du meuble", error);
+    res.status(500).send({ message: "Erreur lors de la recuperation des meubles" });
+  }
+}
 
 module.exports = {displayObjectmeubles}

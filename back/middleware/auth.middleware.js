@@ -1,55 +1,25 @@
-const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
-const AUTH_SECRET = process.env.AUTH_SECRET || 'dev-secret-change-me';
-const TOKEN_DURATION_MS = 2 * 60 * 60 * 1000;
+const getAuthSecret = () => {
+  if (process.env.AUTH_SECRET) {
+    return process.env.AUTH_SECRET;
+  }
 
-const signPayload = (payload) => {
-  const encodedPayload = Buffer.from(JSON.stringify(payload)).toString('base64url');
-  const signature = crypto
-    .createHmac('sha256', AUTH_SECRET)
-    .update(encodedPayload)
-    .digest('base64url');
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('AUTH_SECRET est obligatoire en production');
+  }
 
-  return `${encodedPayload}.${signature}`;
+  return 'dev-secret-change-me';
 };
 
-const verifyToken = (token) => {
-  const [encodedPayload, signature] = token.split('.');
+const AUTH_SECRET = getAuthSecret();
+const TOKEN_EXPIRES_IN = process.env.AUTH_TOKEN_EXPIRES_IN || '2h';
 
-  if (!encodedPayload || !signature) {
-    return null;
-  }
-
-  const expectedSignature = crypto
-    .createHmac('sha256', AUTH_SECRET)
-    .update(encodedPayload)
-    .digest('base64url');
-
-  const signatureBuffer = Buffer.from(signature);
-  const expectedSignatureBuffer = Buffer.from(expectedSignature);
-
-  if (
-    signatureBuffer.length !== expectedSignatureBuffer.length ||
-    !crypto.timingSafeEqual(signatureBuffer, expectedSignatureBuffer)
-  ) {
-    return null;
-  }
-
-  const payload = JSON.parse(Buffer.from(encodedPayload, 'base64url').toString('utf8'));
-
-  if (payload.exp && Date.now() > payload.exp) {
-    return null;
-  }
-
-  return payload;
-};
-
-const createAdminToken = (user) => signPayload({
+const createAdminToken = (user) => jwt.sign({
   id: user.id,
   email: user.email,
   role: user.role,
-  exp: Date.now() + TOKEN_DURATION_MS,
-});
+}, AUTH_SECRET, { expiresIn: TOKEN_EXPIRES_IN });
 
 const requireAdmin = (req, res, next) => {
   const authorization = req.headers.authorization || '';
@@ -59,7 +29,13 @@ const requireAdmin = (req, res, next) => {
     return res.status(401).send({ message: 'Authentification requise' });
   }
 
-  const payload = verifyToken(token);
+  let payload;
+
+  try {
+    payload = jwt.verify(token, AUTH_SECRET);
+  } catch (error) {
+    return res.status(403).send({ message: 'Acces admin refuse' });
+  }
 
   if (!payload || payload.role !== 'admin') {
     return res.status(403).send({ message: 'Acces admin refuse' });
