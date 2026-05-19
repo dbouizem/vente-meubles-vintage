@@ -1,15 +1,25 @@
 const connect  = require('../sql/connexion');
 
+const parseId = (id) => {
+  const parsedId = Number(id);
+  return Number.isInteger(parsedId) && parsedId > 0 ? parsedId : null;
+};
+
 const createObjectDetailProduct = ((req,res,next)=>{
   //  Selectionner le meuble avec le même ID de la selection du meuble
-    const id = req.params.id
+    const id = parseId(req.params.id)
 
-    const query = "SELECT DISTINCT * FROM testmeubles WHERE id ="+id
+    if (!id) {
+      return res.status(400).send({ message: "Id invalide" });
+    }
 
-    connect.query(query,{id} ,(error, results) => {
+    const query = "SELECT DISTINCT * FROM testmeubles WHERE id = ?"
+
+    connect.query(query, [id] ,(error, results) => {
       console.log('controlleur ?')
       if (error) {
         console.error("Erreur lors de l'insertion de l'utilisateur", error);
+        res.status(500).send({ message: "Erreur lors de la recuperation du meuble" });
       } else {
         console.log(results)
         res.status(200).send(results);

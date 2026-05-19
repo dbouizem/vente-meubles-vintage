@@ -1,14 +1,24 @@
-const mysql = require('mysql');
 const connect  = require('../sql/connexion');
+
+const parseId = (id) => {
+  const parsedId = Number(id);
+  return Number.isInteger(parsedId) && parsedId > 0 ? parsedId : null;
+};
 
 const deleteObject = ((req,res,next)=>{
 
-const id = req.params.id;
-const query = "DELETE FROM testmeubles WHERE ID ="+id
+const id = parseId(req.params.id);
 
-connect.query(query, {id}, (error, results) => {
+if (!id) {
+  return res.status(400).send({ message: "Id invalide" });
+}
+
+const query = "DELETE FROM testmeubles WHERE id = ?"
+
+connect.query(query, [id], (error, results) => {
     if (error) {
       console.error("Erreur lors de la supression du meuble", error);
+      res.status(500).send({ message: "Erreur lors de la supression du meuble" });
     } else {
       console.log("Suppression du meuble avec succès");
       res.status(200).send({message: "Suppression du meuble avec succès"});
@@ -20,8 +30,12 @@ connect.query(query, {id}, (error, results) => {
 
 
 const updateObject = (req, res, next) => {
-  const id = req.params.id;
+  const id = parseId(req.params.id);
   const { titre, prix, description, photo } = req.body;
+
+  if (!id) {
+    return res.status(400).send({ message: "Id invalide" });
+  }
 
   const query = "UPDATE testmeubles SET titre = ?, prix = ?, description = ?, photo = ? WHERE id = ?";
   const values = [titre, prix, description, photo, id];

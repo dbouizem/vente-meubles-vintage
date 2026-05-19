@@ -1,42 +1,49 @@
-const mysql = require('mysql');
 const connect  = require('../sql/connexion');
+const bcrypt = require('bcrypt');
 
-const createObject = ((req,res,next)=>{
-     const nom = req.body.name
-     const prenom = req.body.firstname
-     const email = req.body.email
-     const mdp = req.body.password
-     const values = [
+const SALT_ROUNDS = 10;
+
+const createObject = (async (req,res,next)=>{
+  try {
+    const nom = req.body.name
+    const prenom = req.body.firstname
+    const email = req.body.email
+    const password = req.body.password
+
+    if (!nom || !prenom || !email || !password) {
+      return res.status(400).send({ message: "Tous les champs sont obligatoires" });
+    }
+
+    const mdp = await bcrypt.hash(password, SALT_ROUNDS);
+    const values = [
       nom,
       prenom,
       email,
       mdp
-     ]
+    ]
 
-    
-     const query = "INSERT INTO test_users (nom, prenom, email, mdp) VALUES (?,?,?,?)"
-     connect.query(query, values, (error, results) => {
+    const query = "INSERT INTO test_users (nom, prenom, email, mdp) VALUES (?,?,?,?)"
+    connect.query(query, values, (error, results) => {
       if (error) {
         console.error("Erreur lors de l'insertion de l'utilisateur", error);
-      } else {
-        console.log("Utilisateur inséré avec succès");
-        res.status(200).send({message: "Utilisateur inséré avec succès"});
-        // Effectuer d'autres actions si nécessaire
+        return res.status(500).send({message: "Erreur lors de l'insertion de l'utilisateur"});
       }
-  
-      // Fermer la connexion à la base de données
-      // connect.end();
+
+      console.log("Utilisateur inséré avec succès");
+      res.status(200).send({message: "Utilisateur inséré avec succès"});
     });
+  } catch (error) {
+    console.error("Erreur lors du hash du mot de passe", error);
+    res.status(500).send({message: "Erreur lors de la création de l'utilisateur"});
+  }
 })
 
 const checkUserExists =((req,res, next) =>{
   const email = req.body.email
   console.log(email)
-  // const exists = "EXISTS(SELECT 1 FROM test_users WHERE email = '" + email + "')"
-  // const query = "SELECT " + exists;
 
-  const query2 = "SELECT EXISTS(SELECT 1 FROM test_users WHERE email = '" + email + "') as emailCheck "
-  connect.query(query2, (error, result)=> {
+  const query2 = "SELECT EXISTS(SELECT 1 FROM test_users WHERE email = ?) as emailCheck "
+  connect.query(query2, [email], (error, result)=> {
     console.log("result",result)
     // console.log("connectquery ?", result[0][exists])
     if (error) {
@@ -80,32 +87,22 @@ const checkLogin = ((req, res, next) => {
   let email = req.body.email;
 	let password = req.body.password;
 
-	if (email && password) {
-		// Execute SQL query that'll select the account from the database based on the specified email and password
-		connect.query('SELECT * FROM test_users WHERE email = ? AND mdp = ?', [email, password], function(error, results, fields) {
-			// If there is an issue with the query, output the error
-			if (error) throw error;
-			// If the account exists
-			if (results.length > 0) {
-				// Authenticate the user
-
-				// req.session.loggedin = true;
-				// req.session.email = email;
-
-				// Redirect to home page
-
-				// res.redirect('/home');
-        res.status(200).send({message:`Log in OK : ${email}, ${password}`});
-			} else {
-        res.status(401).send({message:`Incorrect email and/or Password!`})
-				// res.send('Incorrect email and/or Password!');
-			}			
-			res.end();
-		});
-	} else {
-		res.send('Please enter email and Password!');
-		res.end();
+	if (!email || !password) {
+		return res.status(400).send({message: 'Email et mot de passe obligatoires'});
 	}
+
+	connect.query('SELECT * FROM test_users WHERE email = ?', [email], async function(error, results, fields) {
+		if (error) {
+      console.error("Erreur lors de la connexion", error);
+      return res.status(500).send({message: "Erreur lors de la connexion"});
+    }
+
+		if (results.length > 0 && await bcrypt.compare(password, results[0].mdp)) {
+      return res.status(200).send({message: "Connexion réussie"});
+		}
+
+    res.status(401).send({message: "Email ou mot de passe incorrect"});
+	});
 })
 
 module.exports = {createObject, checkUserExists, checkedUser, checkLogin}
