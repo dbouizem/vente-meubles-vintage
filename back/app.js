@@ -31,7 +31,6 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 app.use("/images", express.static("./Assets/img_meubles/"))
-app.use("/inscription", express.static("./client/inscription.html")); 
 
 app.use(express.json())
 

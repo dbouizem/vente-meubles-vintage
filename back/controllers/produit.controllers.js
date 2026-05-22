@@ -8,7 +8,6 @@ const parseId = (id) => {
 };
 
 const createObjectDetailProduct = async (req,res,next)=>{
-  //  Selectionner le meuble avec le même ID de la selection du meuble
     const id = parseId(req.params.id)
 
     if (!id) {
@@ -32,7 +31,11 @@ const createObjectDetailProduct = async (req,res,next)=>{
 }
 
 const createNewProduct = async (req,res,next)=>{
-  const { data, error: validationError } = validateBody(productSchema, req.body);
+  const body = {
+    ...req.body,
+    photo: req.file ? req.file.filename : req.body.photo,
+  };
+  const { data, error: validationError } = validateBody(productSchema, body);
 
   if (validationError) {
     return res.status(400).send({ message: validationError });

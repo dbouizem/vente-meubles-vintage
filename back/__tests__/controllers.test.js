@@ -127,6 +127,19 @@ describe('Backend controllers and middleware', () => {
       expect(res.send).toHaveBeenCalledWith({ message: 'Prix invalide' });
       expect(db.query).not.toHaveBeenCalled();
     });
+
+    it('uses uploaded image filename when creating a product', async () => {
+      db.query.mockResolvedValueOnce([{ insertId: 10 }]);
+      const res = createResponse();
+
+      await produitController.createNewProduct({
+        body: { titre: 'Table', prix: 100, description: 'Bois' },
+        file: { filename: 'uploaded-table.jpg' },
+      }, res);
+
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(db.query.mock.calls[0][1]).toEqual(['Table', 100, 'Bois', 'uploaded-table.jpg']);
+    });
   });
 
   describe('users controller', () => {

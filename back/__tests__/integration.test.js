@@ -1,5 +1,8 @@
 process.env.NODE_ENV = 'test';
 
+const fs = require('fs');
+const path = require('path');
+
 const runIntegrationTests = process.env.RUN_INTEGRATION_TESTS === 'true';
 const describeIntegration = runIntegrationTests ? describe : describe.skip;
 
@@ -106,29 +109,35 @@ describeIntegration('Backend integration with MariaDB/MySQL', () => {
   it('creates, reads, updates, and deletes a product through the HTTP API', async () => {
     const request = require('supertest');
 
+    const uploadFixturePath = path.join(__dirname, 'upload-fixture.png');
+    fs.writeFileSync(uploadFixturePath, Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+      'base64'
+    ));
+
     const createResponse = await request(app)
       .post('/meubles/create')
       .set('Authorization', `Bearer ${adminToken}`)
-      .send({
-        titre: 'Table integration',
-        prix: 180,
-        description: 'Produit cree par test integration',
-        photo: 'table-integration.jpg',
-      });
+      .field('titre', 'Table integration')
+      .field('prix', '180')
+      .field('description', 'Produit cree par test integration')
+      .attach('photo', uploadFixturePath);
 
     expect(createResponse.status).toBe(201);
     expect(createResponse.body.id).toEqual(expect.any(Number));
 
     const productId = createResponse.body.id;
+    let uploadedPhoto;
 
     const detailResponse = await request(app).get(`/meubles/${productId}`);
     expect(detailResponse.status).toBe(200);
+    uploadedPhoto = detailResponse.body[0].photo;
     expect(detailResponse.body[0]).toMatchObject({
       id: productId,
       titre: 'Table integration',
       description: 'Produit cree par test integration',
-      photo: 'table-integration.jpg',
     });
+    expect(uploadedPhoto).toMatch(/upload-fixture\.png$/);
 
     const updateResponse = await request(app)
       .put(`/admin/${productId}`)
@@ -150,5 +159,8 @@ describeIntegration('Backend integration with MariaDB/MySQL', () => {
 
     const deletedDetailResponse = await request(app).get(`/meubles/${productId}`);
     expect(deletedDetailResponse.status).toBe(404);
+
+    fs.rmSync(uploadFixturePath, { force: true });
+    fs.rmSync(path.resolve(__dirname, '..', 'Assets', 'img_meubles', uploadedPhoto), { force: true });
   });
 });
