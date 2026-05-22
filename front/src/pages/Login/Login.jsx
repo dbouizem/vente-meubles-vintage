@@ -1,6 +1,5 @@
 
 import {useState} from 'react';
-import Bouton from '../../composants/Bouton/Bouton';
 import { Link, useNavigate } from 'react-router-dom';
 import COVER_IMAGE from "./imageLogin.jpg";
 import { apiUrl } from '../../config/api';
@@ -11,9 +10,13 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  let loginUser = async (e) => {
+  const loginUser = async (e) => {
     e.preventDefault();
+    setMessage('');
+    setIsSubmitting(true);
     try {
       const url = apiUrl('/login')
       let res = await fetch(url, {
@@ -34,13 +37,14 @@ function Login() {
           localStorage.removeItem("adminToken");
         }
 
-        alert(resJson.message)
         navigate("/accueil")
       } else {
-        alert(resJson.message || "Login Erreur")
+        setMessage(resJson.message || "Connexion impossible. Vérifiez vos informations.");
       }
     } catch (err) {
-      alert("Erreur lors de la connexion");
+      setMessage("Le serveur ne répond pas. Réessayez dans quelques instants.");
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -48,67 +52,79 @@ function Login() {
 
   return (
 
-    <div className= "w-full min-h-screen flex flex-col lg:flex-row bg-[#f5f5f5]">
-      <div className= 'relative w-full lg:w-1/2 h-64 lg:h-screen flex flex-col' >
-        <div className= 'absolute top-[18%] left-[8%] right-[8%] flex flex-col '>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl text-white font-bold my-4 drop-shadow-lg">Transformez votre intérieur avec nos meubles vintage uniques,</h1>
-          <p className="text-base sm:text-xl text-white font-normal drop-shadow-lg">Commencez gratuitement et bénéficiez des offres attractives de la communauté. </p>
+    <div className= "flex min-h-screen w-full flex-col bg-[#f5f5f5] font-ptMono lg:flex-row">
+      <div className= 'relative flex h-72 w-full flex-col lg:h-screen lg:w-1/2' >
+        <div className= 'absolute left-[6%] right-[6%] top-[12%] z-10 bg-white/85 px-4 py-5 text-center text-dark-brown shadow-sm sm:left-[8%] sm:right-[8%] lg:top-[14%]'>
+          <h1 className="text-lg font-bold leading-snug sm:text-2xl">Transformez votre intérieur avec nos meubles vintage uniques</h1>
+          <p className="mt-4 text-sm leading-relaxed sm:text-base">Commencez gratuitement et bénéficiez des offres attractives de la communauté.</p>
         </div>
-        <img src={COVER_IMAGE} className="w-full h-full object-cover " alt="Salon vintage"/>
+        <img src={COVER_IMAGE} className="h-full w-full object-cover" alt="Salon vintage"/>
       </div>
       
-      <div className="w-full lg:w-1/2 min-h-screen lg:h-screen bg-[#f5f5f5] flex flex-col px-6 py-10 sm:p-12 lg:p-20 space-y-10 lg:space-y-20 ">
-        <h1 className="text-x1 text-left text-[#060606] font-semibold ">Vintage Logo</h1>
+      <div className="flex min-h-screen w-full flex-col bg-[#f5f5f5] px-6 py-10 sm:p-12 lg:h-screen lg:w-1/2 lg:px-20 lg:py-16">
+        <p className="font-aurore text-5xl text-dark-brown">Vintage</p>
 
-        <div className='w-full flex flex-col max-w-[550px]'>
+        <div className='mx-auto flex w-full max-w-[560px] flex-1 flex-col justify-center'>
 
-          <div className='flex flex-col mb-10 '>
-            <h3 className="text-3xl text-left font-semibold mb-2">Login</h3>
-            <p className="text-base text-left mb- ">Veuillez entrer vos informations.</p>
+          <div className='mb-10 flex flex-col text-left'>
+            <h1 className="mb-2 text-3xl font-semibold text-dark-brown sm:text-4xl">Bienvenue,</h1>
+            <p className="text-sm text-gray-700">Veuillez entrer vos informations.</p>
           </div>
 
           <div className='w-full flex flex-col'>
             <form onSubmit={loginUser}>
+              {message && (
+                <p role="alert" className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-left text-sm text-red-700">{message}</p>
+              )}
+              <label className="sr-only" htmlFor="login-email">Email</label>
               <input
+                id="login-email"
                 type="email"
                 placeholder='Email'
                 value={email}
-                className='w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none' 
+                required
+                autoComplete="email"
+                className='my-2 w-full border-b border-black bg-transparent py-3 text-black outline-none placeholder:text-gray-500 focus:outline-none' 
                 onChange={(e) => setEmail(e.target.value)}
                 />
 
+              <label className="sr-only" htmlFor="login-password">Mot de passe</label>
               <input
+                id="login-password"
                 type="password"
-                placeholder='Password'
+                placeholder='Mot de passe'
                 value={password}
-                className='w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none' 
+                required
+                autoComplete="current-password"
+                className='my-2 w-full border-b border-black bg-transparent py-3 text-black outline-none placeholder:text-gray-500 focus:outline-none' 
                 onChange={(e) => setPassword(e.target.value)}
                 />
 
-              <div className='w-full flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0'>
+              <div className='mt-2 flex w-full flex-col gap-3 text-xs sm:flex-row sm:items-center sm:gap-0'>
                 <div className='w-full flex items-center'>
                   <input
+                  id="remember-me"
                   type='checkbox'
                   className='w-4 h-4 mr-2 '/>
-                  <p className='text-sm'>Remember me</p>
+                  <label htmlFor="remember-me">Remember me</label>
                 </div>
-                <p className='text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2'>Forgot Password?</p>
+                <button type="button" className='whitespace-nowrap underline underline-offset-2'>Forgot Password?</button>
               </div>
 
-              <div className='w-full flex flex-col my-8'>
-                <div className='w-full text-[#ffffff] my-2 font-semibold bg-[#060606] rounded-md p-4 text-center flex items-center justify-center'>
-                  <Bouton texteBouton='Log in'/> 
-                </div>
+              <div className='my-8 flex w-full flex-col'>
+                <button type="submit" disabled={isSubmitting} className='my-2 w-full rounded-md bg-dark-brown p-4 text-center font-semibold text-white transition hover:bg-[#2d1500] disabled:opacity-60'>
+                  {isSubmitting ? 'Connexion...' : 'Log in'}
+                </button>
               </div>
             </form>  
 
-            <div className='w-full text-[#060606] my-2 font-semibold bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center'>
-              <Link to="/signup" className='text-black'><Bouton texteBouton='Sign up' /></Link>
-            </div>
+            <Link to="/signup" className='my-2 block w-full rounded-md border border-black bg-white p-4 text-center font-semibold text-[#060606] transition hover:bg-beige'>
+              Sign up
+            </Link>
           </div>
         </div>
-        <div className ="w-full items-center space-y-20">
-          <p className="text-sm text-center font-normal text-[#060606]">Vous n&#39;avez pas encore de compte? <Link to="signup"><span className='font-semibold underline underline-offset-2 curson-pointer'> Sign up</span></Link></p>
+        <div className ="w-full">
+          <p className="text-center text-xs font-normal text-[#060606]">Vous n&#39;avez pas encore de compte? <Link to="signup"><span className='font-semibold underline underline-offset-2 cursor-pointer'>Sign up</span></Link></p>
         </div>
       </div>
     </div>

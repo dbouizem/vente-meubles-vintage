@@ -1,13 +1,15 @@
 import { useContext, useState} from 'react';
+import { Link } from 'react-router-dom';
 import { panierContext, reductionContext } from '../../contexts';
 import { Modal } from '../../composants/Modal/Modal';
+import fallbackImage from '../../assets/img_vignette/img_non_dispo.jpg';
 
 function Panier() {
 
   const {panier, setPanier} = useContext(panierContext);
 
   const calculateSubtotal = (panier) => {
-    const subtotal = panier.reduce((acc, item) => acc + parseFloat(item.prix), 0);
+    const subtotal = panier.reduce((acc, item) => acc + (Number.parseFloat(item.prix) || 0), 0);
     return subtotal;
   };
 
@@ -57,23 +59,29 @@ function Panier() {
 
 
   return (
-    <>
- 
-
-<section>
+<section className="min-h-[70vh]">
   <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
     <div className="mx-auto max-w-3xl">
       <header className="text-center">
-        <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">Panier</h1>
+        <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">Votre panier</h1>
+        <p className="mt-2 text-sm text-gray-600">Réservez vos pièces favorites avant de venir les retirer en boutique.</p>
       </header>
 
       <div className="mt-8">
+      {panier.length === 0 && (
+        <div className="rounded-lg bg-white px-6 py-10 text-center shadow-sm">
+          <p className="text-lg font-semibold text-dark-brown">Votre panier est vide.</p>
+          <p className="mt-2 text-sm text-gray-600">Explorez la collection pour ajouter un meuble à votre réservation.</p>
+          <Link to="/accueil" className="mt-5 inline-block rounded-md bg-dark-brown px-4 py-2 text-white">Voir les produits</Link>
+        </div>
+      )}
+
       {panier.map((item, index) => (
         <div key={`${item.id}-${index}`} className="mt-8 border-t border-gray-400 pt-8">
         <ul className="space-y-4">
           <li className="flex flex-col sm:flex-row sm:items-center gap-4">
             <img
-              src={item.photo}
+              src={item.photo || fallbackImage}
               className="h-16 w-16 rounded object-cover"
               alt={item.nom}
             />
@@ -125,6 +133,7 @@ function Panier() {
           </div>
         )}
 
+        {panier.length > 0 && (
         <div className="mt-8 flex justify-end border-t border-gray-400 pt-8">
           <div className="w-full max-w-lg space-y-4">
             <dl className="space-y-0.5 text-sm text-gray-700">
@@ -165,11 +174,11 @@ function Panier() {
             </div>
           </div>
         </div>
+        )}
       </div>
     </div>
   </div>
 </section>
-  </>
   )
 }
 

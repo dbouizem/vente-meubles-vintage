@@ -8,8 +8,8 @@ function Icon_admin({admin}) {
 
     return (
         <span>
-                <Link to="/admin" className='text-dark-brown'>
-                    <SupervisorAccountIcon className="text-[44px] sm:text-[70px]"/>
+                <Link to="/admin" className='text-dark-brown' aria-label="Accéder à l'administration">
+                    <SupervisorAccountIcon className="text-[40px] sm:text-[54px]"/>
                 </Link>
         </span>
     )

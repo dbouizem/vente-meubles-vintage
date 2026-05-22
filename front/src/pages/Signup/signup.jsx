@@ -9,9 +9,13 @@ function Signup() {
   const [firstname, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
-  let addUser = async (e) => {
+  const addUser = async (e) => {
     e.preventDefault();
+    setMessage('');
+    setIsSubmitting(true);
     try {
       const url = apiUrl('/signup')
       let res = await fetch(url, {
@@ -28,79 +32,100 @@ function Signup() {
       });
       let resJson = await res.json();
       if (res.status === 200) {
-        alert(resJson.message)
         navigate("/")
       } else {
-        alert(resJson.message || "Utilisateur non créé")
+        setMessage(resJson.message || "Impossible de créer le compte.");
       }
     } catch (err) {
-      alert("Erreur lors de la création du compte");
+      setMessage("Le serveur ne répond pas. Réessayez dans quelques instants.");
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row items-start bg-[#f5f5f5]">
-      <div className="w-full lg:w-1/2 h-auto lg:h-screen bg-[#f5f5f5] flex flex-col p-10 lg:p-20 space-y-10 lg:space-y-20 items-center justify-center">
-        <h1 className="text-xl text-left text-[#060606] font-semibold">Welcome to Vintage</h1>
+    <div className="flex min-h-screen flex-col bg-[#f5f5f5] font-ptMono lg:flex-row">
+      <div className="flex min-h-screen w-full flex-col bg-[#f5f5f5] px-6 py-10 sm:p-12 lg:h-screen lg:w-1/2 lg:p-20">
+        <p className="text-center font-aurore text-4xl text-dark-brown sm:text-5xl">Welcome to Vintage!</p>
 
-        <div className='w-full max-w-[550px]'>
-          <div className='flex flex-col space-y-4 mb-10'>
-            <h3 className="text-3xl lg:text-4xl text-left font-semibold mb-2">Sign Up</h3>
-            <p className="text-base lg:text-xl text-left">Veuillez entrer vos informations.</p>
+        <div className='mt-10 flex w-full max-w-[550px] flex-1 flex-col justify-center self-center lg:mt-0'>
+          <div className='mb-10 flex flex-col space-y-4 text-left'>
+            <h1 className="text-3xl font-semibold text-dark-brown lg:text-4xl">Inscription</h1>
+            <p className="text-sm text-gray-700">Veuillez entrer vos informations.</p>
           </div>
     
           <div className='w-full flex flex-col space-y-4'>
             <form onSubmit={addUser}>
+              {message && (
+                <p role="alert" className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-left text-sm text-red-700">{message}</p>
+              )}
+              <label className="sr-only" htmlFor="signup-name">Nom</label>
               <input
+                id="signup-name"
                 type="text"
                 value={name}
                 placeholder='Nom'
-                className='w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none'
+                required
+                autoComplete="family-name"
+                className='my-2 w-full border-b border-black bg-transparent py-3 text-black outline-none placeholder:text-gray-500 focus:outline-none'
                 onChange={(e) => setName(e.target.value)}
               />
 
+              <label className="sr-only" htmlFor="signup-firstname">Prénom</label>
               <input
+                id="signup-firstname"
                 type="text"
                 value={firstname}
                 placeholder='Prénom'
-                className='w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none'
+                required
+                autoComplete="given-name"
+                className='my-2 w-full border-b border-black bg-transparent py-3 text-black outline-none placeholder:text-gray-500 focus:outline-none'
                 onChange={(e) => setFirstName(e.target.value)}
               />
 
+              <label className="sr-only" htmlFor="signup-email">Email</label>
               <input
+                id="signup-email"
                 type="email"
                 value={email}
                 placeholder='Email'
-                className='w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none'
+                required
+                autoComplete="email"
+                className='my-2 w-full border-b border-black bg-transparent py-3 text-black outline-none placeholder:text-gray-500 focus:outline-none'
                 onChange={(e) => setEmail(e.target.value)}
               />
 
+              <label className="sr-only" htmlFor="signup-password">Mot de passe</label>
               <input
+                id="signup-password"
                 type="password"
                 value={password}
                 placeholder='Mot de passe'
-                className='w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none'
+                required
+                minLength={6}
+                autoComplete="new-password"
+                className='my-2 w-full border-b border-black bg-transparent py-3 text-black outline-none placeholder:text-gray-500 focus:outline-none'
                 onChange={(e) => setPassword(e.target.value)}
               />
 
-              <button type="submit" className='w-full text-white my-2 font-semibold bg-[#060606] rounded-md p-4 text-center flex items-center justify-center mt-12 mb-12'>
-                Créer votre compte
+              <button type="submit" disabled={isSubmitting} className='mt-8 mb-8 flex w-full items-center justify-center rounded-md bg-dark-brown p-4 text-center font-semibold text-white transition hover:bg-[#2d1500] disabled:opacity-60'>
+                {isSubmitting ? 'Création...' : 'Créer votre compte'}
               </button>
             </form>
           </div>
 
           <div className="w-full items-center space-y-10 lg:space-y-20">
-            <p className="text-sm lg:text-base text-center font-normal text-[#060606] mt-12">Vous avez un compte? <Link to=".."><span className='font-semibold underline underline-offset-2 cursor-pointer'>Connectez-vous</span></Link></p>
+            <p className="mt-4 text-center text-xs font-normal text-[#060606]">Vous avez un compte? <Link to=".."><span className='font-semibold underline underline-offset-2 cursor-pointer'>Connectez-vous</span></Link></p>
           </div>
         </div>
       </div>
 
-      <div className="relative w-full lg:w-1/2 h-[50vh] lg:h-screen flex flex-col ">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-full lg:w-2/3">
-          <h1 className="text-4xl lg:text-5xl text-[#2F4F4F] font-bold my-4 lg:my-8">Transformez votre intérieur avec nos meubles vintage uniques,</h1>
-          <p className="text-xl text-[#2F4F4F] font-normal">Commencez gratuitement et bénéficiez des offres attractives de la communauté.</p>
+      <div className="relative flex h-[50vh] w-full flex-col lg:h-screen lg:w-1/2">
+        <div className="absolute left-[6%] right-[6%] top-[10%] z-10 bg-dark-brown/90 px-4 py-5 text-center text-white shadow-sm sm:left-[10%] sm:right-[10%]">
+          <h2 className="text-xl font-bold leading-snug sm:text-2xl">Transformez votre intérieur avec nos meubles vintage uniques</h2>
+          <p className="mt-4 text-sm leading-relaxed">Commencez gratuitement et bénéficiez des offres attractives de la communauté.</p>
         </div>
-        <img src={COVER_IMAGE} className="w-full h-full object-cover" alt="Cover Image" />
+        <img src={COVER_IMAGE} className="h-full w-full object-cover" alt="Meuble vintage avec plantes et radio" />
       </div>
     </div>
   );

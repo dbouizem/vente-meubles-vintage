@@ -15,6 +15,9 @@ function ModifTable(){
         description: '',
         photo: '',
     });
+    const [message, setMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
 
     const handleChange = (event) => {
@@ -27,18 +30,22 @@ function ModifTable(){
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setMessage('');
+        setIsSubmitting(true);
 
         try {
             await updateMeubleInfo(produitDetail.id, formData);
-            alert('meuble mis à jour');
             navigate(`/admin`);
         } catch (error) {
-            alert(error.message);
+            setMessage(error.message);
+        } finally {
+            setIsSubmitting(false);
         }
     };
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setIsLoading(true);
                 const response = await fetch(apiUrl(`/meubles/${idTab}`));
                 if (!response.ok) {
                     throw new Error('Produit introuvable');
@@ -60,6 +67,9 @@ function ModifTable(){
                 });
             } catch (error) {
                 setproduitDetail({});
+                setMessage("Impossible de charger ce produit.");
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -69,40 +79,39 @@ function ModifTable(){
 
     return(
         
-    <form onSubmit={handleSubmit} className='flex flex-col justify-around items-center min-h-[75vh] mt-3 px-3'>
-        <div className="w-full overflow-x-auto">
-        <table className='border-4 table-auto mx-auto min-w-[820px]'>
-            <thead className="text-red-600">
-                <tr>
-                    <th className='border-2 text-2xl'>Titre</th>
-                    <th className='border-2 text-2xl'>Prix</th>
-                    <th className='border-2 text-2xl'>Description</th>
-                    <th className='border-2 text-2xl'>Photo</th>
-                    <th className='border-2 text-2xl'>Actions</th>
-                </tr>
-            </thead>
-            <tbody className='border-4'>
-                <tr key={produitDetail.id} className="border-2">
-                    <td className='px-2'>
-                        <input type="text" name="titre" value={formData.titre} onChange={handleChange} />
-                    </td>
-                    <td className='border-2 px-2'>
-                        <input type="text" name="prix" value={formData.prix} onChange={handleChange}/> €
-                    </td>
-                    <td className='border-2 px-2'>
-                        <input type="text" name='description' value={formData.description} onChange={handleChange}/>
-                    </td>
-                    <td className='border-2 px-2'>
-                        <input type="text" name='photo' value={formData.photo} onChange={handleChange}/>
-                    </td>
-                    <td className='flex mx-2 my-auto'>
-                        <div className="ml-2">
-                            <button type="submit">Enregistrer modification</button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <form onSubmit={handleSubmit} className='mx-auto flex w-full max-w-2xl flex-col min-h-[75vh] mt-3 px-4 py-8'>
+        <div className="rounded-lg bg-white p-5 text-left shadow-sm sm:p-8">
+            <p className="text-sm font-semibold uppercase tracking-wide text-dark-brown/70">Administration</p>
+            <h1 className="text-2xl font-semibold text-dark-brown">Modifier le produit</h1>
+            <p className="mt-2 text-sm text-gray-600">Mettez à jour les informations affichées dans la boutique.</p>
+
+            {message && (
+                <p role="alert" className="mt-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{message}</p>
+            )}
+
+            {isLoading ? (
+                <p className="mt-6 text-sm text-gray-600">Chargement du produit...</p>
+            ) : (
+            <div className="mt-6 space-y-5">
+                <div>
+                    <label className="block text-sm font-semibold" htmlFor="edit-title">Titre</label>
+                    <input id="edit-title" className="mt-2 w-full border-b border-black bg-transparent py-2 outline-none" type="text" name="titre" value={formData.titre} onChange={handleChange} required />
+                </div>
+                <div>
+                    <label className="block text-sm font-semibold" htmlFor="edit-price">Prix</label>
+                    <input id="edit-price" className="mt-2 w-full border-b border-black bg-transparent py-2 outline-none" type="text" name="prix" value={formData.prix} onChange={handleChange} required inputMode="decimal"/>
+                </div>
+                <div>
+                    <label className="block text-sm font-semibold" htmlFor="edit-description">Description</label>
+                    <textarea id="edit-description" className="mt-2 min-h-28 w-full rounded-md border border-gray-300 bg-transparent p-3 outline-none" name='description' value={formData.description} onChange={handleChange} required/>
+                </div>
+                <div>
+                    <label className="block text-sm font-semibold" htmlFor="edit-photo">Nom du fichier photo</label>
+                    <input id="edit-photo" className="mt-2 w-full border-b border-black bg-transparent py-2 outline-none" type="text" name='photo' value={formData.photo} onChange={handleChange}/>
+                </div>
+                <button className="w-full rounded-md bg-dark-brown p-3 font-semibold text-white disabled:opacity-60" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Enregistrement...' : 'Enregistrer les modifications'}</button>
+            </div>
+            )}
         </div>
     </form>
     )  

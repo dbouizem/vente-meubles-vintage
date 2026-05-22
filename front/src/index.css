@@ -1,22 +1,27 @@
 @tailwind base;
 
 @layer base {
-  h1 {
-    @apply text-2xl;
-  }
-  h2 {
-    @apply text-xl;
-  }
-  h3 {
-    @apply text-lg;
-  }
   a {
-    @apply text-blue-600 underline;
+    @apply text-inherit no-underline;
   }
-    html {
-      font-family: PT Mono, monospace;
-    }
+  html {
+    font-family: PT Mono, monospace;
   }
+  body {
+    @apply bg-[#f8f5f2] text-[#24160e] antialiased;
+  }
+  button,
+  input,
+  textarea {
+    font: inherit;
+  }
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-[#421F00];
+  }
+}
 
 html {
   scroll-behavior: smooth;
