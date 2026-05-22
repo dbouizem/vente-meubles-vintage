@@ -1,30 +1,29 @@
 
-import React, {useState} from 'react';
+import {useState} from 'react';
 import Bouton from '../../composants/Bouton/Bouton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import COVER_IMAGE from "./imageLogin.jpg";
-import { handleClick2 } from '../../function/handleClick';
-const port=import.meta.env.VITE_PORT;
+import { apiUrl } from '../../config/api';
 
 
 function Login() {
 
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   let loginUser = async (e) => {
     e.preventDefault();
     try {
-      const url = `http://localhost:${port}/login`
+      const url = apiUrl('/login')
       let res = await fetch(url, {
         method: "POST",
-        // Le "headers" est absolument nécessaire sinon la requête n'aboutit pas 
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email: email,
-          password: password // NON UTILISE PAR LE BACK POUR LE MOMENT
+          password: password
         })
       });
       let resJson = await res.json();
@@ -35,13 +34,13 @@ function Login() {
           localStorage.removeItem("adminToken");
         }
 
-        alert(resJson.message) // message de réussite envoyé par le back, affiché en alerte
-        window.location.href = "/accueil" // Après ajout dans la base, l'utilisateur est renvoyé sur la page login
+        alert(resJson.message)
+        navigate("/accueil")
       } else {
-        alert("Login Erreur")
+        alert(resJson.message || "Login Erreur")
       }
     } catch (err) {
-      console.log(err);
+      alert("Erreur lors de la connexion");
     }
   }
 
@@ -49,16 +48,16 @@ function Login() {
 
   return (
 
-    <div className= "w-full min-h-screen flex items-start bg-[#f5f5f5]">
-      <div className= 'relative w-1/2 h-full flex flex-col' >
-        <div className= 'absolute top-[20%] left-[10%] right-[10%] flex flex-col '>
-          <h1 className="text-4xl text-white font-bold my-4 drop-shadow-lg">Transformez votre intérieur avec nos meubles vintage uniques,</h1>
-          <p className="text-xl text-white font-normal drop-shadow-lg">Commencez gratuitement et bénéficiez des offres attractives de la communauté. </p>
+    <div className= "w-full min-h-screen flex flex-col lg:flex-row bg-[#f5f5f5]">
+      <div className= 'relative w-full lg:w-1/2 h-64 lg:h-screen flex flex-col' >
+        <div className= 'absolute top-[18%] left-[8%] right-[8%] flex flex-col '>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl text-white font-bold my-4 drop-shadow-lg">Transformez votre intérieur avec nos meubles vintage uniques,</h1>
+          <p className="text-base sm:text-xl text-white font-normal drop-shadow-lg">Commencez gratuitement et bénéficiez des offres attractives de la communauté. </p>
         </div>
-        <img src={COVER_IMAGE} className="w-full h-full object-cover "/>
+        <img src={COVER_IMAGE} className="w-full h-full object-cover " alt="Salon vintage"/>
       </div>
       
-      <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col p-20 space-y-20 ">
+      <div className="w-full lg:w-1/2 min-h-screen lg:h-screen bg-[#f5f5f5] flex flex-col px-6 py-10 sm:p-12 lg:p-20 space-y-10 lg:space-y-20 ">
         <h1 className="text-x1 text-left text-[#060606] font-semibold ">Vintage Logo</h1>
 
         <div className='w-full flex flex-col max-w-[550px]'>
@@ -86,7 +85,7 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 />
 
-              <div className='w-full flex items-center  '>
+              <div className='w-full flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0'>
                 <div className='w-full flex items-center'>
                   <input
                   type='checkbox'
@@ -98,8 +97,7 @@ function Login() {
 
               <div className='w-full flex flex-col my-8'>
                 <div className='w-full text-[#ffffff] my-2 font-semibold bg-[#060606] rounded-md p-4 text-center flex items-center justify-center'>
-                  {/* <Link to="/accueil"><Bouton texteBouton='Test'/></Link> */}
-                  <Bouton onClick={handleClick2} texteBouton='Log in'/> 
+                  <Bouton texteBouton='Log in'/> 
                 </div>
               </div>
             </form>  

@@ -1,19 +1,13 @@
-import React from 'react';
-import logoSun from "/src/assets/logo-sun.png";
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/system';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import Icon_admin from '../Icon_admin/Icon_admin';
-import { panierContext } from '../../App';
+import { panierContext } from '../../contexts';
 import { useContext } from 'react';
 
-// const verifAdmin = false;
-const verifAdmin = true;
-
-const CustomBadge = styled(Badge)(({ theme }) => ({
+const CustomBadge = styled(Badge)(() => ({
   "& .MuiBadge-badge": {
     color: "white",
     backgroundColor: "#421F00"
@@ -23,6 +17,7 @@ const CustomBadge = styled(Badge)(({ theme }) => ({
 
 function Navbar() {
   const {panier} = useContext(panierContext)
+  const isAdmin = Boolean(localStorage.getItem("adminToken"));
 
 
   const backgroundStyle = {
@@ -31,28 +26,25 @@ function Navbar() {
     backgroundPosition: "center",
   };
 
-  console.log("navbar", {panier});
-
   return (
-    <div className='bg-beige h-32' style={backgroundStyle}>
-      <ul className='flex h-full '>
-        <div className='h-full flex justify-start items-center w-3/4'>
-          <li className='ml-[10%] mt-6 text-4xl text-dark-brown font-aurore decoration-transparent   '>
-          <Link to="/accueil">Vintage</Link></li>
-        </div>
-        <div className='flex justify-end items-center w-1/4'>
-          <Icon_admin admin={verifAdmin}/> 
-          <li className='flex-3 mr-2.5'>
+    <div className='bg-beige min-h-24 sm:h-32 px-4 sm:px-8' style={backgroundStyle}>
+      <ul className='flex h-full min-h-24 items-center justify-between gap-4'>
+        <li className='text-3xl sm:text-4xl text-dark-brown font-aurore decoration-transparent'>
+          <Link to="/accueil">Vintage</Link>
+        </li>
+        <li className='flex items-center justify-end gap-2 sm:gap-4'>
+          <Icon_admin admin={isAdmin}/> 
+          <span>
             <Link to="/panier" className='text-dark-brown'>
               <CustomBadge badgeContent={(panier.length)}>
-                <LocalMallIcon sx={{ fontSize: 70 }} />
+                <LocalMallIcon className="text-[44px] sm:text-[70px]" />
               </CustomBadge>
             </Link>
-          </li>
-          <li className='flex-3 mt-3 text-dark-brown'><MenuIcon sx={{ fontSize: 70 }} /></li>
+          </span>
+          <span className='text-dark-brown'><MenuIcon className="text-[44px] sm:text-[70px]" /></span>
 
           {/* A revoir, composant menu  <li><Menu/></li> */}
-        </div>
+        </li>
       </ul>
     </div>
   );

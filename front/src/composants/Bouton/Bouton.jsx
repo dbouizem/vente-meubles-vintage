@@ -1,6 +1,3 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-
 const Bouton = ({onClick, texteBouton}) => {
   return (
     <div>
@@ -13,4 +10,3 @@ const Bouton = ({onClick, texteBouton}) => {
 }
 
 export default Bouton;
-

@@ -1,41 +1,22 @@
-const port = import.meta.env.VITE_PORT
-function updateMeubleInfo(id){
-    
-    const titre = document.getElementById("titre").value;
-    const prix = document.getElementById("prix").value;
-    const description = document.getElementById("description").value;
-    const photo = document.getElementById("photo").value;
-    const titrePlaceholder = document.getElementById("titre").placeholder;
-    const prixPlaceholder = document.getElementById("prix").placeholder;
-    const descriptionPlaceholder = document.getElementById("description").placeholder;
-    const photoPlaceholder = document.getElementById("photo").placeholder;
-    
-    const data = {
-      titre : titre ? titre:titrePlaceholder,
-      prix : prix ? prix:prixPlaceholder,
-      description : description ? description:descriptionPlaceholder,
-      photo : photo ? photo:photoPlaceholder
-      
-    }
-    console.log("data update meuble",data)
-    
-      const url = `http://localhost:${port}/admin/${id}`
+import { apiUrl } from '../config/api';
 
-      fetch(url, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json', 
-            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-          },
-          body: JSON.stringify(data)
-        })
-          .then(response => response.json()) // Traitement de la réponse comme JSON
-          .then(data => {
-            alert('meuble mis à jour')
-          })
-          .catch(error => {
-            // Gestion des erreurs
-            console.error(error);
-          });
+async function updateMeubleInfo(id, data){
+  const response = await fetch(apiUrl(`/admin/${id}`), {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+    },
+    body: JSON.stringify(data)
+  });
+
+  const responseData = await response.json();
+
+  if (!response.ok) {
+    throw new Error(responseData.message || 'Erreur lors de la modification du meuble');
+  }
+
+  return responseData;
 }
+
 export default updateMeubleInfo

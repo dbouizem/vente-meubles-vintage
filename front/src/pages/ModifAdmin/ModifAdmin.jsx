@@ -4,8 +4,6 @@ import ModifTable from '../../composants/Table/ModifTable'
 
 
 function modificationMeuble () {
-    // let navigate = useNavigate()
-
     return(
         <div>
             <Navbar/>

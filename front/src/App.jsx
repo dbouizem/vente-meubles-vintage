@@ -7,17 +7,34 @@ import Produit from "./pages/Produit/Produit";
 import Signup from "./pages/Signup/signup";
 
 import './App.css';
-import { createContext, useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import Create from "./pages/Creation_produit/Create";
 import ModifAdmin from "./pages/ModifAdmin/ModifAdmin";
+import { panierContext, reductionContext } from "./contexts";
 
 
-  export const panierContext = createContext({});
-  export const reductionContext = createContext({})
+  const PANIER_STORAGE_KEY = 'panier';
 
 function App() {
   
-  const [panier, setPanier] = useState([]);
+  const [panier, setPanier] = useState(() => {
+    const storedPanier = localStorage.getItem(PANIER_STORAGE_KEY);
+
+    if (!storedPanier) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(storedPanier);
+    } catch (error) {
+      localStorage.removeItem(PANIER_STORAGE_KEY);
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(PANIER_STORAGE_KEY, JSON.stringify(panier));
+  }, [panier]);
 
   const ProtectedAdminRoute = ({ children }) => {
     return localStorage.getItem("adminToken") ? children : <Navigate to="/" replace />;

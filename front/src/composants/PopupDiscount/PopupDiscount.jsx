@@ -1,5 +1,4 @@
 
-import React from 'react'
 import discount from './discount.jpg'
 import { useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close';

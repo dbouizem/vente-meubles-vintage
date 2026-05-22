@@ -1,4 +1,3 @@
-import React from 'react'
 import Navbar from '../../composants/Navbar/Navbar';
 import Header from '../../composants/Header/Header';
 import Main from '../../composants/Main/Main';

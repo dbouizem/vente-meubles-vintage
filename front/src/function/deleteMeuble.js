@@ -1,21 +1,21 @@
-const port = import.meta.env.VITE_PORT
+import { apiUrl } from '../config/api';
 
-function deleteMeuble(id){
-    const url = `http://localhost:${port}/admin/${id}`
+async function deleteMeuble(id){
+    const url = apiUrl(`/admin/${id}`)
 
-    fetch(url, {
+    const response = await fetch(url, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         }
-      })
-        .then(response => {
-            console.log(response)
-          alert('meuble supprimé')
-        })
-        .catch(error => {
-          // Gestion des erreurs
-          console.error(error);
-        });
+      });
+
+    const responseData = await response.json();
+
+    if (!response.ok) {
+      throw new Error(responseData.message || 'Erreur lors de la suppression du meuble');
+    }
+
+    return responseData;
 }
 export default deleteMeuble

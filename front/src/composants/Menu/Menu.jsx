@@ -1,6 +1,4 @@
-import React from 'react';
 import { useState } from 'react';
-import menuIcon from "/src/assets/menu_icon.png"
 
 
 const Menu = () => {

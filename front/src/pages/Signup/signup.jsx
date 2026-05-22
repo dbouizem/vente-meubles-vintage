@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import COVER_IMAGE from "./img.jpg";
-const port=import.meta.env.VITE_PORT;
+import { apiUrl } from '../../config/api';
 
 function Signup() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [firstname, setFirstName] = useState("");
   const [email, setEmail] = useState("");
@@ -12,10 +13,9 @@ function Signup() {
   let addUser = async (e) => {
     e.preventDefault();
     try {
-      const url = `http://localhost:${port}/signup`
+      const url = apiUrl('/signup')
       let res = await fetch(url, {
         method: "POST",
-        // Le "headers" est absolument nécessaire sinon la requête n'aboutit pas 
         headers: {
           'Content-Type': 'application/json', 
         },
@@ -23,18 +23,18 @@ function Signup() {
           name: name,
           firstname: firstname,
           email: email,
-          password: password, // NON UTILISE PAR LE BACK POUR LE MOMENT
+          password: password,
         }),
       });
       let resJson = await res.json();
       if (res.status === 200) {
-        alert(resJson.message) // message de réussite envoyé par le back, affiché en alerte
-        window.location.href = "/" // Après ajout dans la base, l'utilisateur est renvoyé sur la page login
+        alert(resJson.message)
+        navigate("/")
       } else {
-        alert("Utilisateur non créé")
+        alert(resJson.message || "Utilisateur non créé")
       }
     } catch (err) {
-      console.log(err);
+      alert("Erreur lors de la création du compte");
     }
   }
 
