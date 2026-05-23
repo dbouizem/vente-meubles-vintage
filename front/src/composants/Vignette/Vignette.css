@@ -1,13 +1,7 @@
-.body{
-    display: grid;
-    justify-items: center;
-    grid-row-gap: 1em;
+@media (prefers-reduced-motion: reduce) {
+    .group,
+    .group img,
+    .group button {
+        transition: none;
+    }
 }
-.badge{
-    border-radius: theme('borderRadius.lg');
-    padding: theme('spacing.6');
-    box-shadow: theme('boxShadow.xl');
-}
-/* .button{
-    background-color: lightgray;
-} */

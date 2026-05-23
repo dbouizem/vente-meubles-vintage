@@ -1,22 +1,52 @@
 import { useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Badge, Button, Card } from "react-bootstrap";
-import "./Vignette.css"  
+import { motion } from "motion/react";
+import { ArrowRight } from "lucide-react";
+import "./Vignette.css";
 
-function Vignette({ id, nom, prix, photo }) {
-  let navigate = useNavigate();
+function Vignette({ id, nom, prix, photo, index = 0 }) {
+  const navigate = useNavigate();
+
   return (
-    <Card className="w-full max-w-[18rem] border-0 bg-white p-4 shadow-sm">
-      <Card.Img variant="top" src={photo} alt={nom} className="h-56 sm:h-64 object-cover"/>
-      <Card.Body className="body px-0 pb-0 text-left">
-        <Card.Title className="w-full text-base text-dark-brown">{nom}</Card.Title>
-        <div className="flex w-full items-center justify-between gap-3">
-          <Badge bg="primary">{prix} €</Badge> 
-          <Button className="button bg-dark-brown border-0 px-4" onClick={() => {navigate(`/produit/${id}`);}} >Détails</Button>
+    <motion.article
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ duration: 0.45, delay: index * 0.04, ease: "easeOut" }}
+      className="group flex h-full w-full max-w-sm flex-col overflow-hidden border border-[#d8bc86]/25 bg-[#14100c] transition duration-300 hover:-translate-y-1 hover:border-[#d8bc86]/70"
+    >
+      <button
+        type="button"
+        onClick={() => navigate(`/produit/${id}`)}
+        className="block cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d8bc86]"
+        aria-label={`Voir le détail de ${nom}`}
+      >
+        <div className="relative aspect-[4/5] overflow-hidden bg-[#1d1711]">
+          <img
+            src={photo}
+            alt={nom}
+            className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105 group-hover:opacity-100"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0907]/80 via-transparent to-transparent" />
+          <p className="absolute left-5 top-5 text-[10px] uppercase tracking-[0.22em] text-[#e6cfaa]/75">Pièce sélectionnée</p>
         </div>
-      </Card.Body>
-    </Card>
+      </button>
 
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="font-serif text-2xl text-[#e6cfaa]">{nom}</h3>
+        <p className="mt-3 text-xs leading-6 text-[#d8bc86]/60">Meuble vintage restauré, choisi pour sa présence et sa patine.</p>
+        <div className="mt-6 flex items-center justify-between border-t border-[#d8bc86]/15 pt-5">
+          <span className="text-sm text-[#d8bc86]">{prix} €</span>
+          <button
+            type="button"
+            onClick={() => navigate(`/produit/${id}`)}
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#d8bc86]/50 text-[#d8bc86] transition duration-200 hover:bg-[#d8bc86] hover:text-[#130f0a] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d8bc86]"
+            aria-label={`Ouvrir ${nom}`}
+          >
+            <ArrowRight size={16} />
+          </button>
+        </div>
+      </div>
+    </motion.article>
   );
 }
 

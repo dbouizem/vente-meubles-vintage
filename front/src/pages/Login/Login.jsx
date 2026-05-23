@@ -1,8 +1,20 @@
 
 import {useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'motion/react';
+import { ArrowLeft, ArrowRight, Eye, HelpCircle, Lock, Mail, PackageCheck, RotateCcw, ShieldCheck, Sparkles, UserRoundCheck } from 'lucide-react';
+import AppleIcon from '@mui/icons-material/Apple';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import GoogleIcon from '@mui/icons-material/Google';
 import COVER_IMAGE from "./imageLogin.jpg";
 import { apiUrl } from '../../config/api';
+import './Login.css';
+
+const socialProviders = [
+  { name: 'Google', Icon: GoogleIcon },
+  { name: 'Apple', Icon: AppleIcon },
+  { name: 'Facebook', Icon: FacebookIcon },
+];
 
 
 function Login() {
@@ -12,6 +24,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const loginUser = async (e) => {
     e.preventDefault();
@@ -51,81 +64,187 @@ function Login() {
 
 
   return (
+    <div className="login-page relative min-h-dvh overflow-x-hidden bg-[#0b0907] font-ptMono text-[#ead7b8]">
+      <img src={COVER_IMAGE} className="absolute inset-0 h-full w-full object-cover object-center" alt="" aria-hidden="true" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(198,161,107,0.20),transparent_30%),linear-gradient(90deg,rgba(10,7,5,0.86),rgba(10,7,5,0.56)_45%,rgba(10,7,5,0.88))]" />
 
-    <div className= "flex min-h-screen w-full flex-col bg-[#f5f5f5] font-ptMono lg:flex-row">
-      <div className= 'relative flex h-72 w-full flex-col lg:h-screen lg:w-1/2' >
-        <div className= 'absolute left-[6%] right-[6%] top-[12%] z-10 bg-white/85 px-4 py-5 text-center text-dark-brown shadow-sm sm:left-[8%] sm:right-[8%] lg:top-[14%]'>
-          <h1 className="text-lg font-bold leading-snug sm:text-2xl">Transformez votre intérieur avec nos meubles vintage uniques</h1>
-          <p className="mt-4 text-sm leading-relaxed sm:text-base">Commencez gratuitement et bénéficiez des offres attractives de la communauté.</p>
+      <header className="relative z-20 grid gap-3 px-3 py-4 text-[10px] uppercase tracking-[0.16em] min-[380px]:px-4 sm:grid-cols-3 sm:items-center sm:px-10 sm:py-6 sm:tracking-[0.18em]">
+        <Link to="/accueil" className="inline-flex min-h-11 items-center gap-2 text-[#ead7b8] transition hover:text-[#c6a16b] focus-visible:outline-[#c6a16b] sm:gap-3">
+          <ArrowLeft size={16} />
+          Retour à la boutique
+        </Link>
+        <div className="text-center sm:block">
+          <p className="font-serif text-2xl uppercase tracking-[0.12em] text-[#f1dfbf] sm:text-3xl">Atelier Héritage</p>
+          <p className="mt-1 text-[10px] tracking-[0.45em] text-[#c6a16b]">Paris</p>
         </div>
-        <img src={COVER_IMAGE} className="h-full w-full object-cover" alt="Salon vintage"/>
-      </div>
-      
-      <div className="flex min-h-screen w-full flex-col bg-[#f5f5f5] px-6 py-10 sm:p-12 lg:h-screen lg:w-1/2 lg:px-20 lg:py-16">
-        <p className="font-aurore text-5xl text-dark-brown">Vintage</p>
+        <a href="mailto:contact@vintage.local" className="hidden items-center justify-end gap-3 text-[#ead7b8] underline underline-offset-4 transition hover:text-[#c6a16b] sm:inline-flex">
+          Besoin d’aide ?
+          <HelpCircle size={18} />
+        </a>
+      </header>
 
-        <div className='mx-auto flex w-full max-w-[560px] flex-1 flex-col justify-center'>
-
-          <div className='mb-10 flex flex-col text-left'>
-            <h1 className="mb-2 text-3xl font-semibold text-dark-brown sm:text-4xl">Bienvenue,</h1>
-            <p className="text-sm text-gray-700">Veuillez entrer vos informations.</p>
+      <main className="relative z-10 grid gap-6 px-3 pb-7 min-[380px]:px-4 sm:px-8 sm:pb-10 lg:min-h-[calc(100dvh-96px)] lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:px-10">
+        <motion.aside
+          initial={{ opacity: 0, x: -28 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.75, ease: 'easeOut' }}
+          className="hidden min-h-[620px] flex-col justify-center lg:flex"
+        >
+          <div className="max-w-xs">
+            <p className="font-serif text-7xl leading-none text-[#c6a16b]">“</p>
+            <p className="mt-2 font-serif text-3xl leading-tight text-[#f1dfbf]">
+              Chaque pièce raconte une époque, chaque client devient une part de notre histoire.
+            </p>
+            <p className="mt-8 text-xs uppercase tracking-[0.22em] text-[#ead7b8]/80">Atelier Héritage</p>
+            <span className="mt-5 block h-px w-20 bg-[#c6a16b]" />
           </div>
+        </motion.aside>
 
-          <div className='w-full flex flex-col'>
-            <form onSubmit={loginUser}>
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, delay: 0.1, ease: 'easeOut' }}
+          className="mx-auto w-full max-w-[590px] border border-[#b58a55]/55 bg-[#f2e3c8]/95 p-2 text-[#1b120b] shadow-2xl backdrop-blur-sm min-[380px]:p-3 sm:p-6 lg:mr-8 lg:p-8"
+          aria-labelledby="login-title"
+        >
+          <div className="border border-[#b58a55]/35 p-3 min-[380px]:p-4 sm:p-6 lg:p-8">
+            <div className="text-center">
+              <Sparkles className="mx-auto text-[#8b5a24]" size={24} />
+              <h1 id="login-title" className="mt-3 font-serif text-3xl uppercase tracking-[0.06em] text-[#17100b] min-[380px]:mt-4 sm:mt-6 sm:text-5xl sm:tracking-[0.08em]">Bienvenue</h1>
+              <p className="mt-2 font-aurore text-2xl leading-none text-[#3b2412] sm:mt-3 sm:text-3xl">chez Atelier Héritage</p>
+              <div className="mx-auto mt-4 flex max-w-xs items-center gap-3 text-[#8b5a24] sm:mt-7 sm:gap-4">
+                <span className="h-px flex-1 bg-[#b58a55]/45" />
+                <span>◆</span>
+                <span className="h-px flex-1 bg-[#b58a55]/45" />
+              </div>
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 border-b border-[#b58a55]/25 text-center text-[10px] uppercase tracking-[0.08em] min-[380px]:text-[11px] min-[380px]:tracking-[0.12em] sm:mt-8 sm:text-xs sm:tracking-[0.14em]">
+              <span className="border-b-2 border-[#8b5a24] pb-3 font-semibold">Connexion</span>
+              <Link to="/signup" className="pb-3 text-[#5f4a35] transition hover:text-[#17100b]">Créer un compte</Link>
+            </div>
+
+            <form onSubmit={loginUser} className="mt-5 space-y-4 sm:mt-7 sm:space-y-5">
               {message && (
-                <p role="alert" className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-left text-sm text-red-700">{message}</p>
+                <p role="alert" className="rounded-sm border border-red-900/30 bg-red-950/10 px-4 py-3 text-left text-sm text-red-900">
+                  {message} Vous pouvez vérifier votre e-mail ou réessayer dans un instant.
+                </p>
               )}
-              <label className="sr-only" htmlFor="login-email">Email</label>
-              <input
-                id="login-email"
-                type="email"
-                placeholder='Email'
-                value={email}
-                required
-                autoComplete="email"
-                className='my-2 w-full border-b border-black bg-transparent py-3 text-black outline-none placeholder:text-gray-500 focus:outline-none' 
-                onChange={(e) => setEmail(e.target.value)}
-                />
 
-              <label className="sr-only" htmlFor="login-password">Mot de passe</label>
-              <input
-                id="login-password"
-                type="password"
-                placeholder='Mot de passe'
-                value={password}
-                required
-                autoComplete="current-password"
-                className='my-2 w-full border-b border-black bg-transparent py-3 text-black outline-none placeholder:text-gray-500 focus:outline-none' 
-                onChange={(e) => setPassword(e.target.value)}
-                />
-
-              <div className='mt-2 flex w-full flex-col gap-3 text-xs sm:flex-row sm:items-center sm:gap-0'>
-                <div className='w-full flex items-center'>
+              <div>
+                <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.12em] sm:text-xs" htmlFor="login-email">E-mail</label>
+                <div className="login-field">
+                  <span className="login-field-icon" aria-hidden="true">
+                    <Mail size={19} />
+                  </span>
                   <input
-                  id="remember-me"
-                  type='checkbox'
-                  className='w-4 h-4 mr-2 '/>
-                  <label htmlFor="remember-me">Remember me</label>
+                    id="login-email"
+                    type="email"
+                    placeholder='Entrez votre adresse e-mail'
+                    value={email}
+                    required
+                    disabled={isSubmitting}
+                    aria-invalid={message ? 'true' : 'false'}
+                    autoComplete="email"
+                    className='login-input'
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
-                <button type="button" className='whitespace-nowrap underline underline-offset-2'>Forgot Password?</button>
               </div>
 
-              <div className='my-8 flex w-full flex-col'>
-                <button type="submit" disabled={isSubmitting} className='my-2 w-full rounded-md bg-dark-brown p-4 text-center font-semibold text-white transition hover:bg-[#2d1500] disabled:opacity-60'>
-                  {isSubmitting ? 'Connexion...' : 'Log in'}
-                </button>
+              <div>
+                <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.12em] sm:text-xs" htmlFor="login-password">Mot de passe</label>
+                <div className="login-field">
+                  <span className="login-field-icon" aria-hidden="true">
+                    <Lock size={19} />
+                  </span>
+                  <input
+                    id="login-password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder='Entrez votre mot de passe'
+                    value={password}
+                    required
+                    disabled={isSubmitting}
+                    aria-invalid={message ? 'true' : 'false'}
+                    autoComplete="current-password"
+                    className='login-input'
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((current) => !current)}
+                    disabled={isSubmitting}
+                    className="login-password-toggle"
+                    aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                  >
+                    <Eye size={19} />
+                  </button>
+                </div>
               </div>
-            </form>  
 
-            <Link to="/signup" className='my-2 block w-full rounded-md border border-black bg-white p-4 text-center font-semibold text-[#060606] transition hover:bg-beige'>
-              Sign up
-            </Link>
+              <div className='flex w-full flex-col gap-3 text-xs min-[460px]:flex-row min-[460px]:items-center min-[460px]:justify-between'>
+                <div className='flex items-center'>
+                  <input
+                    id="remember-me"
+                    type='checkbox'
+                    disabled={isSubmitting}
+                    className='mr-3 h-4 w-4 accent-[#5a3519] disabled:cursor-not-allowed disabled:opacity-60'
+                  />
+                  <label htmlFor="remember-me">Se souvenir de moi</label>
+                </div>
+                <button type="button" disabled={isSubmitting} className='whitespace-nowrap underline underline-offset-4 transition hover:text-[#8b5a24] disabled:cursor-not-allowed disabled:opacity-60'>Mot de passe oublié ?</button>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className='login-submit group flex w-full items-center justify-center gap-3 px-5 py-4 font-serif text-base uppercase tracking-[0.14em] shadow-lg transition disabled:cursor-not-allowed disabled:opacity-70 sm:gap-4 sm:px-6 sm:text-lg sm:tracking-[0.16em]'
+              >
+                {isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
+                <ArrowRight className="transition group-hover:translate-x-1" size={18} />
+              </button>
+            </form>
+
+            <div className="mt-7">
+              <div className="flex items-center gap-3 text-center text-[11px] uppercase tracking-[0.10em] text-[#5f4a35] sm:gap-4 sm:text-xs sm:tracking-[0.12em]">
+                <span className="h-px flex-1 bg-[#b58a55]/35" />
+                Ou continuer avec
+                <span className="h-px flex-1 bg-[#b58a55]/35" />
+              </div>
+              <div className="mt-4 grid grid-cols-3 gap-2 min-[380px]:gap-3 sm:mt-5">
+                {socialProviders.map(({ name, Icon }) => (
+                  <button key={name} type="button" disabled={isSubmitting} className="login-social-button">
+                    <Icon className="login-social-icon" aria-hidden="true" />
+                    <span>{name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-3 border-y border-[#b58a55]/25 py-4 text-center text-[10px] text-[#3b2a1d] min-[380px]:text-[11px] sm:mt-8 sm:grid-cols-4 sm:gap-4 sm:py-6">
+              {[
+                [PackageCheck, 'Livraison sécurisée'],
+                [RotateCcw, 'Retours gratuits'],
+                [ShieldCheck, 'Paiement sécurisé'],
+                [UserRoundCheck, 'Service client 7j/7'],
+              ].map(([Icon, label]) => (
+                <div key={label} className="flex flex-col items-center gap-2">
+                  <Icon size={22} />
+                  <span className="leading-snug">{label}</span>
+                </div>
+              ))}
+            </div>
+
+            <blockquote className="mt-5 text-center font-serif text-lg italic leading-relaxed text-[#2d1c10] sm:mt-6 sm:text-xl">
+              “L’élégance est la seule beauté qui ne se fane jamais.”
+              <span className="mt-2 block font-aurore text-2xl text-[#5f3a1d] sm:mt-3 sm:text-3xl">Atelier Héritage</span>
+            </blockquote>
           </div>
-        </div>
-        <div className ="w-full">
-          <p className="text-center text-xs font-normal text-[#060606]">Vous n&#39;avez pas encore de compte? <Link to="signup"><span className='font-semibold underline underline-offset-2 cursor-pointer'>Sign up</span></Link></p>
-        </div>
+        </motion.section>
+      </main>
+
+      <div className="relative z-10 px-4 pb-7 text-center text-[11px] uppercase tracking-[0.12em] text-[#ead7b8] sm:px-5 sm:pb-8 sm:text-xs sm:tracking-[0.16em]">
+        Nouveau ici ? <Link to="/signup" className="underline underline-offset-4 transition hover:text-[#c6a16b]">Créez votre compte</Link>
       </div>
     </div>
   );
