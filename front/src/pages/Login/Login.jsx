@@ -90,7 +90,7 @@ function Login() {
         </a>
       </header>
 
-      <main className="relative z-10 grid gap-6 px-3 pb-7 min-[380px]:px-4 sm:px-8 sm:pb-10 lg:min-h-[calc(100dvh-96px)] lg:grid-cols-[minmax(280px,0.82fr)_minmax(580px,0.68fr)] lg:items-center lg:gap-12 lg:px-10 xl:grid-cols-[minmax(420px,1fr)_minmax(620px,760px)] xl:px-14">
+      <main className="relative z-10 grid gap-6 px-3 pb-7 min-[380px]:px-4 sm:px-8 sm:pb-10 lg:min-h-[calc(100dvh-96px)] lg:grid-cols-[minmax(280px,0.82fr)_minmax(620px,0.72fr)] lg:items-center lg:gap-12 lg:px-10 xl:grid-cols-[minmax(420px,1fr)_minmax(680px,820px)] xl:px-14">
         <motion.aside
           initial={{ opacity: 0, x: -28 }}
           animate={{ opacity: 1, x: 0 }}
@@ -111,7 +111,7 @@ function Login() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.1, ease: 'easeOut' }}
-          className="login-card mx-auto w-full max-w-[640px] text-[#1b120b] lg:mr-0 xl:mr-8"
+          className="login-card mx-auto w-full max-w-[720px] text-[#1b120b] lg:mr-0 xl:mr-8"
           aria-labelledby="login-title"
         >
           <div className="login-card-frame">

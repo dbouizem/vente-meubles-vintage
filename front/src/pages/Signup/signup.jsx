@@ -5,47 +5,23 @@ import AppleIcon from '@mui/icons-material/Apple';
 import GoogleIcon from '@mui/icons-material/Google';
 import PinterestIcon from '@mui/icons-material/Pinterest';
 import {
+  ArrowLeft,
   ArrowRight,
   Eye,
-  Gem,
-  KeyRound,
+  EyeOff,
+  HelpCircle,
   Lock,
   Mail,
-  Scissors,
-  Ticket,
+  Sparkles,
   User,
 } from 'lucide-react';
-import COVER_IMAGE from "./img.jpg";
-import PANORAMA_IMAGE from "./imageSup.jpg";
+import BACKGROUND_IMAGE from "./img.jpg";
 import { apiUrl } from '../../config/api';
 import './Signup.css';
 
-const benefits = [
-  {
-    Icon: KeyRound,
-    title: 'Accès privilégié',
-    text: 'Découvrez nos nouveautés en avant-première.',
-  },
-  {
-    Icon: Gem,
-    title: 'Pièces uniques',
-    text: 'Accédez à des pièces rares et éditions limitées.',
-  },
-  {
-    Icon: Scissors,
-    title: 'Expérience personnalisée',
-    text: 'Des conseils sur-mesure et un service dédié.',
-  },
-  {
-    Icon: Ticket,
-    title: 'Invitations privées',
-    text: 'Participez à nos événements et ventes confidentielles.',
-  },
-];
-
 const socialProviders = [
-  { name: 'Apple', Icon: AppleIcon },
   { name: 'Google', Icon: GoogleIcon },
+  { name: 'Apple', Icon: AppleIcon },
   { name: 'Pinterest', Icon: PinterestIcon },
 ];
 
@@ -132,50 +108,39 @@ function Signup() {
   }
 
   return (
-    <div className="signup-page min-h-dvh overflow-x-hidden bg-[#0b0907] font-ptMono text-[#2a190e]">
-      <main className="grid min-h-dvh lg:grid-cols-[48fr_52fr]">
+    <div className="signup-page relative min-h-dvh overflow-x-hidden bg-[#0b0907] font-ptMono text-[#ead7b8]">
+      <img src={BACKGROUND_IMAGE} className="absolute inset-0 h-full w-full object-cover object-center" alt="" aria-hidden="true" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(198,161,107,0.20),transparent_30%),linear-gradient(90deg,rgba(10,7,5,0.86),rgba(10,7,5,0.56)_45%,rgba(10,7,5,0.88))]" />
+
+      <header className="relative z-20 grid gap-3 px-3 py-4 text-[10px] uppercase tracking-[0.16em] min-[380px]:px-4 sm:grid-cols-3 sm:items-center sm:px-10 sm:py-6 sm:tracking-[0.18em]">
+        <Link to="/" className="inline-flex min-h-11 items-center gap-2 text-[#ead7b8] transition hover:text-[#c6a16b] focus-visible:outline-[#c6a16b] sm:gap-3">
+          <ArrowLeft size={16} />
+          Retour à la connexion
+        </Link>
+        <div className="text-center sm:block">
+          <p className="font-serif text-2xl uppercase tracking-[0.12em] text-[#f1dfbf] sm:text-3xl">Atelier Héritage</p>
+          <p className="mt-1 text-[10px] tracking-[0.45em] text-[#c6a16b]">Paris</p>
+        </div>
+        <a href="mailto:contact@vintage.local" className="hidden items-center justify-end gap-3 text-[#ead7b8] underline underline-offset-4 transition hover:text-[#c6a16b] sm:inline-flex">
+          Besoin d’aide ?
+          <HelpCircle size={18} />
+        </a>
+      </header>
+
+      <main className="relative z-10 grid gap-6 px-3 pb-7 min-[380px]:px-4 sm:px-8 sm:pb-10 lg:min-h-[calc(100dvh-96px)] lg:grid-cols-[minmax(280px,0.82fr)_minmax(620px,0.72fr)] lg:items-center lg:gap-12 lg:px-10 xl:grid-cols-[minmax(420px,1fr)_minmax(680px,820px)] xl:px-14">
         <motion.aside
           initial={{ opacity: 0, x: -28 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.75, ease: 'easeOut' }}
-          className="signup-atelier-panel relative order-2 min-h-[540px] overflow-hidden border-[#b58a55]/45 lg:order-1 lg:min-h-dvh lg:border"
+          className="hidden min-h-[620px] flex-col justify-center lg:flex"
         >
-          <img src={COVER_IMAGE} className="absolute inset-0 h-full w-full object-cover" alt="Atelier artisanal sombre avec mobilier vintage" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_42%_26%,rgba(198,161,107,0.28),transparent_30%),linear-gradient(180deg,rgba(11,8,5,0.35),rgba(11,8,5,0.92)),linear-gradient(90deg,rgba(11,8,5,0.75),rgba(11,8,5,0.18))]" />
-          <div className="signup-film-grain" aria-hidden="true" />
-
-          <div className="relative z-10 flex h-full flex-col justify-between p-6 sm:p-10 lg:p-12">
-            <div>
-              <div className="signup-monogram" aria-label="Atelier Héritage Paris">
-                <span>AH</span>
-                <small>Atelier Héritage Paris</small>
-              </div>
-
-              <blockquote className="mt-12 max-w-[300px] font-serif text-3xl leading-tight text-[#f7e3bd] sm:mt-16 sm:text-4xl">
-                “Créer, c’est transmettre l’âme du temps.”
-                <span className="mt-5 block font-aurore text-3xl text-[#d8bc86]">Atelier Héritage</span>
-              </blockquote>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.25, ease: 'easeOut' }}
-              className="signup-benefits-card mt-10 max-w-[360px]"
-            >
-              <p className="text-xs uppercase tracking-[0.18em] text-[#4a2a14]">En rejoignant Atelier Héritage</p>
-              <div className="mt-6 space-y-5">
-                {benefits.map(({ Icon, title, text }) => (
-                  <div key={title} className="signup-benefit">
-                    <Icon size={25} />
-                    <div>
-                      <h3>{title}</h3>
-                      <p>{text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+          <div className="max-w-xs">
+            <p className="font-serif text-7xl leading-none text-[#c6a16b]">“</p>
+            <p className="mt-2 font-serif text-3xl leading-tight text-[#f1dfbf]">
+              Créer un compte, c’est entrer dans une maison de pièces choisies et d’histoires rares.
+            </p>
+            <p className="mt-8 text-xs uppercase tracking-[0.22em] text-[#ead7b8]/80">Atelier Héritage</p>
+            <span className="mt-5 block h-px w-20 bg-[#c6a16b]" />
           </div>
         </motion.aside>
 
@@ -183,39 +148,27 @@ function Signup() {
           initial={{ opacity: 0, y: 26 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.08, ease: 'easeOut' }}
-          className="signup-form-panel relative order-1 flex min-h-dvh items-center justify-center px-3 py-6 sm:px-6 lg:order-2 lg:px-10 lg:py-10"
+          className="signup-card mx-auto w-full max-w-[720px] text-[#1b120b] lg:mr-0 xl:mr-8"
           aria-labelledby="signup-title"
         >
-          <div className="signup-certificate relative w-full max-w-[720px]">
-            <motion.div
-              className="signup-wax-seal"
-              whileHover={{ rotate: -3, scale: 1.03 }}
-              transition={{ duration: 0.2 }}
-              aria-hidden="true"
-            >
-              AH
-            </motion.div>
-
-            <div className="signup-stamp" aria-hidden="true">AH<br />Paris</div>
-
-            <div className="signup-form-frame">
-              <div className="text-center">
-                <div className="signup-ornament" aria-hidden="true" />
-                <p className="mt-6 font-serif text-2xl italic text-[#4f3018]">Rejoignez l’univers</p>
-                <h1 id="signup-title" className="mt-2 font-serif text-4xl uppercase leading-none tracking-[0.06em] text-[#1b120b] sm:text-5xl">
-                  Atelier Héritage
-                </h1>
-                <div className="mx-auto mt-4 flex max-w-xs items-center gap-4 text-xs uppercase tracking-[0.45em] text-[#6f461f]">
-                  <span className="h-px flex-1 bg-[#b58a55]/60" />
-                  Paris
-                  <span className="h-px flex-1 bg-[#b58a55]/60" />
-                </div>
-                <p className="mx-auto mt-6 max-w-md text-sm leading-7 text-[#4f3b2a]">
-                  Créez votre compte et accédez à un monde où l’élégance intemporelle prend vie.
-                </p>
+          <div className="signup-card-frame">
+            <div className="text-center">
+              <Sparkles className="mx-auto text-[#8b5a24]" size={22} />
+              <h1 id="signup-title" className="mt-3 font-serif text-4xl uppercase tracking-[0.08em] text-[#17100b] min-[380px]:mt-4 sm:text-5xl xl:text-6xl">Bienvenue</h1>
+              <p className="mt-2 font-aurore text-2xl leading-none text-[#3b2412] sm:mt-3 sm:text-4xl">chez Atelier Héritage</p>
+              <div className="mx-auto mt-5 flex max-w-[230px] items-center gap-3 text-[#8b5a24] sm:mt-6 sm:gap-4">
+                <span className="h-px flex-1 bg-[#b58a55]/45" />
+                <span>◆</span>
+                <span className="h-px flex-1 bg-[#b58a55]/45" />
               </div>
+            </div>
 
-              <form onSubmit={addUser} className="mt-8 space-y-4" noValidate>
+            <div className="mt-6 grid grid-cols-2 border-b border-[#b58a55]/25 text-center text-[10px] uppercase tracking-[0.12em] min-[380px]:text-[11px] sm:mt-8 sm:text-xs sm:tracking-[0.14em]">
+              <Link to="/" className="pb-3 text-[#5f4a35] transition hover:text-[#17100b]">Connexion</Link>
+              <span className="border-b-2 border-[#8b5a24] pb-3 font-semibold">Créer un compte</span>
+            </div>
+
+            <form onSubmit={addUser} className="mt-5 space-y-4 sm:mt-7" noValidate>
                 {message && (
                   <p role="alert" className="signup-alert signup-alert-error">{message}</p>
                 )}
@@ -267,7 +220,7 @@ function Signup() {
                   id="signup-password"
                   label="Mot de passe"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Créez votre mot de passe"
+                  placeholder="Mot de passe"
                   value={password}
                   disabled={isSubmitting}
                   autoComplete="new-password"
@@ -285,7 +238,7 @@ function Signup() {
                   id="signup-confirm-password"
                   label="Confirmer le mot de passe"
                   type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="Confirmez votre mot de passe"
+                  placeholder="Confirmation"
                   value={confirmPassword}
                   disabled={isSubmitting}
                   autoComplete="new-password"
@@ -315,13 +268,13 @@ function Signup() {
                   {fieldError('terms') && <p className="signup-field-error">{fieldError('terms')}</p>}
                 </div>
 
-                <button type="submit" disabled={isSubmitting || !formIsValid} className="signup-submit group">
+                <button type="submit" disabled={isSubmitting} className="signup-submit group">
                   {isSubmitting ? 'Création du compte...' : 'Créer mon compte'}
                   <ArrowRight size={18} className="transition group-hover:translate-x-1" />
                 </button>
-              </form>
+            </form>
 
-              <div className="mt-7">
+            <div className="mt-7">
                 <div className="signup-separator">
                   <span />
                   Ou s’inscrire avec
@@ -335,24 +288,14 @@ function Signup() {
                     </button>
                   ))}
                 </div>
-              </div>
-
-              <p className="mt-8 text-center text-sm text-[#3b2a1d]">
-                Vous avez déjà un compte ? <Link to="/" className="font-semibold underline underline-offset-4">Se connecter <ArrowRight size={14} className="inline" /></Link>
-              </p>
             </div>
+
+            <p className="mt-7 text-center text-sm text-[#3b2a1d]">
+                Vous avez déjà un compte ? <Link to="/" className="font-semibold underline underline-offset-4">Se connecter <ArrowRight size={14} className="inline" /></Link>
+            </p>
           </div>
         </motion.section>
       </main>
-
-      <section className="signup-postcard relative overflow-hidden border-t border-[#b58a55]/25 px-5 py-9 text-center">
-        <img src={PANORAMA_IMAGE} className="absolute inset-0 h-full w-full object-cover" alt="" aria-hidden="true" />
-        <div className="absolute inset-0 bg-[#e8d1ad]/80" />
-        <div className="signup-postmark" aria-hidden="true">Atelier<br />Héritage</div>
-        <p className="relative z-10 mx-auto max-w-xl font-serif text-2xl leading-tight text-[#21140b] sm:text-3xl">
-          Plus qu’une maison,<br /> une histoire que nous écrivons ensemble.
-        </p>
-      </section>
     </div>
   );
 }
@@ -398,7 +341,7 @@ function SignupField({
         />
         {showToggle && (
           <button type="button" className="signup-password-toggle" onClick={onToggle} disabled={disabled} aria-label={toggleLabel}>
-            <Eye size={18} />
+            {type === 'text' ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         )}
       </div>
