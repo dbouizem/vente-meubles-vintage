@@ -2,7 +2,7 @@
 import {useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowLeft, ArrowRight, Eye, HelpCircle, Lock, Mail, PackageCheck, RotateCcw, ShieldCheck, Sparkles, UserRoundCheck } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Eye, EyeOff, HelpCircle, Lock, Mail, PackageCheck, RotateCcw, ShieldCheck, Sparkles, UserRoundCheck } from 'lucide-react';
 import AppleIcon from '@mui/icons-material/Apple';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -14,6 +14,13 @@ const socialProviders = [
   { name: 'Google', Icon: GoogleIcon },
   { name: 'Apple', Icon: AppleIcon },
   { name: 'Facebook', Icon: FacebookIcon },
+];
+
+const trustItems = [
+  [PackageCheck, 'Livraison sécurisée'],
+  [RotateCcw, 'Retours gratuits sous 30 jours'],
+  [ShieldCheck, 'Paiement 100% sécurisé'],
+  [UserRoundCheck, 'Service client 7j/7'],
 ];
 
 
@@ -83,7 +90,7 @@ function Login() {
         </a>
       </header>
 
-      <main className="relative z-10 grid gap-6 px-3 pb-7 min-[380px]:px-4 sm:px-8 sm:pb-10 lg:min-h-[calc(100dvh-96px)] lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:px-10">
+      <main className="relative z-10 grid gap-6 px-3 pb-7 min-[380px]:px-4 sm:px-8 sm:pb-10 lg:min-h-[calc(100dvh-96px)] lg:grid-cols-[minmax(280px,0.82fr)_minmax(580px,0.68fr)] lg:items-center lg:gap-12 lg:px-10 xl:grid-cols-[minmax(420px,1fr)_minmax(620px,760px)] xl:px-14">
         <motion.aside
           initial={{ opacity: 0, x: -28 }}
           animate={{ opacity: 1, x: 0 }}
@@ -104,22 +111,22 @@ function Login() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.1, ease: 'easeOut' }}
-          className="mx-auto w-full max-w-[590px] border border-[#b58a55]/55 bg-[#f2e3c8]/95 p-2 text-[#1b120b] shadow-2xl backdrop-blur-sm min-[380px]:p-3 sm:p-6 lg:mr-8 lg:p-8"
+          className="login-card mx-auto w-full max-w-[640px] text-[#1b120b] lg:mr-0 xl:mr-8"
           aria-labelledby="login-title"
         >
-          <div className="border border-[#b58a55]/35 p-3 min-[380px]:p-4 sm:p-6 lg:p-8">
+          <div className="login-card-frame">
             <div className="text-center">
-              <Sparkles className="mx-auto text-[#8b5a24]" size={24} />
-              <h1 id="login-title" className="mt-3 font-serif text-3xl uppercase tracking-[0.06em] text-[#17100b] min-[380px]:mt-4 sm:mt-6 sm:text-5xl sm:tracking-[0.08em]">Bienvenue</h1>
-              <p className="mt-2 font-aurore text-2xl leading-none text-[#3b2412] sm:mt-3 sm:text-3xl">chez Atelier Héritage</p>
-              <div className="mx-auto mt-4 flex max-w-xs items-center gap-3 text-[#8b5a24] sm:mt-7 sm:gap-4">
+              <Sparkles className="mx-auto text-[#8b5a24]" size={22} />
+              <h1 id="login-title" className="mt-3 font-serif text-4xl uppercase tracking-[0.08em] text-[#17100b] min-[380px]:mt-4 sm:text-5xl xl:text-6xl">Bienvenue</h1>
+              <p className="mt-2 font-aurore text-2xl leading-none text-[#3b2412] sm:mt-3 sm:text-4xl">chez Atelier Héritage</p>
+              <div className="mx-auto mt-5 flex max-w-[230px] items-center gap-3 text-[#8b5a24] sm:mt-6 sm:gap-4">
                 <span className="h-px flex-1 bg-[#b58a55]/45" />
                 <span>◆</span>
                 <span className="h-px flex-1 bg-[#b58a55]/45" />
               </div>
             </div>
 
-            <div className="mt-5 grid grid-cols-2 border-b border-[#b58a55]/25 text-center text-[10px] uppercase tracking-[0.08em] min-[380px]:text-[11px] min-[380px]:tracking-[0.12em] sm:mt-8 sm:text-xs sm:tracking-[0.14em]">
+            <div className="mt-6 grid grid-cols-2 border-b border-[#b58a55]/25 text-center text-[10px] uppercase tracking-[0.12em] min-[380px]:text-[11px] sm:mt-8 sm:text-xs sm:tracking-[0.14em]">
               <span className="border-b-2 border-[#8b5a24] pb-3 font-semibold">Connexion</span>
               <Link to="/signup" className="pb-3 text-[#5f4a35] transition hover:text-[#17100b]">Créer un compte</Link>
             </div>
@@ -177,7 +184,7 @@ function Login() {
                     className="login-password-toggle"
                     aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                   >
-                    <Eye size={19} />
+                    {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
                   </button>
                 </div>
               </div>
@@ -198,7 +205,7 @@ function Login() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className='login-submit group flex w-full items-center justify-center gap-3 px-5 py-4 font-serif text-base uppercase tracking-[0.14em] shadow-lg transition disabled:cursor-not-allowed disabled:opacity-70 sm:gap-4 sm:px-6 sm:text-lg sm:tracking-[0.16em]'
+                className='login-submit group flex w-full cursor-pointer items-center justify-center gap-3 px-5 py-4 font-serif text-base uppercase tracking-[0.14em] shadow-lg transition disabled:cursor-not-allowed disabled:opacity-70 sm:gap-4 sm:px-6 sm:text-lg sm:tracking-[0.16em]'
               >
                 {isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
                 <ArrowRight className="transition group-hover:translate-x-1" size={18} />
@@ -213,7 +220,7 @@ function Login() {
               </div>
               <div className="mt-4 grid grid-cols-3 gap-2 min-[380px]:gap-3 sm:mt-5">
                 {socialProviders.map(({ name, Icon }) => (
-                  <button key={name} type="button" disabled={isSubmitting} className="login-social-button">
+                  <button key={name} type="button" disabled={isSubmitting} className="login-social-button" aria-label={`Continuer avec ${name}`}>
                     <Icon className="login-social-icon" aria-hidden="true" />
                     <span>{name}</span>
                   </button>
@@ -221,13 +228,8 @@ function Login() {
               </div>
             </div>
 
-            <div className="mt-5 grid grid-cols-2 gap-3 border-y border-[#b58a55]/25 py-4 text-center text-[10px] text-[#3b2a1d] min-[380px]:text-[11px] sm:mt-8 sm:grid-cols-4 sm:gap-4 sm:py-6">
-              {[
-                [PackageCheck, 'Livraison sécurisée'],
-                [RotateCcw, 'Retours gratuits'],
-                [ShieldCheck, 'Paiement sécurisé'],
-                [UserRoundCheck, 'Service client 7j/7'],
-              ].map(([Icon, label]) => (
+            <div className="mt-5 grid grid-cols-2 gap-3 border-y border-[#b58a55]/25 py-4 text-center text-[10px] text-[#3b2a1d] min-[380px]:text-[11px] sm:mt-7 sm:grid-cols-4 sm:gap-4 sm:py-5 xl:text-[12px]">
+              {trustItems.map(([Icon, label]) => (
                 <div key={label} className="flex flex-col items-center gap-2">
                   <Icon size={22} />
                   <span className="leading-snug">{label}</span>
@@ -243,7 +245,7 @@ function Login() {
         </motion.section>
       </main>
 
-      <div className="relative z-10 px-4 pb-7 text-center text-[11px] uppercase tracking-[0.12em] text-[#ead7b8] sm:px-5 sm:pb-8 sm:text-xs sm:tracking-[0.16em]">
+      <div className="relative z-10 px-4 pb-7 text-center text-[11px] uppercase tracking-[0.12em] text-[#ead7b8] sm:px-5 sm:pb-8 sm:text-xs sm:tracking-[0.16em] lg:hidden">
         Nouveau ici ? <Link to="/signup" className="underline underline-offset-4 transition hover:text-[#c6a16b]">Créez votre compte</Link>
       </div>
     </div>
