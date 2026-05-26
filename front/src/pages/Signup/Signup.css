@@ -64,6 +64,43 @@
   position: relative;
 }
 
+.signup-quote-block {
+  width: min(100%, 440px);
+  margin-left: clamp(13rem, 18vw, 18rem);
+  text-align: left;
+}
+
+.signup-quote-mark {
+  color: #c6a16b;
+  font-family: Georgia, serif;
+  font-size: 4.5rem;
+  line-height: 0.75;
+}
+
+.signup-quote-text {
+  margin-top: 1rem;
+  color: #f1dfbf;
+  font-family: Georgia, serif;
+  font-size: 1.875rem;
+  line-height: 1.25;
+}
+
+.signup-quote-brand {
+  margin-top: 2rem;
+  color: rgba(234, 215, 184, 0.8);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.signup-quote-line {
+  display: block;
+  width: 5rem;
+  height: 1px;
+  margin-top: 1.25rem;
+  background: #c6a16b;
+}
+
 .signup-label {
   display: block;
   margin-bottom: 0.45rem;

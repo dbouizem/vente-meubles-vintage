@@ -127,28 +127,12 @@ function Signup() {
         </a>
       </header>
 
-      <main className="relative z-10 grid gap-6 px-3 pb-7 min-[380px]:px-4 sm:px-8 sm:pb-10 lg:min-h-[calc(100dvh-96px)] lg:grid-cols-[minmax(280px,0.82fr)_minmax(620px,0.72fr)] lg:items-center lg:gap-12 lg:px-10 xl:grid-cols-[minmax(420px,1fr)_minmax(680px,820px)] xl:px-14">
-        <motion.aside
-          initial={{ opacity: 0, x: -28 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.75, ease: 'easeOut' }}
-          className="hidden min-h-[620px] flex-col justify-center lg:flex"
-        >
-          <div className="max-w-xs">
-            <p className="font-serif text-7xl leading-none text-[#c6a16b]">“</p>
-            <p className="mt-2 font-serif text-3xl leading-tight text-[#f1dfbf]">
-              Créer un compte, c’est entrer dans une maison de pièces choisies et d’histoires rares.
-            </p>
-            <p className="mt-8 text-xs uppercase tracking-[0.22em] text-[#ead7b8]/80">Atelier Héritage</p>
-            <span className="mt-5 block h-px w-20 bg-[#c6a16b]" />
-          </div>
-        </motion.aside>
-
+      <main className="relative z-10 grid gap-6 px-3 pb-7 min-[380px]:px-4 sm:px-8 sm:pb-10 lg:min-h-[calc(100dvh-96px)] lg:grid-cols-[minmax(620px,0.72fr)_minmax(280px,0.82fr)] lg:items-center lg:gap-12 lg:px-10 xl:grid-cols-[minmax(680px,820px)_minmax(420px,1fr)] xl:px-14">
         <motion.section
           initial={{ opacity: 0, y: 26 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.08, ease: 'easeOut' }}
-          className="signup-card mx-auto w-full max-w-[720px] text-[#1b120b] lg:mr-0 xl:mr-8"
+          className="signup-card mx-auto w-full max-w-[720px] text-[#1b120b] lg:ml-0 xl:ml-8"
           aria-labelledby="signup-title"
         >
           <div className="signup-card-frame">
@@ -295,6 +279,22 @@ function Signup() {
             </p>
           </div>
         </motion.section>
+
+        <motion.aside
+          initial={{ opacity: 0, x: -28 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.75, ease: 'easeOut' }}
+          className="hidden min-h-[620px] flex-col justify-center lg:flex"
+        >
+          <div className="signup-quote-block">
+            <p className="signup-quote-mark">“</p>
+            <p className="signup-quote-text">
+              Créer un compte, c’est entrer dans une maison de pièces choisies et d’histoires rares.
+            </p>
+            <p className="signup-quote-brand">Atelier Héritage</p>
+            <span className="signup-quote-line" />
+          </div>
+        </motion.aside>
       </main>
     </div>
   );

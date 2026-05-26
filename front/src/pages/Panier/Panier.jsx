@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { panierContext, reductionContext } from '../../contexts';
 import { Modal } from '../../composants/Modal/Modal';
 import fallbackImage from '../../assets/img_vignette/img_non_dispo.jpg';
+import Navbar from '../../composants/Navbar/Navbar';
+import Footer from '../../composants/Footer/Footer';
+import { Lock, Mail, Package, RotateCcw, Trash2 } from 'lucide-react';
 
 function Panier() {
 
@@ -59,126 +62,166 @@ function Panier() {
 
 
   return (
-<section className="min-h-[70vh]">
-  <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-    <div className="mx-auto max-w-3xl">
-      <header className="text-center">
-        <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">Votre panier</h1>
-        <p className="mt-2 text-sm text-gray-600">Réservez vos pièces favorites avant de venir les retirer en boutique.</p>
-      </header>
+<div className="min-h-screen bg-[#f8f2ec] text-[#24160e]">
+  <Navbar />
+  <main className="mx-auto max-w-7xl px-4 py-12 sm:px-8">
+    <header className="text-center">
+      <p className="font-serif text-2xl text-[#8b5a24]">⌁</p>
+      <h1 className="font-serif text-5xl uppercase tracking-[0.08em] text-[#17100b] sm:text-7xl">Votre panier</h1>
+      <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-[#5f4a35]">L’élégance intemporelle, choisie avec soin.</p>
+      <span className="mx-auto mt-5 block h-px w-20 bg-[#b58a55]" />
+    </header>
 
-      <div className="mt-8">
-      {panier.length === 0 && (
-        <div className="rounded-lg bg-white px-6 py-10 text-center shadow-sm">
-          <p className="text-lg font-semibold text-dark-brown">Votre panier est vide.</p>
-          <p className="mt-2 text-sm text-gray-600">Explorez la collection pour ajouter un meuble à votre réservation.</p>
-          <Link to="/accueil" className="mt-5 inline-block rounded-md bg-dark-brown px-4 py-2 text-white">Voir les produits</Link>
-        </div>
-      )}
-
-      {panier.map((item, index) => (
-        <div key={`${item.id}-${index}`} className="mt-8 border-t border-gray-400 pt-8">
-        <ul className="space-y-4">
-          <li className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <img
-              src={item.photo || fallbackImage}
-              className="h-16 w-16 rounded object-cover"
-              alt={item.nom}
-            />
-
-            <div>
-              <h3 className="text-base  text-gray-900">{item.nom}</h3>
-
-            </div>
-
-            <div className="flex w-full flex-1 items-center justify-between sm:justify-end gap-2 font-medium text-base">
-              <p>{item.prix}€</p>
-    
-
-              <button className="text-gray-600 transition hover:text-red-600"
-                onClick={() => removeItemFromPanier(index)}
-              >
-                <span className="sr-only">Supprimer</span>
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="h-4 w-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                  />
-                </svg>
-              </button>
-            </div>
-          </li>
-
-        </ul>
-        </div>
-        ))}
-
-        {panier.length > 0 && (
-          <div className="mt-8 flex justify-end">
-            <button
-              className="rounded border border-gray-700 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100"
-              onClick={clearPanier}
-            >
-              Vider le panier
-            </button>
-          </div>
-        )}
-
-        {panier.length > 0 && (
-        <div className="mt-8 flex justify-end border-t border-gray-400 pt-8">
-          <div className="w-full max-w-lg space-y-4">
-            <dl className="space-y-0.5 text-sm text-gray-700">
-              <div className="flex justify-between">
-                <dt>Sous-total</dt>
-                <dd>{subtotals}€</dd>
-              </div>
-
-              <div className="flex justify-between">
-                <dt>Taxes incluses</dt>
-                <dd>20%</dd>
-              </div>
-
-              <div className="flex flex-col gap-2 sm:flex-row sm:justify-between">
-                <dt>Code Promo</dt>
-                <dd className="flex gap-2">
-                  <input placeholder='Code Promo' value={promoMessage} onChange={messageChange} onKeyDown={messagePress} className='w-full text-left sm:text-right border-solid border-gray-800'></input>
-                  <button type="button" className="rounded bg-gray-700 px-3 py-1 text-white" onClick={applyPromo}>OK</button>
-                </dd>
-                <dd>{codePromo()}€</dd>
-              </div>
-
-              <div className="flex justify-between !text-base font-medium ">
-                <dt>Total</dt>
-                <dd>{total}€</dd>
-              </div>
-            </dl>
-
-
-
-            <div className="flex flex-col items-center justify-end">
-              <button
-               className="block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600"
-               onClick={openModal}> Payer en boutique</button>
-               <Modal showModal={showModal} setShowModal = {setShowModal} />
-              
-              
-            </div>
-          </div>
-        </div>
-        )}
+    {panier.length === 0 ? (
+      <div className="mx-auto mt-12 max-w-2xl border border-[#dccbbd] bg-white px-6 py-12 text-center">
+        <p className="font-serif text-3xl uppercase text-[#4a2b18]">Votre panier est vide</p>
+        <p className="mt-3 text-sm text-[#5f4a35]">Explorez la collection pour ajouter un meuble à votre réservation.</p>
+        <Link to="/accueil" className="mt-6 inline-block bg-[#17100b] px-6 py-3 text-xs uppercase tracking-[0.16em] text-[#f8ecd4]">Voir les produits</Link>
       </div>
-    </div>
-  </div>
-</section>
+    ) : (
+      <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_380px]">
+        <section>
+          <div className="border border-[#dccbbd] bg-[#fbf1df]">
+            <div className="hidden grid-cols-[1fr_120px_150px_110px] border-b border-[#dccbbd] px-8 py-5 text-[11px] uppercase tracking-[0.16em] text-[#5f4a35] md:grid">
+              <span>Article</span>
+              <span>Prix</span>
+              <span>Quantité</span>
+              <span>Total</span>
+            </div>
+
+            {panier.map((item, index) => (
+              <div key={`${item.id}-${index}`} className="grid gap-4 border-b border-[#dccbbd] px-5 py-5 last:border-b-0 md:grid-cols-[1fr_120px_150px_110px] md:items-center md:px-8">
+                <div className="flex gap-5">
+                  <img src={item.photo || fallbackImage} className="h-28 w-28 border border-[#dccbbd] object-contain bg-white" alt={item.nom} />
+                  <div className="flex flex-col justify-center">
+                    <h3 className="font-serif text-base uppercase leading-5 text-[#24160e]">{item.nom}</h3>
+                    <p className="mt-2 text-[11px] uppercase tracking-[0.1em] text-[#5f4a35]">Pièce unique · vintage</p>
+                  </div>
+                </div>
+                <p className="font-serif text-lg">{item.prix}€</p>
+                <div className="inline-flex w-fit items-center border border-[#dccbbd]">
+                  <button type="button" className="h-10 w-10 cursor-pointer">−</button>
+                  <span className="w-10 text-center">1</span>
+                  <button type="button" className="h-10 w-10 cursor-pointer">+</button>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <p className="font-serif text-lg">{item.prix}€</p>
+                  <button className="cursor-pointer text-[#5f4a35] transition hover:text-red-700" onClick={() => removeItemFromPanier(index)} aria-label="Supprimer">
+                    <Trash2 size={17} />
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            <div className="flex flex-col gap-3 px-5 py-5 sm:flex-row sm:items-center sm:justify-between md:px-8">
+              <Link to="/accueil" className="inline-flex justify-center border border-[#b58a55] px-6 py-3 text-[11px] uppercase tracking-[0.16em] transition hover:border-[#7c2d12] hover:text-[#7c2d12]">← Continuer mes achats</Link>
+              <button className="cursor-pointer border border-[#dccbbd] px-6 py-3 text-[11px] uppercase tracking-[0.16em] text-[#5f4a35] transition hover:border-[#7c2d12] hover:text-[#7c2d12]" onClick={clearPanier}>Vider le panier</button>
+            </div>
+          </div>
+
+          <div className="mt-5 grid border border-[#dccbbd] bg-[#fbf1df] p-5 sm:grid-cols-[170px_1fr_auto] sm:items-center">
+            <p className="text-[11px] uppercase tracking-[0.16em]">Code promo</p>
+            <input placeholder='Entrez votre code' value={promoMessage} onChange={messageChange} onKeyDown={messagePress} className='mt-3 border border-[#dccbbd] bg-transparent px-4 py-3 text-sm outline-none sm:mt-0' />
+            <button type="button" className="mt-3 cursor-pointer border border-[#9a805d] px-6 py-3 text-[11px] uppercase tracking-[0.16em] sm:mt-0" onClick={applyPromo}>Appliquer</button>
+          </div>
+
+          <section className="mt-5 border border-[#dccbbd] bg-[#fbf1df]">
+            <div className="border-b border-[#dccbbd] p-5">
+              <p className="text-[11px] uppercase tracking-[0.16em]">1 Livraison</p>
+              <div className="mt-5 grid gap-4 sm:grid-cols-3">
+                {['Votre prénom', 'Votre nom', 'Téléphone'].map((placeholder) => (
+                  <input key={placeholder} placeholder={placeholder} className="border border-[#dccbbd] bg-transparent px-4 py-3 text-sm outline-none" />
+                ))}
+              </div>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <input placeholder="Adresse" className="border border-[#dccbbd] bg-transparent px-4 py-3 text-sm outline-none" />
+                <input placeholder="Ville" className="border border-[#dccbbd] bg-transparent px-4 py-3 text-sm outline-none" />
+              </div>
+            </div>
+
+            <div className="border-b border-[#dccbbd] p-5">
+              <p className="text-[11px] uppercase tracking-[0.16em]">2 Livraison</p>
+              <div className="mt-5 grid gap-4 sm:grid-cols-3">
+                {['Livraison Standard', 'Livraison Express', 'Point Relais'].map((label, index) => (
+                  <label key={label} className="flex cursor-pointer items-start gap-3 text-sm text-[#5f4a35]">
+                    <input type="radio" name="shipping" defaultChecked={index === 0} className="mt-1 accent-[#7c2d12]" />
+                    <span>{label}<br/><span className="text-xs">2 à 4 jours ouvrés</span></span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-5">
+              <p className="text-[11px] uppercase tracking-[0.16em]">3 Paiement</p>
+              <div className="mt-5 grid gap-4 sm:grid-cols-3">
+                {['Carte bancaire', 'PayPal', 'Apple Pay'].map((label, index) => (
+                  <label key={label} className="flex cursor-pointer items-center gap-3 text-sm text-[#5f4a35]">
+                    <input type="radio" name="payment" defaultChecked={index === 0} className="accent-[#7c2d12]" />
+                    <span>{label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <aside className="h-fit border border-[#dccbbd] bg-[#fbf1df] p-7 lg:sticky lg:top-6">
+          <div className="mx-auto mb-7 flex h-24 w-24 items-center justify-center border border-[#b58a55] font-serif text-3xl text-[#4a2b18]">AH</div>
+          <div className="border-y border-[#dccbbd] py-5">
+            <p className="text-[11px] uppercase tracking-[0.16em]">Résumé de commande</p>
+            <dl className="mt-5 space-y-3 text-sm text-[#5f4a35]">
+              <div className="flex justify-between"><dt>Sous-total</dt><dd>{subtotals}€</dd></div>
+              <div className="flex justify-between"><dt>Livraison</dt><dd>Gratuite</dd></div>
+              <div className="flex justify-between"><dt>Code promo</dt><dd>-{codePromo()}€</dd></div>
+            </dl>
+          </div>
+          <div className="flex justify-between border-b border-[#dccbbd] py-5 font-serif text-2xl">
+            <span>Total</span>
+            <span>{total}€</span>
+          </div>
+
+          <div className="mt-6 space-y-4">
+            {panier.map((item, index) => (
+              <div key={`${item.id}-summary-${index}`} className="flex gap-4">
+                <img src={item.photo || fallbackImage} alt="" className="h-20 w-20 border border-[#dccbbd] object-contain bg-white" />
+                <div className="flex-1 text-sm">
+                  <p className="font-serif uppercase leading-5">{item.nom}</p>
+                  <p className="mt-1 text-xs text-[#5f4a35]">{item.prix}€</p>
+                </div>
+                <span className="text-xs">x1</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-7 border-t border-[#dccbbd] pt-5 text-xs leading-6 text-[#5f4a35]">
+            <p className="font-semibold text-[#24160e]">Besoin d’aide ?</p>
+            <p>Notre équipe est à votre écoute.</p>
+            <p className="inline-flex items-center gap-2"><Mail size={14}/> contact@atelierheritage.com</p>
+          </div>
+
+          <div className="mt-7 grid gap-4 border-t border-[#dccbbd] pt-5 text-xs uppercase tracking-[0.08em] text-[#5f4a35]">
+            <p className="inline-flex items-center gap-3"><Package size={18}/> Livraison offerte</p>
+            <p className="inline-flex items-center gap-3"><RotateCcw size={18}/> Retours sous 30 jours</p>
+            <p className="inline-flex items-center gap-3"><Lock size={18}/> Paiement sécurisé</p>
+          </div>
+        </aside>
+      </div>
+    )}
+
+    {panier.length > 0 && (
+      <div className="mt-8 grid gap-5 lg:grid-cols-[1fr_380px]">
+        <div className="border border-[#dccbbd] bg-[#fbf1df] p-5 text-xs text-[#5f4a35]">
+          <p className="inline-flex items-center gap-3"><Lock size={18}/> Paiement sécurisé et chiffré. Vos informations sont protégées.</p>
+        </div>
+        <button className="cursor-pointer bg-[#17100b] px-5 py-4 text-[11px] uppercase tracking-[0.16em] text-[#f8ecd4] transition hover:bg-[#4a2b18]" onClick={openModal}>
+          Valider et payer — {total}€
+        </button>
+        <Modal showModal={showModal} setShowModal={setShowModal} />
+      </div>
+    )}
+  </main>
+  <Footer />
+</div>
   )
 }
 
