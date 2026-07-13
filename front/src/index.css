@@ -5,7 +5,9 @@
     @apply text-inherit no-underline;
   }
   html {
-    font-family: PT Mono, monospace;
+    font-family:
+      PT Mono,
+      monospace;
   }
   body {
     @apply bg-[#f8f5f2] text-[#24160e] antialiased;

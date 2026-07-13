@@ -1,13 +1,13 @@
 import { apiUrl } from '../config/api';
 
-async function updateMeubleInfo(id, data){
+async function updateMeubleInfo(id, data) {
   const response = await fetch(apiUrl(`/admin/${id}`), {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+      Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 
   const responseData = await response.json();
@@ -19,4 +19,4 @@ async function updateMeubleInfo(id, data){
   return responseData;
 }
 
-export default updateMeubleInfo
+export default updateMeubleInfo;

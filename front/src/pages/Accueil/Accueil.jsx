@@ -4,14 +4,13 @@ import Main from '../../composants/Main/Main';
 import Footer from '../../composants/Footer/Footer';
 
 function Accueil() {
-
   return (
     <div className="min-h-screen bg-[#f1dfbf] text-[#24160e]">
-      <Navbar/>
-      <Header/>
-      <Main/>
-      <Footer/>
+      <Navbar />
+      <Header />
+      <Main />
+      <Footer />
     </div>
-  )
+  );
 }
 export default Accueil;

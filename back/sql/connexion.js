@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 const path = require('path');
 
 const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
-require("dotenv").config({ path: path.resolve(__dirname, '..', '..', envFile), quiet: true });
+require('dotenv').config({ path: path.resolve(__dirname, '..', '..', envFile), quiet: true });
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
@@ -16,7 +16,8 @@ const pool = mysql.createPool({
 });
 
 if (process.env.NODE_ENV !== 'test') {
-  pool.getConnection()
+  pool
+    .getConnection()
     .then((connection) => {
       connection.release();
       console.log('Connecté à la base de données MySQL');

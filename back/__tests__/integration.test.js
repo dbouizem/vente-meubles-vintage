@@ -46,7 +46,7 @@ describeIntegration('Backend integration with MariaDB/MySQL', () => {
 
     await db.query(
       'INSERT INTO test_users (nom, prenom, email, mdp, role) VALUES (?, ?, ?, ?, ?)',
-      ['Admin', 'Test', 'admin@example.com', passwordHash, 'admin']
+      ['Admin', 'Test', 'admin@example.com', passwordHash, 'admin'],
     );
   };
 
@@ -62,18 +62,18 @@ describeIntegration('Backend integration with MariaDB/MySQL', () => {
   it('creates a user, stores a hashed password, and logs in without an admin token', async () => {
     const request = require('supertest');
 
-    const signupResponse = await request(app)
-      .post('/signup')
-      .send({
-        name: 'User',
-        firstname: 'Integration',
-        email: 'integration@example.com',
-        password: 'secret123',
-      });
+    const signupResponse = await request(app).post('/signup').send({
+      name: 'User',
+      firstname: 'Integration',
+      email: 'integration@example.com',
+      password: 'secret123',
+    });
 
     expect(signupResponse.status).toBe(200);
 
-    const [users] = await db.query('SELECT email, mdp, role FROM test_users WHERE email = ?', ['integration@example.com']);
+    const [users] = await db.query('SELECT email, mdp, role FROM test_users WHERE email = ?', [
+      'integration@example.com',
+    ]);
     expect(users).toHaveLength(1);
     expect(users[0].mdp).not.toBe('secret123');
     expect(await bcrypt.compare('secret123', users[0].mdp)).toBe(true);
@@ -94,13 +94,11 @@ describeIntegration('Backend integration with MariaDB/MySQL', () => {
   it('protects product creation without an admin token', async () => {
     const request = require('supertest');
 
-    const response = await request(app)
-      .post('/meubles/create')
-      .send({
-        titre: 'Table test',
-        prix: 120,
-        description: 'Produit cree par test integration',
-      });
+    const response = await request(app).post('/meubles/create').send({
+      titre: 'Table test',
+      prix: 120,
+      description: 'Produit cree par test integration',
+    });
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ message: 'Authentification requise' });
@@ -110,10 +108,13 @@ describeIntegration('Backend integration with MariaDB/MySQL', () => {
     const request = require('supertest');
 
     const uploadFixturePath = path.join(__dirname, 'upload-fixture.png');
-    fs.writeFileSync(uploadFixturePath, Buffer.from(
-      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
-      'base64'
-    ));
+    fs.writeFileSync(
+      uploadFixturePath,
+      Buffer.from(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+        'base64',
+      ),
+    );
 
     const createResponse = await request(app)
       .post('/meubles/create')
@@ -161,6 +162,8 @@ describeIntegration('Backend integration with MariaDB/MySQL', () => {
     expect(deletedDetailResponse.status).toBe(404);
 
     fs.rmSync(uploadFixturePath, { force: true });
-    fs.rmSync(path.resolve(__dirname, '..', 'Assets', 'img_meubles', uploadedPhoto), { force: true });
+    fs.rmSync(path.resolve(__dirname, '..', 'Assets', 'img_meubles', uploadedPhoto), {
+      force: true,
+    });
   });
 });

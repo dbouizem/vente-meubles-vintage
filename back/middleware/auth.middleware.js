@@ -15,11 +15,16 @@ const getAuthSecret = () => {
 const AUTH_SECRET = getAuthSecret();
 const TOKEN_EXPIRES_IN = process.env.AUTH_TOKEN_EXPIRES_IN || '2h';
 
-const createAdminToken = (user) => jwt.sign({
-  id: user.id,
-  email: user.email,
-  role: user.role,
-}, AUTH_SECRET, { expiresIn: TOKEN_EXPIRES_IN });
+const createAdminToken = (user) =>
+  jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    },
+    AUTH_SECRET,
+    { expiresIn: TOKEN_EXPIRES_IN },
+  );
 
 const requireAdmin = (req, res, next) => {
   const authorization = req.headers.authorization || '';

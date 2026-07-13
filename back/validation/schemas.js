@@ -1,15 +1,19 @@
 const { z } = require('zod');
 
-const requiredString = (fieldName) => z
-  .string({ required_error: `${fieldName} est obligatoire` })
-  .trim()
-  .min(1, `${fieldName} est obligatoire`);
+const requiredString = (fieldName) =>
+  z
+    .string({ required_error: `${fieldName} est obligatoire` })
+    .trim()
+    .min(1, `${fieldName} est obligatoire`);
 
 const signupSchema = z.object({
   name: requiredString('Nom'),
   firstname: requiredString('Prenom'),
   email: requiredString('Email').email('Email invalide'),
-  password: requiredString('Mot de passe').min(6, 'Le mot de passe doit contenir au moins 6 caracteres'),
+  password: requiredString('Mot de passe').min(
+    6,
+    'Le mot de passe doit contenir au moins 6 caracteres',
+  ),
 });
 
 const loginSchema = z.object({

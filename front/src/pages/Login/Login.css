@@ -5,16 +5,16 @@
 .login-card {
   position: relative;
   border: 1px solid rgba(181, 138, 85, 0.62);
-  background:
-    linear-gradient(rgba(247, 231, 204, 0.96), rgba(239, 219, 186, 0.96)),
-    #f2e3c8;
-  box-shadow: 0 28px 70px rgba(13, 8, 4, 0.42), inset 0 0 0 1px rgba(255, 250, 235, 0.38);
+  background: linear-gradient(rgba(247, 231, 204, 0.96), rgba(239, 219, 186, 0.96)), #f2e3c8;
+  box-shadow:
+    0 28px 70px rgba(13, 8, 4, 0.42),
+    inset 0 0 0 1px rgba(255, 250, 235, 0.38);
   backdrop-filter: blur(8px);
 }
 
 .login-card::before,
 .login-card::after {
-  content: "";
+  content: '';
   position: absolute;
   width: 32px;
   height: 32px;
@@ -44,7 +44,7 @@
 }
 
 .login-card-frame::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -52,7 +52,9 @@
   background-image:
     radial-gradient(circle at 20% 18%, rgba(139, 90, 36, 0.2) 0 1px, transparent 1px),
     radial-gradient(circle at 78% 58%, rgba(255, 255, 255, 0.5) 0 1px, transparent 1px);
-  background-size: 34px 34px, 46px 46px;
+  background-size:
+    34px 34px,
+    46px 46px;
 }
 
 .login-card-frame > * {
@@ -67,13 +69,18 @@
   border: 1px solid rgba(155, 118, 80, 0.62);
   background: rgba(248, 236, 215, 0.82);
   box-shadow: inset 0 0 0 1px rgba(255, 250, 235, 0.28);
-  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
 }
 
 .login-field:focus-within {
   border-color: #5a3519;
   background: rgba(248, 236, 215, 0.96);
-  box-shadow: 0 0 0 3px rgba(198, 161, 107, 0.26), inset 0 0 0 1px rgba(255, 250, 235, 0.36);
+  box-shadow:
+    0 0 0 3px rgba(198, 161, 107, 0.26),
+    inset 0 0 0 1px rgba(255, 250, 235, 0.36);
 }
 
 .login-field-icon,
@@ -95,7 +102,9 @@
   border-left: 1px solid rgba(155, 118, 80, 0.22);
   background: transparent;
   cursor: pointer;
-  transition: color 180ms ease, background 180ms ease;
+  transition:
+    color 180ms ease,
+    background 180ms ease;
 }
 
 .login-password-toggle:hover {
@@ -143,7 +152,9 @@
   border: 1px solid #5a3519;
   background: linear-gradient(180deg, #21140b 0%, #0f0905 100%) !important;
   color: #fff2d8 !important;
-  box-shadow: inset 0 0 0 1px rgba(246, 218, 172, 0.22), 0 10px 22px rgba(21, 12, 6, 0.22) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(246, 218, 172, 0.22),
+    0 10px 22px rgba(21, 12, 6, 0.22) !important;
   min-height: 64px;
 }
 
@@ -174,7 +185,11 @@
   cursor: pointer;
   font-size: 0.78rem;
   line-height: 1;
-  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease;
 }
 
 .login-social-button:hover {

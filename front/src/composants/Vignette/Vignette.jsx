@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
-import { motion } from "motion/react";
-import { Heart, Plus } from "lucide-react";
-import "./Vignette.css";
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'motion/react';
+import { Heart, Plus } from 'lucide-react';
+import './Vignette.css';
 
 function Vignette({ id, nom, prix, photo, index = 0 }) {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ function Vignette({ id, nom, prix, photo, index = 0 }) {
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.48, delay: index * 0.035, ease: "easeOut" }}
+      transition={{ duration: 0.48, delay: index * 0.035, ease: 'easeOut' }}
       className="product-card group flex h-full w-full flex-col overflow-hidden border border-[#d8c5a7] bg-[#fbf1df] transition duration-300 hover:border-[#7c2d12]"
     >
       <button
@@ -33,7 +33,9 @@ function Vignette({ id, nom, prix, photo, index = 0 }) {
       </button>
 
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="min-h-[42px] font-serif text-sm uppercase leading-5 tracking-[0.06em] text-[#24160e]">{nom}</h3>
+        <h3 className="min-h-[42px] font-serif text-sm uppercase leading-5 tracking-[0.06em] text-[#24160e]">
+          {nom}
+        </h3>
         <p className="mt-1 text-xs uppercase tracking-[0.08em] text-[#5f4a35]">Vintage restauré</p>
         <div className="mt-4 flex items-end justify-between">
           <div>

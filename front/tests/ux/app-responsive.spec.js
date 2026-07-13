@@ -10,7 +10,9 @@ for (const viewport of [
     await page.goto('/');
     await expect(page.locator('body')).toBeVisible();
 
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
     expect(overflow).toBeLessThanOrEqual(2);
   });
 }

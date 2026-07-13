@@ -8,6 +8,10 @@ node_modules
 .git-real/
 dist/
 dist-ssr/
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
 *.local
 .DS_Store
 logs

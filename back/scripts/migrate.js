@@ -9,26 +9,28 @@ dotenv.config({ path: path.resolve(__dirname, '..', '..', envFile), quiet: true 
 const database = process.env.DB_NAME || 'vente_meubles';
 const migrationsDir = path.resolve(__dirname, '..', 'migrations');
 
-const createConnection = (options = {}) => mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.USER_BDD || 'root',
-  password: process.env.PASSWORD,
-  port: Number(process.env.PORT_BDD) || 3306,
-  multipleStatements: false,
-  ...options,
-});
+const createConnection = (options = {}) =>
+  mysql.createConnection({
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.USER_BDD || 'root',
+    password: process.env.PASSWORD,
+    port: Number(process.env.PORT_BDD) || 3306,
+    multipleStatements: false,
+    ...options,
+  });
 
-const splitSqlStatements = (sql) => sql
-  .split(';')
-  .map((statement) => statement.trim())
-  .filter(Boolean);
+const splitSqlStatements = (sql) =>
+  sql
+    .split(';')
+    .map((statement) => statement.trim())
+    .filter(Boolean);
 
 const ensureDatabaseExists = async () => {
   const connection = await createConnection();
 
   try {
     await connection.query(
-      `CREATE DATABASE IF NOT EXISTS \`${database}\` DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci`
+      `CREATE DATABASE IF NOT EXISTS \`${database}\` DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci`,
     );
   } finally {
     await connection.end();
@@ -54,9 +56,7 @@ const getAppliedMigrations = async (connection) => {
 
 const getMigrationFiles = async () => {
   const entries = await fs.readdir(migrationsDir);
-  return entries
-    .filter((entry) => entry.endsWith('.sql'))
-    .sort();
+  return entries.filter((entry) => entry.endsWith('.sql')).sort();
 };
 
 const runMigration = async (connection, filename) => {

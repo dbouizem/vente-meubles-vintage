@@ -1,10 +1,10 @@
-import './Header.css'
-import { motion } from 'motion/react'
-import heroImage from '../../assets/bg_header.png'
+import './Header.css';
+import { motion } from 'motion/react';
+import heroImage from '../../assets/bg_header.png';
 
 function Header() {
   return (
-    <section className='luxury-hero relative min-h-[330px] overflow-hidden text-[#f1dfbf] sm:min-h-[420px]'>
+    <section className="luxury-hero relative min-h-[330px] overflow-hidden text-[#f1dfbf] sm:min-h-[420px]">
       <motion.div
         aria-hidden="true"
         className="absolute inset-0 bg-cover bg-center"
@@ -31,8 +31,7 @@ function Header() {
         </motion.div>
       </div>
     </section>
-  )
-  
+  );
 }
 
-export default Header
+export default Header;

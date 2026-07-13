@@ -18,8 +18,8 @@ Fichiers concernes:
 Exemples:
 
 ```js
-const query = "DELETE FROM testmeubles WHERE ID =" + id;
-const query = "SELECT DISTINCT * FROM testmeubles WHERE id =" + id;
+const query = 'DELETE FROM testmeubles WHERE ID =' + id;
+const query = 'SELECT DISTINCT * FROM testmeubles WHERE id =' + id;
 ```
 
 ### Objectif
@@ -328,4 +328,3 @@ Rendre le code plus propre et plus lisible.
 ### Critere d'acceptation
 
 Le code reste fonctionnel et ne contient plus de logs de debug inutiles.
-

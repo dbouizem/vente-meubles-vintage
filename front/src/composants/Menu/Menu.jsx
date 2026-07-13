@@ -1,29 +1,21 @@
 import { useState } from 'react';
 
-
 const Menu = () => {
-    const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
-    return (
-        <div className="flex items-center justify-between border-b border-gray-400 py-8">
-
-<nav>
+  return (
+    <div className="flex items-center justify-between border-b border-gray-400 py-8">
+      <nav>
         <section className="MOBILE-MENU flex lg:hidden">
-        {/* <button><img src={menuIcon}></img></button> */}
-          <div
-            className="HAMBURGER-ICON space-y-2"
-            onClick={() => setIsNavOpen((prev) => !prev)}
-          >
+          {/* <button><img src={menuIcon}></img></button> */}
+          <div className="HAMBURGER-ICON space-y-2" onClick={() => setIsNavOpen((prev) => !prev)}>
             <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
             <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
             <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
           </div>
 
-          <div className={isNavOpen ? "showMenuNav" : "hideMenuNav"}>
-            <div
-              className="absolute top-0 right-0 px-8 py-8"
-              onClick={() => setIsNavOpen(false)}
-            >
+          <div className={isNavOpen ? 'showMenuNav' : 'hideMenuNav'}>
+            <div className="absolute top-0 right-0 px-8 py-8" onClick={() => setIsNavOpen(false)}>
               <svg
                 className="h-8 w-8 text-gray-600"
                 viewBox="0 0 24 24"
@@ -38,13 +30,19 @@ const Menu = () => {
               </svg>
             </div>
             <ul className="flex flex-col items-center justify-between min-h-[250px]">
-              <li className="border-b border-gray-400 my-8 uppercase"> Produits
+              <li className="border-b border-gray-400 my-8 uppercase">
+                {' '}
+                Produits
                 {/* <a href="/about">Produits</a> */}
               </li>
-              <li className="border-b border-gray-400 my-8 uppercase"> Mon Compte
+              <li className="border-b border-gray-400 my-8 uppercase">
+                {' '}
+                Mon Compte
                 {/* <a href="/portfolio">Mon Compte</a> */}
               </li>
-              <li className="border-b border-gray-400 my-8 uppercase"> Contact
+              <li className="border-b border-gray-400 my-8 uppercase">
+                {' '}
+                Contact
                 {/* <a href="/contact">Contact</a> */}
               </li>
             </ul>
@@ -52,13 +50,19 @@ const Menu = () => {
         </section>
 
         <ul className="DESKTOP-MENU hidden space-x-8 lg:flex">
-          <li> Produits
+          <li>
+            {' '}
+            Produits
             {/* <a href="/about">Produits</a> */}
           </li>
-          <li> Mon Compte
+          <li>
+            {' '}
+            Mon Compte
             {/* <a href="/portfolio">Mon Compte</a> */}
           </li>
-          <li> Contact
+          <li>
+            {' '}
+            Contact
             {/* <a href="/contact">Contact</a> */}
           </li>
         </ul>
@@ -83,9 +87,8 @@ const Menu = () => {
         align-items: center;
       }
     `}</style>
-
-        </div>
-    );
+    </div>
+  );
 };
 
 export default Menu;

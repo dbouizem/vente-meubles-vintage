@@ -53,7 +53,10 @@ describe('Backend controllers and middleware', () => {
 
       corsLayer.handle(req, res, next);
 
-      expect(res.setHeader).toHaveBeenCalledWith('Access-Control-Allow-Origin', 'http://localhost:5173');
+      expect(res.setHeader).toHaveBeenCalledWith(
+        'Access-Control-Allow-Origin',
+        'http://localhost:5173',
+      );
       expect(next).toHaveBeenCalled();
     });
   });
@@ -70,7 +73,9 @@ describe('Backend controllers and middleware', () => {
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.send).toHaveBeenCalledWith(meubles);
-      expect(db.query).toHaveBeenCalledWith('SELECT id,titre,prix,description,photo FROM testmeubles');
+      expect(db.query).toHaveBeenCalledWith(
+        'SELECT id,titre,prix,description,photo FROM testmeubles',
+      );
     });
 
     it('returns 500 when database fails', async () => {
@@ -80,7 +85,9 @@ describe('Backend controllers and middleware', () => {
       await accueilController.displayObjectmeubles({}, res);
 
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith({ message: 'Erreur lors de la recuperation des meubles' });
+      expect(res.send).toHaveBeenCalledWith({
+        message: 'Erreur lors de la recuperation des meubles',
+      });
     });
   });
 
@@ -119,9 +126,12 @@ describe('Backend controllers and middleware', () => {
     it('rejects product creation with invalid price', async () => {
       const res = createResponse();
 
-      await produitController.createNewProduct({
-        body: { titre: 'Table', prix: -10, description: 'Bois' },
-      }, res);
+      await produitController.createNewProduct(
+        {
+          body: { titre: 'Table', prix: -10, description: 'Bois' },
+        },
+        res,
+      );
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith({ message: 'Prix invalide' });
@@ -132,10 +142,13 @@ describe('Backend controllers and middleware', () => {
       db.query.mockResolvedValueOnce([{ insertId: 10 }]);
       const res = createResponse();
 
-      await produitController.createNewProduct({
-        body: { titre: 'Table', prix: 100, description: 'Bois' },
-        file: { filename: 'uploaded-table.jpg' },
-      }, res);
+      await produitController.createNewProduct(
+        {
+          body: { titre: 'Table', prix: 100, description: 'Bois' },
+          file: { filename: 'uploaded-table.jpg' },
+        },
+        res,
+      );
 
       expect(res.status).toHaveBeenCalledWith(201);
       expect(db.query.mock.calls[0][1]).toEqual(['Table', 100, 'Bois', 'uploaded-table.jpg']);
@@ -147,14 +160,17 @@ describe('Backend controllers and middleware', () => {
       db.query.mockResolvedValueOnce([{ insertId: 1 }]);
       const res = createResponse();
 
-      await usersController.createObject({
-        body: {
-          name: 'Test',
-          firstname: 'User',
-          email: 'test@example.com',
-          password: 'secret123',
+      await usersController.createObject(
+        {
+          body: {
+            name: 'Test',
+            firstname: 'User',
+            email: 'test@example.com',
+            password: 'secret123',
+          },
         },
-      }, res);
+        res,
+      );
 
       expect(res.status).toHaveBeenCalledWith(200);
       const [, values] = db.query.mock.calls[0];
@@ -169,14 +185,17 @@ describe('Backend controllers and middleware', () => {
       db.query.mockRejectedValueOnce(duplicateError);
       const res = createResponse();
 
-      await usersController.createObject({
-        body: {
-          name: 'Test',
-          firstname: 'User',
-          email: 'test@example.com',
-          password: 'secret123',
+      await usersController.createObject(
+        {
+          body: {
+            name: 'Test',
+            firstname: 'User',
+            email: 'test@example.com',
+            password: 'secret123',
+          },
         },
-      }, res);
+        res,
+      );
 
       expect(res.status).toHaveBeenCalledWith(409);
       expect(res.send).toHaveBeenCalledWith({ message: 'Cet email est deja utilise' });
@@ -185,14 +204,17 @@ describe('Backend controllers and middleware', () => {
     it('rejects signup with invalid email', async () => {
       const res = createResponse();
 
-      await usersController.createObject({
-        body: {
-          name: 'Test',
-          firstname: 'User',
-          email: 'not-an-email',
-          password: 'secret123',
+      await usersController.createObject(
+        {
+          body: {
+            name: 'Test',
+            firstname: 'User',
+            email: 'not-an-email',
+            password: 'secret123',
+          },
         },
-      }, res);
+        res,
+      );
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith({ message: 'Email invalide' });
@@ -201,19 +223,24 @@ describe('Backend controllers and middleware', () => {
 
     it('returns an admin token without leaking the password', async () => {
       const passwordHash = await bcrypt.hash('admin123', 10);
-      db.query.mockResolvedValueOnce([[
-        {
-          id: 1,
-          email: 'admin@example.com',
-          mdp: passwordHash,
-          role: 'admin',
-        },
-      ]]);
+      db.query.mockResolvedValueOnce([
+        [
+          {
+            id: 1,
+            email: 'admin@example.com',
+            mdp: passwordHash,
+            role: 'admin',
+          },
+        ],
+      ]);
       const res = createResponse();
 
-      await usersController.checkLogin({
-        body: { email: 'admin@example.com', password: 'admin123' },
-      }, res);
+      await usersController.checkLogin(
+        {
+          body: { email: 'admin@example.com', password: 'admin123' },
+        },
+        res,
+      );
 
       expect(res.status).toHaveBeenCalledWith(200);
       const payload = res.send.mock.calls[0][0];
@@ -227,19 +254,24 @@ describe('Backend controllers and middleware', () => {
 
     it('returns 401 on wrong password', async () => {
       const passwordHash = await bcrypt.hash('admin123', 10);
-      db.query.mockResolvedValueOnce([[
-        {
-          id: 1,
-          email: 'admin@example.com',
-          mdp: passwordHash,
-          role: 'admin',
-        },
-      ]]);
+      db.query.mockResolvedValueOnce([
+        [
+          {
+            id: 1,
+            email: 'admin@example.com',
+            mdp: passwordHash,
+            role: 'admin',
+          },
+        ],
+      ]);
       const res = createResponse();
 
-      await usersController.checkLogin({
-        body: { email: 'admin@example.com', password: 'wrong' },
-      }, res);
+      await usersController.checkLogin(
+        {
+          body: { email: 'admin@example.com', password: 'wrong' },
+        },
+        res,
+      );
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(res.send).toHaveBeenCalledWith({ message: 'Email ou mot de passe incorrect' });
@@ -248,9 +280,12 @@ describe('Backend controllers and middleware', () => {
     it('rejects login with missing password', async () => {
       const res = createResponse();
 
-      await usersController.checkLogin({
-        body: { email: 'admin@example.com' },
-      }, res);
+      await usersController.checkLogin(
+        {
+          body: { email: 'admin@example.com' },
+        },
+        res,
+      );
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith({ message: 'Mot de passe est obligatoire' });
@@ -318,10 +353,13 @@ describe('Backend controllers and middleware', () => {
     it('rejects update with invalid body', async () => {
       const res = createResponse();
 
-      await adminController.updateObject({
-        params: { id: '1' },
-        body: { titre: 'Table', prix: 'abc', description: 'Bois' },
-      }, res);
+      await adminController.updateObject(
+        {
+          params: { id: '1' },
+          body: { titre: 'Table', prix: 'abc', description: 'Bois' },
+        },
+        res,
+      );
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith({ message: 'Prix invalide' });
