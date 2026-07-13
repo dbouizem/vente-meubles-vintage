@@ -6,7 +6,7 @@ import { imageUrl } from '../../services/api';
 import { getProduct, getProducts } from '../../services/products';
 import ProductCard from '../../features/catalog/components/ProductCard';
 import { motion } from 'motion/react';
-import { Box, Maximize, Play } from 'lucide-react';
+import { Box } from 'lucide-react';
 import '../../features/catalog/components/product-grid.css';
 
 function Produit() {
@@ -37,7 +37,6 @@ function Produit() {
   }, [id]);
 
   const productImage = imageUrl(produitDetail.photo || 'img_non_dispo.jpg');
-  const galleryImages = [productImage, productImage, productImage, productImage];
 
   return (
     <div>
@@ -68,45 +67,18 @@ function Produit() {
             </div>
 
             <section className="grid w-full grid-cols-1 gap-8 lg:grid-cols-[0.62fr_0.38fr]">
-              <div className="grid gap-4 sm:grid-cols-[90px_1fr]">
-                <div className="order-2 grid grid-cols-4 gap-3 sm:order-1 sm:grid-cols-1">
-                  {galleryImages.map((src, index) => (
-                    <button
-                      key={`${src}-${index}`}
-                      type="button"
-                      className="aspect-square cursor-pointer overflow-hidden border border-[#dccbbd] bg-white p-1 transition hover:border-[#7c2d12]"
-                      aria-label={`Voir image ${index + 1}`}
-                    >
-                      <img src={src} alt="" className="h-full w-full object-contain" />
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    className="hidden aspect-square cursor-pointer flex-col items-center justify-center gap-2 border border-[#dccbbd] bg-white text-[10px] uppercase tracking-[0.12em] text-[#5f4a35] transition hover:border-[#7c2d12] sm:flex"
-                  >
-                    <Play size={20} />
-                    Voir le film
-                  </button>
-                </div>
-
+              <div>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.7, ease: 'easeOut' }}
-                  className="relative order-1 flex min-h-[420px] items-center justify-center overflow-hidden border border-[#dccbbd] bg-[#f3e7d7] p-6 sm:order-2 lg:min-h-[700px]"
+                  className="relative flex min-h-[420px] items-center justify-center overflow-hidden border border-[#dccbbd] bg-[#f3e7d7] p-6 lg:min-h-[700px]"
                 >
                   <img
                     className="max-h-full w-full object-contain drop-shadow-xl"
                     src={productImage}
                     alt={produitDetail.titre ?? 'Produit'}
                   />
-                  <button
-                    type="button"
-                    className="absolute right-5 top-5 flex h-10 w-10 cursor-pointer items-center justify-center border border-[#f8ecd4]/80 bg-[#17100b]/35 text-[#f8ecd4] backdrop-blur-sm transition hover:bg-[#17100b]/65"
-                    aria-label="Agrandir l'image"
-                  >
-                    <Maximize size={18} />
-                  </button>
                 </motion.div>
               </div>
 
@@ -156,12 +128,12 @@ function Produit() {
                   Bois, patines et tissus sont sélectionnés pour leur présence et leur capacité à
                   traverser le temps.
                 </p>
-                <a
-                  href="#story"
-                  className="mt-6 inline-flex items-center gap-3 text-xs uppercase tracking-[0.16em] text-[#c6a16b]"
+                <span
+                  className="mt-6 inline-flex cursor-not-allowed items-center gap-3 text-xs uppercase tracking-[0.16em] text-[#c6a16b] opacity-70"
+                  title="Guide des matières bientôt disponible"
                 >
-                  Voir les matières →
-                </a>
+                  Guide des matières — bientôt
+                </span>
               </div>
             </div>
           </section>

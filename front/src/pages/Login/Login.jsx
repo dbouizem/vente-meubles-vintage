@@ -31,7 +31,7 @@ const socialProviders = [
 const trustItems = [
   [PackageCheck, 'Livraison sécurisée'],
   [RotateCcw, 'Retours gratuits sous 30 jours'],
-  [ShieldCheck, 'Paiement 100% sécurisé'],
+  [ShieldCheck, 'Paiement au retrait'],
   [UserRoundCheck, 'Service client 7j/7'],
 ];
 
@@ -225,15 +225,17 @@ function Login() {
                   <input
                     id="remember-me"
                     type="checkbox"
-                    disabled={isSubmitting}
-                    className="mr-3 h-4 w-4 accent-[#5a3519] disabled:cursor-not-allowed disabled:opacity-60"
+                    disabled
+                    title="Option bientôt disponible"
+                    className="mr-3 h-4 w-4 cursor-not-allowed accent-[#5a3519] opacity-60"
                   />
-                  <label htmlFor="remember-me">Se souvenir de moi</label>
+                  <label htmlFor="remember-me">Se souvenir de moi — bientôt</label>
                 </div>
                 <button
                   type="button"
-                  disabled={isSubmitting}
-                  className="whitespace-nowrap underline underline-offset-4 transition hover:text-[#8b5a24] disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled
+                  title="Récupération du mot de passe bientôt disponible"
+                  className="cursor-not-allowed whitespace-nowrap opacity-60"
                 >
                   Mot de passe oublié ?
                 </button>
@@ -252,7 +254,7 @@ function Login() {
             <div className="mt-7">
               <div className="flex items-center gap-3 text-center text-[11px] uppercase tracking-[0.10em] text-[#5f4a35] sm:gap-4 sm:text-xs sm:tracking-[0.12em]">
                 <span className="h-px flex-1 bg-[#b58a55]/35" />
-                Ou continuer avec
+                Connexions sociales — bientôt
                 <span className="h-px flex-1 bg-[#b58a55]/35" />
               </div>
               <div className="mt-4 grid grid-cols-3 gap-2 min-[380px]:gap-3 sm:mt-5">
@@ -260,9 +262,10 @@ function Login() {
                   <button
                     key={name}
                     type="button"
-                    disabled={isSubmitting}
-                    className="login-social-button"
-                    aria-label={`Continuer avec ${name}`}
+                    disabled
+                    title="Connexion sociale bientôt disponible"
+                    className="login-social-button cursor-not-allowed opacity-55"
+                    aria-label={`Connexion avec ${name} bientôt disponible`}
                   >
                     <Icon className="login-social-icon" aria-hidden="true" />
                     <span>{name}</span>

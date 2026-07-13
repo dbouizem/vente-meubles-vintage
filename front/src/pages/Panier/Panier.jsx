@@ -1,7 +1,6 @@
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CartContext, DiscountContext } from '../../features/cart/cart-context';
-import { ReservationModal } from '../../features/cart/ReservationModal';
 import fallbackImage from '../../assets/img_vignette/img_non_dispo.jpg';
 import { Lock, Mail, Package, RotateCcw, Trash2 } from 'lucide-react';
 
@@ -22,12 +21,6 @@ function Panier() {
   const discount = promoUpdated === promotionString ? promotion : 0;
 
   const total = subtotals - discount;
-
-  const [showModal, setShowModal] = useState(false);
-
-  const openModal = () => {
-    setShowModal((showModal) => !showModal);
-  };
 
   const removeItemFromPanier = (itemIndex) => {
     setPanier((currentPanier) => currentPanier.filter((item, index) => index !== itemIndex));
@@ -87,7 +80,7 @@ function Panier() {
                 <div className="hidden grid-cols-[1fr_120px_150px_110px] border-b border-[#dccbbd] px-8 py-5 text-[11px] uppercase tracking-[0.16em] text-[#5f4a35] md:grid">
                   <span>Article</span>
                   <span>Prix</span>
-                  <span>Quantité</span>
+                  <span>Quantité fixe</span>
                   <span>Total</span>
                 </div>
 
@@ -112,14 +105,12 @@ function Panier() {
                       </div>
                     </div>
                     <p className="font-serif text-lg">{item.prix}€</p>
-                    <div className="inline-flex w-fit items-center border border-[#dccbbd]">
-                      <button type="button" className="h-10 w-10 cursor-pointer">
-                        −
-                      </button>
-                      <span className="w-10 text-center">1</span>
-                      <button type="button" className="h-10 w-10 cursor-pointer">
-                        +
-                      </button>
+                    <div
+                      className="inline-flex w-fit items-center border border-[#dccbbd] px-4 py-2 text-sm"
+                      title="Gestion des quantités bientôt disponible"
+                    >
+                      <span>1</span>
+                      <span className="ml-2 text-xs text-[#5f4a35]">pièce unique</span>
                     </div>
                     <div className="flex items-center justify-between gap-4">
                       <p className="font-serif text-lg">{item.prix}€</p>
@@ -168,75 +159,15 @@ function Panier() {
                 </button>
               </div>
 
-              <section className="mt-5 border border-[#dccbbd] bg-[#fbf1df]">
-                <div className="border-b border-[#dccbbd] p-5">
-                  <p className="text-[11px] uppercase tracking-[0.16em]">1 Livraison</p>
-                  <div className="mt-5 grid gap-4 sm:grid-cols-3">
-                    {['Votre prénom', 'Votre nom', 'Téléphone'].map((placeholder) => (
-                      <input
-                        key={placeholder}
-                        placeholder={placeholder}
-                        className="border border-[#dccbbd] bg-transparent px-4 py-3 text-sm outline-none"
-                      />
-                    ))}
-                  </div>
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                    <input
-                      placeholder="Adresse"
-                      className="border border-[#dccbbd] bg-transparent px-4 py-3 text-sm outline-none"
-                    />
-                    <input
-                      placeholder="Ville"
-                      className="border border-[#dccbbd] bg-transparent px-4 py-3 text-sm outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="border-b border-[#dccbbd] p-5">
-                  <p className="text-[11px] uppercase tracking-[0.16em]">2 Livraison</p>
-                  <div className="mt-5 grid gap-4 sm:grid-cols-3">
-                    {['Livraison Standard', 'Livraison Express', 'Point Relais'].map(
-                      (label, index) => (
-                        <label
-                          key={label}
-                          className="flex cursor-pointer items-start gap-3 text-sm text-[#5f4a35]"
-                        >
-                          <input
-                            type="radio"
-                            name="shipping"
-                            defaultChecked={index === 0}
-                            className="mt-1 accent-[#7c2d12]"
-                          />
-                          <span>
-                            {label}
-                            <br />
-                            <span className="text-xs">2 à 4 jours ouvrés</span>
-                          </span>
-                        </label>
-                      ),
-                    )}
-                  </div>
-                </div>
-
-                <div className="p-5">
-                  <p className="text-[11px] uppercase tracking-[0.16em]">3 Paiement</p>
-                  <div className="mt-5 grid gap-4 sm:grid-cols-3">
-                    {['Carte bancaire', 'PayPal', 'Apple Pay'].map((label, index) => (
-                      <label
-                        key={label}
-                        className="flex cursor-pointer items-center gap-3 text-sm text-[#5f4a35]"
-                      >
-                        <input
-                          type="radio"
-                          name="payment"
-                          defaultChecked={index === 0}
-                          className="accent-[#7c2d12]"
-                        />
-                        <span>{label}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
+              <section className="mt-5 border border-[#dccbbd] bg-[#fbf1df] p-5">
+                <p className="text-[11px] uppercase tracking-[0.16em] text-[#7c2d12]">
+                  Réservation bientôt disponible
+                </p>
+                <p className="mt-3 text-sm leading-6 text-[#5f4a35]">
+                  La saisie de l’adresse, le choix de livraison et la création de commande seront
+                  activés après la mise en place du système de commandes. Aucun paiement n’est
+                  demandé actuellement.
+                </p>
               </section>
             </section>
 
@@ -299,7 +230,7 @@ function Panier() {
                   <RotateCcw size={18} /> Retours sous 30 jours
                 </p>
                 <p className="inline-flex items-center gap-3">
-                  <Lock size={18} /> Paiement sécurisé
+                  <Lock size={18} /> Paiement au retrait
                 </p>
               </div>
             </aside>
@@ -310,16 +241,17 @@ function Panier() {
           <div className="mt-8 grid gap-5 lg:grid-cols-[1fr_380px]">
             <div className="border border-[#dccbbd] bg-[#fbf1df] p-5 text-xs text-[#5f4a35]">
               <p className="inline-flex items-center gap-3">
-                <Lock size={18} /> Paiement sécurisé et chiffré. Vos informations sont protégées.
+                <Lock size={18} /> Aucun paiement en ligne n’est collecté actuellement.
               </p>
             </div>
             <button
-              className="cursor-pointer bg-[#17100b] px-5 py-4 text-[11px] uppercase tracking-[0.16em] text-[#f8ecd4] transition hover:bg-[#4a2b18]"
-              onClick={openModal}
+              type="button"
+              disabled
+              title="Réservation bientôt disponible"
+              className="cursor-not-allowed bg-[#17100b] px-5 py-4 text-[11px] uppercase tracking-[0.16em] text-[#f8ecd4] opacity-55"
             >
-              Valider et payer — {total}€
+              Réservation bientôt disponible — {total}€
             </button>
-            <ReservationModal showModal={showModal} setShowModal={setShowModal} />
           </div>
         )}
       </main>

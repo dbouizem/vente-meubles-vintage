@@ -15,6 +15,7 @@ const ProductDetails = ({
   categorie,
 }) => {
   const { setPanier } = useContext(CartContext);
+  const isAvailable = disponibilite !== false && disponibilite !== 0;
   const addToPanier = () => {
     const cartItem = { id, nom, prix, photo };
     setPanier((currentPanier) => [...currentPanier, cartItem]);
@@ -45,7 +46,7 @@ const ProductDetails = ({
         </p>
         <p className="mt-3">
           <span className="text-[#24160e]">Disponibilité :</span>{' '}
-          {disponibilite ? 'Disponible' : 'Indisponible'}
+          {isAvailable ? 'Disponible' : 'Indisponible'}
         </p>
       </div>
 
@@ -72,16 +73,19 @@ const ProductDetails = ({
 
       <div className="mt-8 grid gap-3">
         <button
-          className="w-full cursor-pointer bg-[#17100b] px-5 py-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#f8ecd4] transition hover:bg-[#4a2b18]"
+          disabled={!isAvailable}
+          className="w-full cursor-pointer bg-[#17100b] px-5 py-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#f8ecd4] transition hover:bg-[#4a2b18] disabled:cursor-not-allowed disabled:opacity-45"
           onClick={addToPanier}
         >
-          Ajouter au panier — {prix} €
+          {isAvailable ? `Ajouter au panier — ${prix} €` : 'Produit indisponible'}
         </button>
         <button
           type="button"
-          className="inline-flex w-full cursor-pointer items-center justify-center gap-3 border border-[#b58a55]/50 px-5 py-4 text-[11px] uppercase tracking-[0.16em] text-[#4a2b18] transition hover:border-[#7c2d12] hover:text-[#7c2d12]"
+          disabled
+          title="Favoris bientôt disponibles"
+          className="inline-flex w-full cursor-not-allowed items-center justify-center gap-3 border border-[#b58a55]/50 px-5 py-4 text-[11px] uppercase tracking-[0.16em] text-[#4a2b18] opacity-55"
         >
-          <Heart size={15} /> Ajouter aux favoris
+          <Heart size={15} /> Favoris — bientôt disponible
         </button>
       </div>
 
@@ -96,7 +100,7 @@ const ProductDetails = ({
         </div>
         <div className="flex flex-col items-center gap-2">
           <Lock size={18} />
-          <span>Paiement sécurisé</span>
+          <span>Paiement au retrait</span>
         </div>
       </div>
 

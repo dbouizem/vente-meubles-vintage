@@ -34,14 +34,16 @@ function Navbar() {
         <div className="flex items-center gap-6">
           <button
             type="button"
-            className="flex h-10 w-10 cursor-pointer items-center justify-center text-[#24160e] transition hover:text-[#7c2d12]"
-            aria-label="Menu"
+            disabled
+            title="Menu bientôt disponible"
+            className="flex h-10 w-10 cursor-not-allowed items-center justify-center text-[#24160e] opacity-45"
+            aria-label="Menu bientôt disponible"
           >
             <Menu size={24} strokeWidth={1.4} />
           </button>
-          <a className="hidden transition hover:text-[#7c2d12] sm:inline" href="#main">
+          <Link className="hidden transition hover:text-[#7c2d12] sm:inline" to="/accueil#main">
             Boutique
-          </a>
+          </Link>
         </div>
 
         <Link
@@ -55,8 +57,10 @@ function Navbar() {
         <div className="flex items-center justify-end gap-3 text-[#24160e]">
           <button
             type="button"
-            className="hidden h-9 w-9 cursor-pointer items-center justify-center transition hover:text-[#7c2d12] sm:flex"
-            aria-label="Rechercher"
+            disabled
+            title="Recherche bientôt disponible"
+            className="hidden h-9 w-9 cursor-not-allowed items-center justify-center opacity-45 sm:flex"
+            aria-label="Recherche bientôt disponible"
           >
             <Search size={20} strokeWidth={1.4} />
           </button>
@@ -83,9 +87,13 @@ function Navbar() {
       <div className="hidden border-t border-[#d8c5a7] px-4 py-3 text-center text-[11px] uppercase tracking-[0.18em] text-[#24160e] md:block">
         <div className="mx-auto flex max-w-4xl justify-center gap-12">
           {['Nouveautés', 'Assises', 'Tables', 'Rangement', 'Décoration', 'Journal'].map((item) => (
-            <a key={item} href="#main" className="transition hover:text-[#7c2d12]">
+            <span
+              key={item}
+              className="cursor-not-allowed text-[#5f4a35]"
+              title="Navigation par catégorie bientôt disponible"
+            >
               {item}
-            </a>
+            </span>
           ))}
         </div>
       </div>

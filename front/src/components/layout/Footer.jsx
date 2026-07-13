@@ -8,16 +8,13 @@ function Footer() {
           <p className="mt-5 max-w-xs text-sm leading-6 text-[#5f4a35]">
             L’élégance est notre langage, le temps notre allié.
           </p>
-          <div className="mt-5 flex gap-5 text-[10px] uppercase tracking-[0.14em] text-[#5f4a35]">
-            <a href="#main" className="transition hover:text-[#7c2d12]">
-              Instagram
-            </a>
-            <a href="#main" className="transition hover:text-[#7c2d12]">
-              Pinterest
-            </a>
-            <a href="#main" className="transition hover:text-[#7c2d12]">
-              Facebook
-            </a>
+          <div
+            className="mt-5 flex gap-5 text-[10px] uppercase tracking-[0.14em] text-[#5f4a35]"
+            aria-label="Réseaux sociaux bientôt disponibles"
+          >
+            <span>Instagram</span>
+            <span>Pinterest</span>
+            <span>Facebook</span>
           </div>
         </div>
 
@@ -28,12 +25,11 @@ function Footer() {
         ].map(([title, links]) => (
           <div key={title}>
             <p className="mb-4 text-[11px] uppercase tracking-[0.16em]">{title}</p>
+            <p className="mb-3 text-[10px] text-[#7c2d12]">Pages bientôt disponibles</p>
             <ul className="space-y-2 text-sm text-[#5f4a35]">
               {links.map((link) => (
                 <li key={link}>
-                  <a href="#main" className="transition hover:text-[#7c2d12]">
-                    {link}
-                  </a>
+                  <span>{link}</span>
                 </li>
               ))}
             </ul>
@@ -41,14 +37,16 @@ function Footer() {
         ))}
 
         <div>
-          <p className="mb-4 text-[11px] uppercase tracking-[0.16em]">Recevoir l’actualité</p>
-          <label className="flex border-b border-[#9a805d]">
+          <p className="mb-1 text-[11px] uppercase tracking-[0.16em]">Recevoir l’actualité</p>
+          <p className="mb-3 text-[10px] text-[#7c2d12]">Bientôt disponible</p>
+          <label className="flex border-b border-[#9a805d] opacity-55">
             <span className="sr-only">Votre email</span>
             <input
               className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-[#5f4a35]"
               placeholder="Votre email"
+              disabled
             />
-            <button type="button" className="cursor-pointer px-2 text-xl">
+            <button type="button" disabled className="cursor-not-allowed px-2 text-xl">
               →
             </button>
           </label>
@@ -58,9 +56,9 @@ function Footer() {
       <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-4 pt-5 text-[10px] uppercase tracking-[0.14em] text-[#5f4a35]">
         <p>© 2026 Atelier Héritage. Tous droits réservés.</p>
         <div className="flex gap-6">
-          <a href="#main">Mentions légales</a>
-          <a href="#main">CGV</a>
-          <a href="#main">Politique de confidentialité</a>
+          <span>Mentions légales — bientôt</span>
+          <span>CGV — bientôt</span>
+          <span>Confidentialité — bientôt</span>
         </div>
       </div>
     </footer>

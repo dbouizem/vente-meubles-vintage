@@ -11,7 +11,7 @@ const CATEGORIES = [
 const BENEFITS = [
   ['Livraison offerte', 'dès 200€ d’achat', Package],
   ['Retours gratuits', 'sous 30 jours', RotateCcw],
-  ['Paiement sécurisé', 'CB, Paypal, Apple Pay', Lock],
+  ['Réservation simple', 'paiement au retrait', Lock],
   ['Service client', '7j/7 par email', Headphones],
 ];
 
@@ -33,12 +33,12 @@ function CatalogEditorial() {
           <p className="mt-4 max-w-sm text-sm leading-7 text-[#f1dfbf]/80">
             Chaque pièce raconte une histoire. La vôtre commence ici.
           </p>
-          <a
-            href="#main"
-            className="mt-7 inline-flex w-fit items-center gap-3 bg-[#c6a16b] px-6 py-3 text-xs uppercase tracking-[0.16em] text-[#17100b] transition hover:bg-[#f8ecd4]"
+          <span
+            className="mt-7 inline-flex w-fit cursor-not-allowed items-center gap-3 bg-[#c6a16b] px-6 py-3 text-xs uppercase tracking-[0.16em] text-[#17100b]"
+            title="Présentation de l’atelier bientôt disponible"
           >
-            Découvrir l’atelier <ArrowRight size={14} />
-          </a>
+            L’atelier — bientôt <ArrowRight size={14} />
+          </span>
         </div>
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}

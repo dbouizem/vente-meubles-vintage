@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Heart, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import './product-card.css';
 
 function ProductCard({ id, nom, prix, photo, index = 0 }) {
@@ -27,9 +27,6 @@ function ProductCard({ id, nom, prix, photo, index = 0 }) {
             className="h-full w-full object-contain transition duration-700 group-hover:scale-105"
           />
         </div>
-        <span className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center border border-[#f8ecd4]/70 bg-[#17100b]/24 text-[#f8ecd4] backdrop-blur-sm transition group-hover:bg-[#17100b]/60">
-          <Heart size={17} strokeWidth={1.4} />
-        </span>
       </button>
 
       <div className="flex flex-1 flex-col p-4">

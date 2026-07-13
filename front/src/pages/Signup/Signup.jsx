@@ -265,8 +265,8 @@ function Signup() {
                     onChange={(event) => setAcceptedTerms(event.target.checked)}
                   />
                   <span>
-                    J’accepte les <a href="/conditions">Conditions Générales de Vente</a> et la{' '}
-                    <a href="/confidentialite">Politique de Confidentialité</a>.
+                    J’accepte les conditions d’utilisation et la politique de confidentialité. Les
+                    pages juridiques détaillées sont en préparation.
                   </span>
                 </label>
                 {fieldError('terms') && <p className="signup-field-error">{fieldError('terms')}</p>}
@@ -281,7 +281,7 @@ function Signup() {
             <div className="mt-7">
               <div className="signup-separator">
                 <span />
-                Ou s’inscrire avec
+                Inscriptions sociales — bientôt
                 <span />
               </div>
               <div className="mt-5 grid grid-cols-3 gap-3">
@@ -289,9 +289,10 @@ function Signup() {
                   <button
                     key={name}
                     type="button"
-                    disabled={isSubmitting}
-                    className="signup-social-button"
-                    aria-label={`S'inscrire avec ${name}`}
+                    disabled
+                    title="Inscription sociale bientôt disponible"
+                    className="signup-social-button cursor-not-allowed opacity-55"
+                    aria-label={`Inscription avec ${name} bientôt disponible`}
                   >
                     <Icon className="signup-social-icon" aria-hidden="true" />
                     <span>{name}</span>
