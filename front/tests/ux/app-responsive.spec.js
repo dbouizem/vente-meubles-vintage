@@ -7,7 +7,7 @@ for (const viewport of [
 ]) {
   test('home renders without horizontal overflow on ' + viewport.name, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto('/');
+    await page.goto('/accueil');
     await expect(page.locator('body')).toBeVisible();
 
     const overflow = await page.evaluate(

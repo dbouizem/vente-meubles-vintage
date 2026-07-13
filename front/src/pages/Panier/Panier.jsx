@@ -1,14 +1,12 @@
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { panierContext, reductionContext } from '../../contexts';
-import { Modal } from '../../composants/Modal/Modal';
+import { CartContext, DiscountContext } from '../../features/cart/cart-context';
+import { ReservationModal } from '../../features/cart/ReservationModal';
 import fallbackImage from '../../assets/img_vignette/img_non_dispo.jpg';
-import Navbar from '../../composants/Navbar/Navbar';
-import Footer from '../../composants/Footer/Footer';
 import { Lock, Mail, Package, RotateCcw, Trash2 } from 'lucide-react';
 
 function Panier() {
-  const { panier, setPanier } = useContext(panierContext);
+  const { panier, setPanier } = useContext(CartContext);
 
   const calculateSubtotal = (panier) => {
     const subtotal = panier.reduce((acc, item) => acc + (Number.parseFloat(item.prix) || 0), 0);
@@ -18,7 +16,7 @@ function Panier() {
   const subtotals = calculateSubtotal(panier);
   const promotionString = 'ADATECH';
 
-  const promotion = useContext(reductionContext);
+  const promotion = useContext(DiscountContext);
   const [promoMessage, setPromoMessage] = useState('');
   const [promoUpdated, setPromoUpdated] = useState('');
   const discount = promoUpdated === promotionString ? promotion : 0;
@@ -56,8 +54,7 @@ function Panier() {
   const codePromo = () => discount;
 
   return (
-    <div className="min-h-screen bg-[#f8f2ec] text-[#24160e]">
-      <Navbar />
+    <div>
       <main className="mx-auto max-w-7xl px-4 py-12 sm:px-8">
         <header className="text-center">
           <p className="font-serif text-2xl text-[#8b5a24]">⌁</p>
@@ -322,11 +319,10 @@ function Panier() {
             >
               Valider et payer — {total}€
             </button>
-            <Modal showModal={showModal} setShowModal={setShowModal} />
+            <ReservationModal showModal={showModal} setShowModal={setShowModal} />
           </div>
         )}
       </main>
-      <Footer />
     </div>
   );
 }

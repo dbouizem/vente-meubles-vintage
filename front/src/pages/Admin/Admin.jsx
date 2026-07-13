@@ -1,15 +1,9 @@
-import Navbar from '../../composants/Navbar/Navbar';
-import Table from '../../composants/Table/Table';
-import Footer from '../../composants/Footer/Footer';
+import ProductsTable from '../../features/admin/components/ProductsTable';
 
 function Admin() {
   return (
     <div>
-      <Navbar />
-
-      <Table />
-
-      <Footer />
+      <ProductsTable />
     </div>
   );
 }

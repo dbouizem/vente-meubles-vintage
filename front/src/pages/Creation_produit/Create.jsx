@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../composants/Navbar/Navbar';
-import Footer from '../../composants/Footer/Footer';
-import { apiUrl } from '../../config/api';
+import { apiUrl } from '../../services/api';
 
 function Create() {
   const navigate = useNavigate();
@@ -50,7 +48,6 @@ function Create() {
 
   return (
     <div>
-      <Navbar />
       <div className="min-h-[75vh] px-4 py-8">
         <div className="mx-auto w-full max-w-2xl rounded-lg bg-white p-5 shadow-sm sm:p-8">
           <p className="text-left text-sm font-semibold uppercase tracking-wide text-dark-brown/70">
@@ -136,7 +133,6 @@ function Create() {
           </form>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

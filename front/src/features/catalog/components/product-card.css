@@ -1,0 +1,16 @@
+@media (prefers-reduced-motion: reduce) {
+  .group,
+  .group img,
+  .group button {
+    transition: none;
+  }
+}
+
+.product-card {
+  box-shadow: 0 1px 0 rgba(36, 22, 14, 0.04);
+}
+
+.product-card:hover {
+  box-shadow: 0 18px 38px rgba(36, 22, 14, 0.12);
+}
+/* Product grid and card */

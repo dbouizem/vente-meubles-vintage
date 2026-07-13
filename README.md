@@ -131,6 +131,20 @@ Les tests d'intégration nécessitent une base de test configurée. Les tests E2
 └── package.json          Scripts et workspaces du projet
 ```
 
+Le frontend est organisé par responsabilité :
+
+```text
+front/src/
+├── app/                  Routeur, providers et protection des routes
+├── components/layout/    Navigation et pied de page partagés
+├── features/admin/       Gestion des produits
+├── features/cart/        État et composants du panier
+├── features/catalog/     Catalogue et composants produit
+├── layouts/              Structures boutique et administration
+├── pages/                Points d'entrée des routes
+└── services/             Accès centralisé à l'API
+```
+
 ## Intégration continue
 
 Le workflow GitHub Actions exécute automatiquement sur chaque push et pull request :

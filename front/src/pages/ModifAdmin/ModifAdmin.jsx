@@ -1,13 +1,9 @@
-import Navbar from '../../composants/Navbar/Navbar';
-import Footer from '../../composants/Footer/Footer';
-import ModifTable from '../../composants/Table/ModifTable';
+import EditProductForm from '../../features/admin/components/EditProductForm';
 
 function modificationMeuble() {
   return (
     <div>
-      <Navbar />
-      <ModifTable />
-      <Footer />
+      <EditProductForm />
     </div>
   );
 }

@@ -1,15 +1,11 @@
-import Navbar from '../../composants/Navbar/Navbar';
-import Header from '../../composants/Header/Header';
-import Main from '../../composants/Main/Main';
-import Footer from '../../composants/Footer/Footer';
+import CatalogHero from '../../features/catalog/components/CatalogHero';
+import Catalog from '../../features/catalog/Catalog';
 
 function Accueil() {
   return (
-    <div className="min-h-screen bg-[#f1dfbf] text-[#24160e]">
-      <Navbar />
-      <Header />
-      <Main />
-      <Footer />
+    <div className="bg-[#f1dfbf] text-[#24160e]">
+      <CatalogHero />
+      <Catalog />
     </div>
   );
 }

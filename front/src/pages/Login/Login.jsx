@@ -19,7 +19,7 @@ import AppleIcon from '@mui/icons-material/Apple';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
 import COVER_IMAGE from './imageLogin.jpg';
-import { apiUrl } from '../../config/api';
+import { login } from '../../services/auth';
 import './Login.css';
 
 const socialProviders = [
@@ -48,31 +48,15 @@ function Login() {
     setMessage('');
     setIsSubmitting(true);
     try {
-      const url = apiUrl('/login');
-      let res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
-      let resJson = await res.json();
-      if (res.status === 200) {
-        if (resJson.token) {
-          localStorage.setItem('adminToken', resJson.token);
-        } else {
-          localStorage.removeItem('adminToken');
-        }
-
-        navigate('/accueil');
+      const response = await login({ email, password });
+      if (response.token) {
+        localStorage.setItem('adminToken', response.token);
       } else {
-        setMessage(resJson.message || 'Connexion impossible. Vérifiez vos informations.');
+        localStorage.removeItem('adminToken');
       }
+      navigate('/accueil');
     } catch (err) {
-      setMessage('Le serveur ne répond pas. Réessayez dans quelques instants.');
+      setMessage(err.message || 'Le serveur ne répond pas. Réessayez dans quelques instants.');
     } finally {
       setIsSubmitting(false);
     }

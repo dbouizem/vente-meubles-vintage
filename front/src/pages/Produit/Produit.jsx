@@ -1,14 +1,13 @@
-import Navbar from '../../composants/Navbar/Navbar';
-import Detail from '../../composants/Detail/Detail';
+import ProductDetails from '../../features/catalog/components/ProductDetails';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { apiUrl, imageUrl } from '../../config/api';
-import Footer from '../../composants/Footer/Footer';
-import Vignette from '../../composants/Vignette/Vignette';
+import { imageUrl } from '../../services/api';
+import { getProduct, getProducts } from '../../services/products';
+import ProductCard from '../../features/catalog/components/ProductCard';
 import { motion } from 'motion/react';
 import { Box, Maximize, Play } from 'lucide-react';
-import '../../composants/Main/main.css';
+import '../../features/catalog/components/product-grid.css';
 
 function Produit() {
   let { id } = useParams();
@@ -21,21 +20,11 @@ function Produit() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(apiUrl(`/meubles/${id}`));
-        if (!response.ok) {
-          throw new Error('Produit introuvable');
-        }
-        const jsonData = await response.json();
-        setproduitDetail(jsonData[0] || {});
+        const [product, products] = await Promise.all([getProduct(id), getProducts()]);
+        if (!product) throw new Error('Produit introuvable');
+        setproduitDetail(product);
         setErrorMessage('');
-
-        const relatedResponse = await fetch(apiUrl('/meubles'));
-        if (relatedResponse.ok) {
-          const relatedData = await relatedResponse.json();
-          setRelatedProducts(
-            relatedData.filter((item) => String(item.id) !== String(id)).slice(0, 5),
-          );
-        }
+        setRelatedProducts(products.filter((item) => String(item.id) !== String(id)).slice(0, 5));
       } catch (error) {
         setproduitDetail({});
         setErrorMessage('Ce produit est introuvable ou indisponible.');
@@ -51,9 +40,7 @@ function Produit() {
   const galleryImages = [productImage, productImage, productImage, productImage];
 
   return (
-    <div className="min-h-screen bg-[#f8f2ec] text-[#24160e]">
-      <Navbar />
-
+    <div>
       {isLoading ? (
         <p className="mx-auto my-10 max-w-4xl border border-[#dccbbd] bg-white px-4 py-3 text-[#5f4a35] shadow-sm">
           Chargement du produit...
@@ -124,7 +111,7 @@ function Produit() {
               </div>
 
               <div className="flex items-start pt-2 lg:pt-0">
-                <Detail
+                <ProductDetails
                   id={id}
                   nom={produitDetail.titre ?? '...'}
                   prix={produitDetail.prix ?? '...'}
@@ -184,7 +171,7 @@ function Produit() {
               <h2 className="font-serif text-2xl uppercase text-[#4a2b18]">Vous aimerez aussi</h2>
               <div className="products-grid mt-5">
                 {relatedProducts.map((item, index) => (
-                  <Vignette
+                  <ProductCard
                     key={`${item.id}-related`}
                     nom={item.titre}
                     prix={item.prix}
@@ -217,7 +204,6 @@ function Produit() {
           </p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
