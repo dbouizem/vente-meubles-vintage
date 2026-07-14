@@ -162,6 +162,7 @@ Une contribution ne doit pas être fusionnée si l'une de ces vérifications éc
 - Inscription et connexion utilisateur
 - Authentification et protection des opérations administrateur
 - Consultation des meubles et de leur fiche
+- Recherche, catégories, filtres de prix, tri et pagination du catalogue
 - Panier conservé dans le navigateur
 - Création, modification et suppression de produits par un administrateur
 

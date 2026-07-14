@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { Plus } from 'lucide-react';
 import './product-card.css';
 
-function ProductCard({ id, nom, prix, photo, index = 0 }) {
+function ProductCard({ id, nom, prix, photo, categorie, epoque, index = 0 }) {
   const navigate = useNavigate();
 
   return (
@@ -33,11 +33,15 @@ function ProductCard({ id, nom, prix, photo, index = 0 }) {
         <h3 className="min-h-[42px] font-serif text-sm uppercase leading-5 tracking-[0.06em] text-[#24160e]">
           {nom}
         </h3>
-        <p className="mt-1 text-xs uppercase tracking-[0.08em] text-[#5f4a35]">Vintage restauré</p>
+        <p className="mt-1 text-xs uppercase tracking-[0.08em] text-[#5f4a35]">
+          {categorie || 'Mobilier vintage'}
+        </p>
         <div className="mt-4 flex items-end justify-between">
           <div>
             <span className="font-serif text-lg text-[#24160e]">{prix} €</span>
-            <p className="mt-2 text-xs text-[#5f4a35]">90s · pièce unique</p>
+            <p className="mt-2 text-xs text-[#5f4a35]">
+              {epoque ? `${epoque} · ` : ''}pièce unique
+            </p>
           </div>
           <button
             type="button"

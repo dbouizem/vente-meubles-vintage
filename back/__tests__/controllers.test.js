@@ -90,6 +90,46 @@ describe('Backend controllers and middleware', () => {
         message: 'Erreur lors de la recuperation des meubles',
       });
     });
+
+    it('searches, sorts, and paginates the public catalog with parameterized queries', async () => {
+      const items = [{ id: 1, titre: 'Table basse', prix: 90 }];
+      db.query.mockResolvedValueOnce([items]).mockResolvedValueOnce([[{ total: 3 }]]);
+      const res = createResponse();
+
+      await accueilController.displayCatalog(
+        {
+          query: {
+            q: 'table',
+            category: 'tables',
+            min_price: '50',
+            max_price: '200',
+            sort: 'price_asc',
+            page: '2',
+            limit: '1',
+          },
+        },
+        res,
+      );
+
+      expect(db.query.mock.calls[0][0]).toContain(
+        'ORDER BY p.price ASC, p.id DESC LIMIT ? OFFSET ?',
+      );
+      expect(db.query.mock.calls[0][1]).toEqual([
+        '%table%',
+        '%table%',
+        '%table%',
+        'tables',
+        50,
+        200,
+        1,
+        1,
+      ]);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.send).toHaveBeenCalledWith({
+        items,
+        pagination: { page: 2, limit: 1, total: 3, totalPages: 3 },
+      });
+    });
   });
 
   describe('produit controller', () => {

@@ -14,6 +14,20 @@ export async function getProducts() {
   return parseResponse(response, 'Impossible de charger les produits.');
 }
 
+export async function getCatalog(filters = {}) {
+  const params = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== '' && value !== null && value !== undefined) params.set(key, value);
+  });
+  const response = await fetch(apiUrl(`/catalog?${params.toString()}`));
+  return parseResponse(response, 'Impossible de charger le catalogue.');
+}
+
+export async function getCategories() {
+  const response = await fetch(apiUrl('/categories'));
+  return parseResponse(response, 'Impossible de charger les catégories.');
+}
+
 export async function getProduct(id) {
   const response = await fetch(apiUrl(`/meubles/${id}`));
   const products = await parseResponse(response, 'Produit introuvable.');
