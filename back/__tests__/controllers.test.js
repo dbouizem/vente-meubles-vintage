@@ -13,6 +13,7 @@ const produitController = require('../controllers/produit.controllers');
 const usersController = require('../controllers/users.controllers');
 const { createAdminToken, requireAdmin } = require('../middleware/auth.middleware');
 const app = require('../app');
+const { PRODUCT_SELECT } = require('../models/product.model');
 
 const createResponse = () => {
   const res = {};
@@ -74,7 +75,7 @@ describe('Backend controllers and middleware', () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.send).toHaveBeenCalledWith(meubles);
       expect(db.query).toHaveBeenCalledWith(
-        'SELECT id,titre,prix,description,photo FROM testmeubles',
+        `${PRODUCT_SELECT} WHERE p.status = 'published' ORDER BY p.created_at DESC`,
       );
     });
 
@@ -151,7 +152,10 @@ describe('Backend controllers and middleware', () => {
       );
 
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(db.query.mock.calls[0][1]).toEqual(['Table', 100, 'Bois', 'uploaded-table.jpg']);
+      expect(db.query.mock.calls[0][1]).toEqual(
+        expect.arrayContaining(['Table', 100, 'Bois', 'uploaded-table.jpg', 'mobilier']),
+      );
+      expect(db.query).toHaveBeenCalledTimes(2);
     });
   });
 

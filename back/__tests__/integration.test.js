@@ -35,9 +35,9 @@ describeIntegration('Backend integration with MariaDB/MySQL', () => {
   });
 
   const resetDatabase = async () => {
-    await db.query('DELETE FROM testmeubles');
+    await db.query('DELETE FROM products');
     await db.query('DELETE FROM test_users');
-    await db.query('ALTER TABLE testmeubles AUTO_INCREMENT = 1');
+    await db.query('ALTER TABLE products AUTO_INCREMENT = 1');
     await db.query('ALTER TABLE test_users AUTO_INCREMENT = 1');
   };
 

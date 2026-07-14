@@ -42,3 +42,11 @@ npm --prefix back run migrate
 ```
 
 Les migrations deja appliquees sont enregistrees dans la table `schema_migrations`.
+
+## Migration du catalogue produit
+
+La migration `005_normalize_product_catalog.sql` renomme et enrichit la table
+historique des meubles. Comme elle modifie une table contenant des donnees,
+effectuer une sauvegarde avant de l'appliquer en production.
+
+Le nouveau modèle est décrit dans [product-catalog.md](product-catalog.md).

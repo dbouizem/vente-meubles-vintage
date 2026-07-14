@@ -94,6 +94,14 @@ function Produit() {
                   disponibilite={produitDetail.disponibilite}
                   categorie={produitDetail.categorie}
                   photo={productImage}
+                  style={produitDetail.style}
+                  epoque={produitDetail.epoque}
+                  matiere={produitDetail.matiere}
+                  couleur={produitDetail.couleur}
+                  etat={produitDetail.etat}
+                  poids={produitDetail.poids}
+                  stock={produitDetail.stock}
+                  sku={produitDetail.sku}
                 />
               </div>
             </section>

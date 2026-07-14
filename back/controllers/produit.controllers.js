@@ -1,6 +1,7 @@
 const connect = require('../sql/connexion');
 const { productSchema } = require('../validation/schemas');
 const { validateBody } = require('../validation/validate');
+const { PRODUCT_SELECT, createProductIdentifiers } = require('../models/product.model');
 
 const parseId = (id) => {
   const parsedId = Number(id);
@@ -14,7 +15,7 @@ const createObjectDetailProduct = async (req, res) => {
     return res.status(400).send({ message: 'Id invalide' });
   }
 
-  const query = 'SELECT DISTINCT * FROM testmeubles WHERE id = ?';
+  const query = `${PRODUCT_SELECT} WHERE p.id = ? AND p.status = 'published'`;
 
   try {
     const [results] = await connect.query(query, [id]);
@@ -41,13 +42,57 @@ const createNewProduct = async (req, res) => {
     return res.status(400).send({ message: validationError });
   }
 
-  const { titre, prix, description, photo } = data;
-
-  const values = [titre, prix, description, photo];
-
-  const query = 'INSERT INTO testmeubles ( titre, prix, description, photo) VALUES (?,?,?,?)';
+  const {
+    titre,
+    prix,
+    description,
+    photo,
+    categorie,
+    style,
+    epoque,
+    matiere,
+    couleur,
+    etat,
+    hauteur,
+    largeur,
+    longueur,
+    poids,
+    stock,
+    status,
+  } = data;
+  const { slug, sku } = createProductIdentifiers(titre);
+  const values = [
+    titre,
+    slug,
+    sku,
+    prix,
+    description,
+    photo,
+    categorie,
+    style || null,
+    epoque || null,
+    matiere || null,
+    couleur || null,
+    etat,
+    hauteur,
+    largeur,
+    longueur,
+    poids,
+    stock,
+    status,
+  ];
+  const query = `
+    INSERT INTO products (
+      title, slug, sku, price, description, primary_image, category_id, style, period,
+      material, color, condition_label, height, width, depth, weight, stock, status
+    ) VALUES (?, ?, ?, ?, ?, ?, (SELECT id FROM categories WHERE slug = ? LIMIT 1), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
   try {
     const [results] = await connect.query(query, values);
+    await connect.query(
+      'INSERT INTO product_images (product_id, filename, alt_text, position) VALUES (?, ?, ?, 0)',
+      [results.insertId, photo, titre],
+    );
     res.status(201).send({ message: 'Produit créé avec succès', id: results.insertId });
   } catch (error) {
     console.error("Erreur lors de la création d'un nouveau produit", error);

@@ -13,6 +13,14 @@ const ProductDetails = ({
   disponibilite,
   photo,
   categorie,
+  style,
+  epoque,
+  matiere,
+  couleur,
+  etat,
+  poids,
+  stock,
+  sku,
 }) => {
   const { setPanier } = useContext(CartContext);
   const isAvailable = disponibilite !== false && disponibilite !== 0;
@@ -36,10 +44,7 @@ const ProductDetails = ({
 
       <div className="mt-7 border-y border-[#dccbbd] py-5 text-[11px] uppercase tracking-[0.12em] text-[#5f4a35]">
         <p>
-          <span className="text-[#24160e]">État :</span> excellent vintage
-        </p>
-        <p className="mt-3">
-          <span className="text-[#24160e]">Origine :</span> Paris, France
+          <span className="text-[#24160e]">État :</span> {etat || 'Non renseigné'}
         </p>
         <p className="mt-3">
           <span className="text-[#24160e]">Catégorie :</span> {categorie || 'Mobilier'}
@@ -48,6 +53,34 @@ const ProductDetails = ({
           <span className="text-[#24160e]">Disponibilité :</span>{' '}
           {isAvailable ? 'Disponible' : 'Indisponible'}
         </p>
+        <p className="mt-3">
+          <span className="text-[#24160e]">Stock :</span> {stock ?? 0}
+        </p>
+        {sku && (
+          <p className="mt-3">
+            <span className="text-[#24160e]">Référence :</span> {sku}
+          </p>
+        )}
+        {style && (
+          <p className="mt-3">
+            <span className="text-[#24160e]">Style :</span> {style}
+          </p>
+        )}
+        {epoque && (
+          <p className="mt-3">
+            <span className="text-[#24160e]">Époque :</span> {epoque}
+          </p>
+        )}
+        {matiere && (
+          <p className="mt-3">
+            <span className="text-[#24160e]">Matière :</span> {matiere}
+          </p>
+        )}
+        {couleur && (
+          <p className="mt-3">
+            <span className="text-[#24160e]">Couleur :</span> {couleur}
+          </p>
+        )}
       </div>
 
       <div className="mt-7">
@@ -55,19 +88,7 @@ const ProductDetails = ({
         <div className="mt-3 inline-flex items-center gap-3 border border-[#dccbbd] bg-[#fbf1df] px-4 py-3 text-sm text-[#24160e]">
           <Ruler size={16} />
           <span>{dimensions || 'Non renseignées'}</span>
-        </div>
-      </div>
-
-      <div className="mt-7">
-        <p className="text-[11px] uppercase tracking-[0.18em] text-[#5f4a35]">Teintes</p>
-        <div className="mt-4 flex gap-3">
-          {['#8b5a24', '#c6a16b', '#5f4a35', '#2a221c', '#17100b'].map((color) => (
-            <span
-              key={color}
-              className="h-6 w-6 border border-[#dccbbd]"
-              style={{ backgroundColor: color }}
-            />
-          ))}
+          {poids && <span>· {poids} kg</span>}
         </div>
       </div>
 

@@ -2,7 +2,8 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import updateProduct from '../services/updateProduct';
-import { getProduct } from '../../../services/products';
+import { getAdminProduct } from '../../../services/products';
+import { CATEGORY_OPTIONS, PRODUCT_STATUS_OPTIONS } from '../../catalog/product-options';
 
 function EditProductForm() {
   const { id: idTab } = useParams();
@@ -13,6 +14,18 @@ function EditProductForm() {
     prix: '',
     description: '',
     photo: '',
+    categorie: 'mobilier',
+    style: '',
+    epoque: '',
+    matiere: '',
+    couleur: '',
+    etat: 'Bon état vintage',
+    hauteur: '',
+    largeur: '',
+    longueur: '',
+    poids: '',
+    stock: '1',
+    status: 'published',
   });
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +57,7 @@ function EditProductForm() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const product = await getProduct(idTab);
+        const product = await getAdminProduct(idTab);
 
         if (!product) {
           setproduitDetail({});
@@ -57,6 +70,18 @@ function EditProductForm() {
           prix: product.prix ?? '',
           description: product.description ?? '',
           photo: product.photo ?? '',
+          categorie: product.categorie_slug ?? 'mobilier',
+          style: product.style ?? '',
+          epoque: product.epoque ?? '',
+          matiere: product.matiere ?? '',
+          couleur: product.couleur ?? '',
+          etat: product.etat ?? 'Bon état vintage',
+          hauteur: product.hauteur ?? '',
+          largeur: product.largeur ?? '',
+          longueur: product.longueur ?? '',
+          poids: product.poids ?? '',
+          stock: product.stock ?? '1',
+          status: product.status ?? 'published',
         });
       } catch (error) {
         setproduitDetail({});
@@ -151,6 +176,88 @@ function EditProductForm() {
                 onChange={handleChange}
               />
             </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block text-sm font-semibold" htmlFor="edit-category">
+                Catégorie
+                <select
+                  id="edit-category"
+                  name="categorie"
+                  value={formData.categorie}
+                  onChange={handleChange}
+                  className="mt-2 w-full border border-gray-300 bg-white p-3 font-normal"
+                >
+                  {CATEGORY_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="block text-sm font-semibold" htmlFor="edit-status">
+                Statut
+                <select
+                  id="edit-status"
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  className="mt-2 w-full border border-gray-300 bg-white p-3 font-normal"
+                >
+                  {PRODUCT_STATUS_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[
+                ['style', 'Style'],
+                ['epoque', 'Époque'],
+                ['matiere', 'Matière'],
+                ['couleur', 'Couleur'],
+                ['etat', 'État'],
+                ['stock', 'Stock'],
+              ].map(([name, label]) => (
+                <label key={name} className="block text-sm font-semibold" htmlFor={`edit-${name}`}>
+                  {label}
+                  <input
+                    id={`edit-${name}`}
+                    type={name === 'stock' ? 'number' : 'text'}
+                    min={name === 'stock' ? '0' : undefined}
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    className="mt-2 w-full border-b border-black bg-transparent py-2 font-normal outline-none"
+                  />
+                </label>
+              ))}
+            </div>
+            <fieldset>
+              <legend className="text-sm font-semibold">Dimensions et poids</legend>
+              <div className="mt-2 grid gap-4 sm:grid-cols-4">
+                {[
+                  ['hauteur', 'Hauteur (cm)'],
+                  ['largeur', 'Largeur (cm)'],
+                  ['longueur', 'Profondeur (cm)'],
+                  ['poids', 'Poids (kg)'],
+                ].map(([name, label]) => (
+                  <label key={name} className="text-xs" htmlFor={`edit-${name}`}>
+                    {label}
+                    <input
+                      id={`edit-${name}`}
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      name={name}
+                      value={formData[name]}
+                      onChange={handleChange}
+                      className="mt-1 w-full border border-gray-300 bg-white p-2"
+                    />
+                  </label>
+                ))}
+              </div>
+            </fieldset>
             <button
               className="w-full rounded-md bg-dark-brown p-3 font-semibold text-white disabled:opacity-60"
               type="submit"

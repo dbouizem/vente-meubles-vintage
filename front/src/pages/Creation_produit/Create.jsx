@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiUrl } from '../../services/api';
+import { CATEGORY_OPTIONS, PRODUCT_STATUS_OPTIONS } from '../../features/catalog/product-options';
 
 function Create() {
   const navigate = useNavigate();
@@ -8,6 +9,20 @@ function Create() {
   const [prix, setPrix] = useState('');
   const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState(null);
+  const [details, setDetails] = useState({
+    categorie: 'mobilier',
+    style: '',
+    epoque: '',
+    matiere: '',
+    couleur: '',
+    etat: 'Bon état vintage',
+    hauteur: '',
+    largeur: '',
+    longueur: '',
+    poids: '',
+    stock: '1',
+    status: 'published',
+  });
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -21,6 +36,7 @@ function Create() {
       formData.append('titre', titre);
       formData.append('prix', prix);
       formData.append('description', description);
+      Object.entries(details).forEach(([key, value]) => formData.append(key, value));
 
       if (photo) {
         formData.append('photo', photo);
@@ -107,6 +123,99 @@ function Create() {
               className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
               onChange={(e) => setDescription(e.target.value)}
             />
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block text-left text-sm font-semibold" htmlFor="product-category">
+                Catégorie
+                <select
+                  id="product-category"
+                  value={details.categorie}
+                  onChange={(e) =>
+                    setDetails((current) => ({ ...current, categorie: e.target.value }))
+                  }
+                  className="mt-2 w-full border border-gray-300 bg-white p-3 font-normal"
+                >
+                  {CATEGORY_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="block text-left text-sm font-semibold" htmlFor="product-status">
+                Statut
+                <select
+                  id="product-status"
+                  value={details.status}
+                  onChange={(e) =>
+                    setDetails((current) => ({ ...current, status: e.target.value }))
+                  }
+                  className="mt-2 w-full border border-gray-300 bg-white p-3 font-normal"
+                >
+                  {PRODUCT_STATUS_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[
+                ['style', 'Style'],
+                ['epoque', 'Époque'],
+                ['matiere', 'Matière'],
+                ['couleur', 'Couleur'],
+                ['etat', 'État'],
+                ['stock', 'Stock'],
+              ].map(([name, label]) => (
+                <label
+                  key={name}
+                  className="block text-left text-sm font-semibold"
+                  htmlFor={`product-${name}`}
+                >
+                  {label}
+                  <input
+                    id={`product-${name}`}
+                    type={name === 'stock' ? 'number' : 'text'}
+                    min={name === 'stock' ? '0' : undefined}
+                    value={details[name]}
+                    onChange={(e) =>
+                      setDetails((current) => ({ ...current, [name]: e.target.value }))
+                    }
+                    className="mt-2 w-full border-b border-black bg-transparent py-2 font-normal outline-none"
+                  />
+                </label>
+              ))}
+            </div>
+
+            <fieldset>
+              <legend className="text-left text-sm font-semibold">Dimensions et poids</legend>
+              <div className="mt-2 grid gap-4 sm:grid-cols-4">
+                {[
+                  ['hauteur', 'Hauteur (cm)'],
+                  ['largeur', 'Largeur (cm)'],
+                  ['longueur', 'Profondeur (cm)'],
+                  ['poids', 'Poids (kg)'],
+                ].map(([name, label]) => (
+                  <label key={name} className="text-xs" htmlFor={`product-${name}`}>
+                    {label}
+                    <input
+                      id={`product-${name}`}
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={details[name]}
+                      onChange={(e) =>
+                        setDetails((current) => ({ ...current, [name]: e.target.value }))
+                      }
+                      className="mt-1 w-full border border-gray-300 bg-white p-2"
+                    />
+                  </label>
+                ))}
+              </div>
+            </fieldset>
 
             <label className="block text-left text-sm font-semibold" htmlFor="product-photo">
               Photo

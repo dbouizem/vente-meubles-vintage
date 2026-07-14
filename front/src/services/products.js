@@ -19,3 +19,17 @@ export async function getProduct(id) {
   const products = await parseResponse(response, 'Produit introuvable.');
   return products[0] ?? null;
 }
+
+const adminHeaders = () => ({
+  Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
+});
+
+export async function getAdminProducts() {
+  const response = await fetch(apiUrl('/admin/products'), { headers: adminHeaders() });
+  return parseResponse(response, 'Impossible de charger les produits.');
+}
+
+export async function getAdminProduct(id) {
+  const response = await fetch(apiUrl(`/admin/products/${id}`), { headers: adminHeaders() });
+  return parseResponse(response, 'Produit introuvable.');
+}

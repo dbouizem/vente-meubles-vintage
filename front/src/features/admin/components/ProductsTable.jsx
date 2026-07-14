@@ -5,7 +5,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import deleteProduct from '../services/deleteProduct';
-import { getProducts } from '../../../services/products';
+import { getAdminProducts } from '../../../services/products';
 
 function ProductsTable() {
   let navigate = useNavigate();
@@ -17,7 +17,7 @@ function ProductsTable() {
 
   const fetchData = async () => {
     try {
-      setData(await getProducts());
+      setData(await getAdminProducts());
       setMessage('');
     } catch (error) {
       setData([]);
@@ -63,11 +63,14 @@ function ProductsTable() {
         </p>
       )}
       <div className="w-full overflow-x-auto">
-        <table className="w-full table-auto min-w-[720px] overflow-hidden rounded-lg bg-white text-left shadow-sm">
+        <table className="w-full table-auto min-w-[900px] overflow-hidden rounded-lg bg-white text-left shadow-sm">
           <thead className="bg-beige text-dark-brown">
             <tr>
               <th className="px-4 py-3 text-sm font-semibold">Nom</th>
               <th className="px-4 py-3 text-sm font-semibold">Prix</th>
+              <th className="px-4 py-3 text-sm font-semibold">Catégorie</th>
+              <th className="px-4 py-3 text-sm font-semibold">Stock</th>
+              <th className="px-4 py-3 text-sm font-semibold">Statut</th>
               <th className="px-4 py-3 text-sm font-semibold">Description</th>
               <th className="px-4 py-3 text-sm font-semibold">Actions</th>
             </tr>
@@ -75,7 +78,7 @@ function ProductsTable() {
           <tbody>
             {data === null ? (
               <tr>
-                <td colSpan="4" className="px-4 py-6 text-center text-gray-600">
+                <td colSpan="7" className="px-4 py-6 text-center text-gray-600">
                   Chargement des produits...
                 </td>
               </tr>
@@ -84,6 +87,9 @@ function ProductsTable() {
                 <tr key={el.id} className="border-t border-gray-100">
                   <td className="px-4 py-3 font-semibold">{el.titre}</td>
                   <td className="px-4 py-3">{el.prix} €</td>
+                  <td className="px-4 py-3 text-sm">{el.categorie}</td>
+                  <td className="px-4 py-3 text-sm">{el.stock}</td>
+                  <td className="px-4 py-3 text-sm">{el.status}</td>
                   <td className="px-4 py-3 text-sm text-gray-600">{el.description}</td>
                   <td className="flex gap-2 px-4 py-3">
                     <button
@@ -109,7 +115,7 @@ function ProductsTable() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="px-4 py-6 text-center text-gray-600">
+                <td colSpan="7" className="px-4 py-6 text-center text-gray-600">
                   Aucun produit à afficher.
                 </td>
               </tr>

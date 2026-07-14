@@ -73,6 +73,7 @@ npm run migrate --workspace=back
 ```
 
 Les migrations créent les tables et les données initiales. Les détails sont disponibles dans [docs/backend-migrations.md](docs/backend-migrations.md).
+Le modèle normalisé du catalogue est décrit dans [docs/product-catalog.md](docs/product-catalog.md).
 
 ## Lancement en développement
 
