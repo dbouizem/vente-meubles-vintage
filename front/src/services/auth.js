@@ -14,3 +14,6 @@ async function postCredentials(path, credentials) {
 
 export const login = (credentials) => postCredentials('/login', credentials);
 export const signup = (credentials) => postCredentials('/signup', credentials);
+export const forgotPassword = (email) => postCredentials('/forgot-password', { email });
+export const resetPassword = (token, password) =>
+  postCredentials('/reset-password', { token, password });

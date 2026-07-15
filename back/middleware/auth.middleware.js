@@ -15,7 +15,7 @@ const getAuthSecret = () => {
 const AUTH_SECRET = getAuthSecret();
 const TOKEN_EXPIRES_IN = process.env.AUTH_TOKEN_EXPIRES_IN || '2h';
 
-const createAdminToken = (user) =>
+const createAuthToken = (user) =>
   jwt.sign(
     {
       id: user.id,
@@ -25,6 +25,33 @@ const createAdminToken = (user) =>
     AUTH_SECRET,
     { expiresIn: TOKEN_EXPIRES_IN },
   );
+
+const readToken = (req) => {
+  const authorization = req.headers.authorization || '';
+  const token = authorization.startsWith('Bearer ') ? authorization.slice(7) : null;
+  if (!token) return null;
+  return jwt.verify(token, AUTH_SECRET);
+};
+
+const requireAuth = (req, res, next) => {
+  try {
+    const payload = readToken(req);
+    if (!payload) return res.status(401).send({ message: 'Authentification requise' });
+    req.user = payload;
+    next();
+  } catch {
+    return res.status(403).send({ message: 'Session invalide ou expirée' });
+  }
+};
+
+const optionalAuth = (req, res, next) => {
+  try {
+    req.user = readToken(req);
+  } catch {
+    req.user = null;
+  }
+  next();
+};
 
 const requireAdmin = (req, res, next) => {
   const authorization = req.headers.authorization || '';
@@ -50,4 +77,10 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
-module.exports = { createAdminToken, requireAdmin };
+module.exports = {
+  createAdminToken: createAuthToken,
+  createAuthToken,
+  optionalAuth,
+  requireAdmin,
+  requireAuth,
+};

@@ -69,9 +69,27 @@ const orderSchema = z.object({
     .max(50, 'Le panier contient trop de produits'),
 });
 
+const profileSchema = z.object({
+  name: requiredString('Nom').max(100),
+  firstname: requiredString('Prenom').max(100),
+  phone: z.string().trim().max(30).optional().default(''),
+});
+
+const forgotPasswordSchema = z.object({
+  email: requiredString('Email').email('Email invalide'),
+});
+
+const resetPasswordSchema = z.object({
+  token: requiredString('Jeton'),
+  password: requiredString('Mot de passe').min(8, 'Le mot de passe doit contenir 8 caracteres'),
+});
+
 module.exports = {
   loginSchema,
+  forgotPasswordSchema,
   orderSchema,
   productSchema,
+  profileSchema,
+  resetPasswordSchema,
   signupSchema,
 };

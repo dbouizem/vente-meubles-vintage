@@ -399,6 +399,26 @@ describe('Backend controllers and middleware', () => {
       expect(JSON.stringify(payload)).not.toContain(passwordHash);
     });
 
+    it('returns an authenticated token for a customer', async () => {
+      const passwordHash = await bcrypt.hash('client123', 10);
+      db.query.mockResolvedValueOnce([
+        [{ id: 7, email: 'client@example.com', mdp: passwordHash, role: 'user' }],
+      ]);
+      const res = createResponse();
+
+      await usersController.checkLogin(
+        { body: { email: 'client@example.com', password: 'client123' } },
+        res,
+      );
+
+      const payload = res.send.mock.calls[0][0];
+      expect(payload.isAdmin).toBe(false);
+      expect(jwt.verify(payload.token, process.env.AUTH_SECRET)).toMatchObject({
+        id: 7,
+        role: 'user',
+      });
+    });
+
     it('returns 401 on wrong password', async () => {
       const passwordHash = await bcrypt.hash('admin123', 10);
       db.query.mockResolvedValueOnce([

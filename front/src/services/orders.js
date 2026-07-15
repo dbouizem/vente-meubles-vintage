@@ -9,7 +9,12 @@ const parseResponse = async (response, fallback) => {
 export async function createOrder(order) {
   const response = await fetch(apiUrl('/orders'), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(localStorage.getItem('authToken')
+        ? { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
+        : {}),
+    },
     body: JSON.stringify(order),
   });
   return parseResponse(response, 'Impossible de créer la commande.');

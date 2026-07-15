@@ -59,13 +59,14 @@ const createOrder = async (req, res) => {
     const confirmationToken = crypto.randomUUID();
     const [orderResult] = await connection.query(
       `INSERT INTO orders
-        (order_number, confirmation_token, customer_name, customer_email, address_line1,
+        (order_number, confirmation_token, user_id, customer_name, customer_email, address_line1,
          address_line2, postal_code, city, country, delivery_method, payment_method,
          subtotal, discount, total)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         orderNumber,
         confirmationToken,
+        req.user?.id || null,
         data.customerName,
         data.customerEmail.toLowerCase(),
         data.address.line1,

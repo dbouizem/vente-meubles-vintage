@@ -1,6 +1,8 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { CartContext } from '../../cart/cart-context';
 import { Heart, Lock, Package, Ruler, RotateCcw, ShieldCheck } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { addFavorite } from '../../../services/account';
 
 const ProductDetails = ({
   id,
@@ -23,6 +25,8 @@ const ProductDetails = ({
   sku,
 }) => {
   const { panier, addItem } = useContext(CartContext);
+  const navigate = useNavigate();
+  const [favoriteMessage, setFavoriteMessage] = useState('');
   const isAvailable = disponibilite !== false && disponibilite !== 0;
   const cartQuantity = panier.find((item) => item.id === Number(id))?.quantity || 0;
   const parsedStock = Number.parseInt(stock, 10);
@@ -109,12 +113,24 @@ const ProductDetails = ({
         </button>
         <button
           type="button"
-          disabled
-          title="Favoris bientôt disponibles"
-          className="inline-flex w-full cursor-not-allowed items-center justify-center gap-3 border border-[#b58a55]/50 px-5 py-4 text-[11px] uppercase tracking-[0.16em] text-[#4a2b18] opacity-55"
+          onClick={async () => {
+            if (!localStorage.getItem('authToken')) return navigate('/');
+            try {
+              await addFavorite(id);
+              setFavoriteMessage('Produit ajouté aux favoris.');
+            } catch (error) {
+              setFavoriteMessage(error.message);
+            }
+          }}
+          className="inline-flex w-full cursor-pointer items-center justify-center gap-3 border border-[#b58a55]/50 px-5 py-4 text-[11px] uppercase tracking-[0.16em] text-[#4a2b18] transition-colors hover:border-[#7c2d12]"
         >
-          <Heart size={15} /> Favoris — bientôt disponible
+          <Heart size={15} /> Ajouter aux favoris
         </button>
+        {favoriteMessage && (
+          <p role="status" className="text-sm text-[#5f4a35]">
+            {favoriteMessage}
+          </p>
+        )}
       </div>
 
       <div className="mt-7 grid grid-cols-3 gap-3 border-t border-[#dccbbd] pt-5 text-center text-[10px] uppercase tracking-[0.08em] text-[#5f4a35]">

@@ -50,11 +50,14 @@ function Login() {
     try {
       const response = await login({ email, password });
       if (response.token) {
-        localStorage.setItem('adminToken', response.token);
+        localStorage.setItem('authToken', response.token);
+        if (response.isAdmin) localStorage.setItem('adminToken', response.token);
+        else localStorage.removeItem('adminToken');
       } else {
+        localStorage.removeItem('authToken');
         localStorage.removeItem('adminToken');
       }
-      navigate('/accueil');
+      navigate(response.isAdmin ? '/admin' : '/compte');
     } catch (err) {
       setMessage(err.message || 'Le serveur ne répond pas. Réessayez dans quelques instants.');
     } finally {
@@ -231,14 +234,12 @@ function Login() {
                   />
                   <label htmlFor="remember-me">Se souvenir de moi — bientôt</label>
                 </div>
-                <button
-                  type="button"
-                  disabled
-                  title="Récupération du mot de passe bientôt disponible"
-                  className="cursor-not-allowed whitespace-nowrap opacity-60"
+                <Link
+                  to="/forgot-password"
+                  className="whitespace-nowrap underline underline-offset-4"
                 >
                   Mot de passe oublié ?
-                </button>
+                </Link>
               </div>
 
               <button

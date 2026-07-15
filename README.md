@@ -167,6 +167,7 @@ Une contribution ne doit pas être fusionnée si l'une de ces vérifications éc
 - Quantités du panier limitées par le stock, sous-totaux et total automatiques
 - Réservations transactionnelles avec contrôle du stock et confirmation
 - Tunnel séparé en panier, livraison, paiement hors ligne et confirmation
+- Espace client avec profil, commandes, favoris et récupération du mot de passe
 - Création, modification et suppression de produits par un administrateur
 
 Le paiement en ligne, le profil utilisateur, les favoris et les filtres avancés ne sont pas encore finalisés.

@@ -35,6 +35,8 @@ describeIntegration('Backend integration with MariaDB/MySQL', () => {
   });
 
   const resetDatabase = async () => {
+    await db.query('DELETE FROM password_reset_tokens');
+    await db.query('DELETE FROM favorites');
     await db.query('DELETE FROM order_items');
     await db.query('DELETE FROM orders');
     await db.query('DELETE FROM products');
@@ -89,7 +91,7 @@ describeIntegration('Backend integration with MariaDB/MySQL', () => {
     expect(loginResponse.body).toMatchObject({
       message: 'Connexion réussie',
       isAdmin: false,
-      token: null,
+      token: expect.any(String),
     });
   });
 

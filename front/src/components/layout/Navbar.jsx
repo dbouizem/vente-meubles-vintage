@@ -17,6 +17,7 @@ const CustomBadge = styled(Badge)(() => ({
 function Navbar() {
   const { itemCount } = useContext(CartContext);
   const isAdmin = Boolean(localStorage.getItem('adminToken'));
+  const isAuthenticated = Boolean(localStorage.getItem('authToken'));
 
   return (
     <header className="relative z-40 border-b border-[#d8c5a7] bg-[#f8ecd4] text-[#24160e]">
@@ -65,7 +66,7 @@ function Navbar() {
             <Search size={20} strokeWidth={1.4} />
           </button>
           <Link
-            to="/"
+            to={isAuthenticated ? '/compte' : '/'}
             className="hidden h-9 w-9 items-center justify-center transition hover:text-[#7c2d12] sm:flex"
             aria-label="Compte"
           >

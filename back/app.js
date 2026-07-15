@@ -8,6 +8,7 @@ const accueil = require('./routes/accueil.routes.js');
 const produit = require('./routes/produit.routes.js');
 const admin = require('./routes/admin.routes.js');
 const orders = require('./routes/orders.routes.js');
+const account = require('./routes/account.routes.js');
 
 const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
   .split(',')
@@ -70,5 +71,6 @@ app.use('/', accueil);
 app.use('/', produit);
 app.use('/', admin);
 app.use('/', orders);
+app.use('/', account);
 
 module.exports = app;

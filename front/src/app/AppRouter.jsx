@@ -13,12 +13,18 @@ import Signup from '../pages/Signup/Signup';
 import Confirmation from '../pages/Commande/Confirmation';
 import Livraison from '../pages/Commande/Livraison';
 import Paiement from '../pages/Commande/Paiement';
+import ProtectedAccountRoute from './ProtectedAccountRoute';
+import Compte from '../pages/Compte/Compte';
+import MotDePasseOublie from '../pages/Compte/MotDePasseOublie';
+import ReinitialiserMotDePasse from '../pages/Compte/ReinitialiserMotDePasse';
 
 function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<MotDePasseOublie />} />
+      <Route path="/reset-password" element={<ReinitialiserMotDePasse />} />
 
       <Route element={<StoreLayout />}>
         <Route path="/accueil" element={<Accueil />} />
@@ -27,6 +33,12 @@ function AppRouter() {
         <Route path="/commande/:token" element={<Confirmation />} />
         <Route path="/commande/livraison" element={<Livraison />} />
         <Route path="/commande/paiement" element={<Paiement />} />
+      </Route>
+
+      <Route element={<ProtectedAccountRoute />}>
+        <Route element={<StoreLayout />}>
+          <Route path="/compte" element={<Compte />} />
+        </Route>
       </Route>
 
       <Route element={<ProtectedAdminRoute />}>
