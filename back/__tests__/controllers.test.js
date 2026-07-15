@@ -228,6 +228,15 @@ describe('Backend controllers and middleware', () => {
           body: {
             customerName: 'Client Test',
             customerEmail: 'CLIENT@example.com',
+            address: {
+              line1: '10 rue Vintage',
+              line2: '',
+              postalCode: '75001',
+              city: 'Paris',
+              country: 'France',
+            },
+            deliveryMethod: 'home_delivery',
+            paymentMethod: 'pay_on_delivery',
             promoCode: 'ADATECH',
             items: [{ productId: 5, quantity: 2 }],
           },
@@ -236,13 +245,21 @@ describe('Backend controllers and middleware', () => {
       );
 
       expect(connection.beginTransaction).toHaveBeenCalled();
-      expect(connection.query.mock.calls[1][1].slice(2)).toEqual([
-        'Client Test',
-        'client@example.com',
-        240,
-        10,
-        230,
-      ]);
+      expect(connection.query.mock.calls[1][1]).toEqual(
+        expect.arrayContaining([
+          'Client Test',
+          'client@example.com',
+          '10 rue Vintage',
+          '75001',
+          'Paris',
+          'France',
+          'home_delivery',
+          'pay_on_delivery',
+          240,
+          10,
+          230,
+        ]),
+      );
       expect(connection.query.mock.calls[2][1]).toEqual([42, 5, 'VH-5', 'Buffet', 120, 2, 240]);
       expect(connection.query.mock.calls[3][1]).toEqual([2, 2, 5]);
       expect(connection.commit).toHaveBeenCalled();
@@ -264,6 +281,14 @@ describe('Backend controllers and middleware', () => {
           body: {
             customerName: 'Client Test',
             customerEmail: 'client@example.com',
+            address: {
+              line1: '10 rue Vintage',
+              postalCode: '75001',
+              city: 'Paris',
+              country: 'France',
+            },
+            deliveryMethod: 'home_delivery',
+            paymentMethod: 'pay_on_delivery',
             items: [{ productId: 5, quantity: 2 }],
           },
         },

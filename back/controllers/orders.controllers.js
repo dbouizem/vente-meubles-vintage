@@ -59,13 +59,22 @@ const createOrder = async (req, res) => {
     const confirmationToken = crypto.randomUUID();
     const [orderResult] = await connection.query(
       `INSERT INTO orders
-        (order_number, confirmation_token, customer_name, customer_email, subtotal, discount, total)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        (order_number, confirmation_token, customer_name, customer_email, address_line1,
+         address_line2, postal_code, city, country, delivery_method, payment_method,
+         subtotal, discount, total)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         orderNumber,
         confirmationToken,
         data.customerName,
         data.customerEmail.toLowerCase(),
+        data.address.line1,
+        data.address.line2 || null,
+        data.address.postalCode,
+        data.address.city,
+        data.address.country,
+        data.deliveryMethod,
+        data.paymentMethod,
         subtotal,
         discount,
         total,
@@ -123,7 +132,10 @@ const displayOrder = async (req, res) => {
   try {
     const [orders] = await connect.query(
       `SELECT id, order_number AS orderNumber, customer_name AS customerName,
-        customer_email AS customerEmail, status, subtotal, discount, total, created_at AS createdAt
+        customer_email AS customerEmail, address_line1 AS addressLine1,
+        address_line2 AS addressLine2, postal_code AS postalCode, city, country,
+        delivery_method AS deliveryMethod, payment_method AS paymentMethod,
+        status, subtotal, discount, total, created_at AS createdAt
        FROM orders WHERE confirmation_token = ?`,
       [token],
     );

@@ -11,6 +11,8 @@ import Panier from '../pages/Panier/Panier';
 import Produit from '../pages/Produit/Produit';
 import Signup from '../pages/Signup/Signup';
 import Confirmation from '../pages/Commande/Confirmation';
+import Livraison from '../pages/Commande/Livraison';
+import Paiement from '../pages/Commande/Paiement';
 
 function AppRouter() {
   return (
@@ -23,6 +25,8 @@ function AppRouter() {
         <Route path="/produit/:id" element={<Produit />} />
         <Route path="/panier" element={<Panier />} />
         <Route path="/commande/:token" element={<Confirmation />} />
+        <Route path="/commande/livraison" element={<Livraison />} />
+        <Route path="/commande/paiement" element={<Paiement />} />
       </Route>
 
       <Route element={<ProtectedAdminRoute />}>

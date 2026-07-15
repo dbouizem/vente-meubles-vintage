@@ -27,5 +27,16 @@ n'est modifiée.
 frontend utilise cette route sur `/commande/:token`. Le numéro de commande seul
 ne permet donc pas de consulter les coordonnées d'un client.
 
-Cette phase ne collecte ni adresse de livraison ni paiement. Ces étapes restent
-réservées au prochain découpage du tunnel de commande.
+## Tunnel de commande
+
+Le frontend sépare le parcours en quatre routes :
+
+1. `/panier` pour les articles, quantités et promotions ;
+2. `/commande/livraison` pour le contact, l'adresse et le mode de livraison ;
+3. `/commande/paiement` pour choisir un paiement hors ligne et valider ;
+4. `/commande/:token` pour la confirmation persistante.
+
+Les données intermédiaires sont conservées dans `sessionStorage` et supprimées
+après une commande réussie. Aucune coordonnée bancaire n'est collectée : les
+modes proposés sont le paiement à la livraison/retrait ou le virement après
+confirmation.

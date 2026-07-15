@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CheckCircle2, Mail, PackageCheck } from 'lucide-react';
 import { getOrder } from '../../services/orders';
+import CheckoutSteps from '../../features/checkout/CheckoutSteps';
 
 const formatPrice = (value) =>
   new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(value));
@@ -19,6 +20,7 @@ function Confirmation() {
 
   return (
     <main className="mx-auto min-h-[70vh] max-w-4xl px-4 py-12 text-[#24160e] sm:px-8">
+      <CheckoutSteps current="confirmation" />
       {error ? (
         <div className="border border-red-800/30 bg-[#fbf1df] p-8 text-center" role="alert">
           <h1 className="font-serif text-3xl uppercase">Commande introuvable</h1>
@@ -61,6 +63,26 @@ function Confirmation() {
                 <PackageCheck size={16} /> Statut
               </p>
               <p className="mt-3 text-sm capitalize text-[#5f4a35]">{order.status}</p>
+            </div>
+          </div>
+          <div className="mt-5 grid gap-5 sm:grid-cols-2">
+            <div className="border border-[#dccbbd] bg-white p-5 text-sm text-[#5f4a35]">
+              <p className="text-xs uppercase tracking-[0.12em] text-[#24160e]">Livraison</p>
+              <p className="mt-3">
+                {order.addressLine1}
+                {order.addressLine2 ? `, ${order.addressLine2}` : ''}
+              </p>
+              <p>
+                {order.postalCode} {order.city}, {order.country}
+              </p>
+            </div>
+            <div className="border border-[#dccbbd] bg-white p-5 text-sm text-[#5f4a35]">
+              <p className="text-xs uppercase tracking-[0.12em] text-[#24160e]">Paiement</p>
+              <p className="mt-3">
+                {order.paymentMethod === 'bank_transfer'
+                  ? 'Virement bancaire'
+                  : 'Paiement à la livraison ou au retrait'}
+              </p>
             </div>
           </div>
 

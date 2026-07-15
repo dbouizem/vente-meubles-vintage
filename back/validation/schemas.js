@@ -48,6 +48,15 @@ const productSchema = z.object({
 const orderSchema = z.object({
   customerName: requiredString('Nom').max(200),
   customerEmail: requiredString('Email').email('Email invalide').max(255),
+  address: z.object({
+    line1: requiredString('Adresse').max(255),
+    line2: z.string().trim().max(255).optional().default(''),
+    postalCode: requiredString('Code postal').max(20),
+    city: requiredString('Ville').max(120),
+    country: requiredString('Pays').max(100).default('France'),
+  }),
+  deliveryMethod: z.enum(['home_delivery', 'store_pickup']),
+  paymentMethod: z.enum(['pay_on_delivery', 'bank_transfer']),
   promoCode: z.string().trim().max(30).optional().default(''),
   items: z
     .array(

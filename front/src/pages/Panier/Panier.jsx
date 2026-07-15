@@ -1,9 +1,10 @@
 import { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Lock, Mail, Minus, Package, Plus, RotateCcw, Trash2 } from 'lucide-react';
 import { CartContext, DiscountContext } from '../../features/cart/cart-context';
 import fallbackImage from '../../assets/img_vignette/img_non_dispo.jpg';
-import { createOrder } from '../../services/orders';
+import CheckoutSteps from '../../features/checkout/CheckoutSteps';
+import { saveCheckout } from '../../features/checkout/checkout-storage';
 
 const formatPrice = (value) =>
   new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value);
@@ -37,43 +38,20 @@ function QuantityControl({ item, updateQuantity }) {
 }
 
 function Panier() {
-  const navigate = useNavigate();
   const { panier, updateQuantity, removeItem, clearCart, itemCount, subtotal } =
     useContext(CartContext);
   const promotion = useContext(DiscountContext);
   const [promoInput, setPromoInput] = useState('');
   const [appliedPromo, setAppliedPromo] = useState('');
-  const [customer, setCustomer] = useState({ name: '', email: '' });
-  const [orderError, setOrderError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const promoIsValid = appliedPromo === 'ADATECH';
   const discount = promoIsValid ? Math.min(promotion, subtotal) : 0;
   const total = Math.max(0, subtotal - discount);
 
   const applyPromo = () => setAppliedPromo(promoInput.trim().toUpperCase());
 
-  const submitOrder = async (event) => {
-    event.preventDefault();
-    setOrderError('');
-    setIsSubmitting(true);
-    try {
-      const result = await createOrder({
-        customerName: customer.name,
-        customerEmail: customer.email,
-        promoCode: promoIsValid ? appliedPromo : '',
-        items: panier.map((item) => ({ productId: item.id, quantity: item.quantity })),
-      });
-      clearCart();
-      navigate(`/commande/${result.confirmationToken}`);
-    } catch (error) {
-      setOrderError(error.message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <main className="mx-auto max-w-7xl px-4 py-12 sm:px-8">
+      <CheckoutSteps current="cart" />
       <header className="text-center">
         <h1 className="font-serif text-5xl uppercase tracking-[0.08em] text-[#17100b] sm:text-7xl">
           Votre panier
@@ -250,48 +228,13 @@ function Panier() {
                 <Lock size={18} /> Paiement au retrait
               </p>
             </div>
-            <form onSubmit={submitOrder} className="mt-7 border-t border-[#dccbbd] pt-5">
-              <p className="text-[11px] uppercase tracking-[0.16em]">Finaliser la réservation</p>
-              <label className="mt-4 block text-xs" htmlFor="order-name">
-                Nom complet
-              </label>
-              <input
-                id="order-name"
-                required
-                autoComplete="name"
-                value={customer.name}
-                onChange={(event) =>
-                  setCustomer((current) => ({ ...current, name: event.target.value }))
-                }
-                className="mt-1 w-full border border-[#b58a55] bg-white px-3 py-2 outline-none focus:border-[#7c2d12] focus:ring-1 focus:ring-[#7c2d12]"
-              />
-              <label className="mt-3 block text-xs" htmlFor="order-email">
-                E-mail
-              </label>
-              <input
-                id="order-email"
-                type="email"
-                required
-                autoComplete="email"
-                value={customer.email}
-                onChange={(event) =>
-                  setCustomer((current) => ({ ...current, email: event.target.value }))
-                }
-                className="mt-1 w-full border border-[#b58a55] bg-white px-3 py-2 outline-none focus:border-[#7c2d12] focus:ring-1 focus:ring-[#7c2d12]"
-              />
-              {orderError && (
-                <p role="alert" className="mt-3 text-sm text-red-700">
-                  {orderError}
-                </p>
-              )}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="mt-5 w-full cursor-pointer bg-[#17100b] px-5 py-4 text-[11px] uppercase tracking-[0.16em] text-[#f8ecd4] transition-colors hover:bg-[#4a2b18] disabled:cursor-wait disabled:opacity-55"
-              >
-                {isSubmitting ? 'Création en cours…' : `Réserver — ${formatPrice(total)}`}
-              </button>
-            </form>
+            <Link
+              to="/commande/livraison"
+              onClick={() => saveCheckout({ promoCode: promoIsValid ? appliedPromo : '' })}
+              className="mt-7 block bg-[#17100b] px-5 py-4 text-center text-[11px] uppercase tracking-[0.16em] text-[#f8ecd4] transition-colors hover:bg-[#4a2b18]"
+            >
+              Continuer vers la livraison — {formatPrice(total)}
+            </Link>
           </aside>
         </div>
       )}
