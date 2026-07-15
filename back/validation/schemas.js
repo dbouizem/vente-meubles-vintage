@@ -45,8 +45,24 @@ const productSchema = z.object({
   status: z.enum(['draft', 'published', 'sold']).optional().default('published'),
 });
 
+const orderSchema = z.object({
+  customerName: requiredString('Nom').max(200),
+  customerEmail: requiredString('Email').email('Email invalide').max(255),
+  promoCode: z.string().trim().max(30).optional().default(''),
+  items: z
+    .array(
+      z.object({
+        productId: z.coerce.number().int().positive(),
+        quantity: z.coerce.number().int().min(1).max(99),
+      }),
+    )
+    .min(1, 'Le panier est vide')
+    .max(50, 'Le panier contient trop de produits'),
+});
+
 module.exports = {
   loginSchema,
+  orderSchema,
   productSchema,
   signupSchema,
 };

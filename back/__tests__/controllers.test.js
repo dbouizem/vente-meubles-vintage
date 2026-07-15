@@ -2,6 +2,7 @@ process.env.AUTH_SECRET = 'test-secret';
 
 jest.mock('../sql/connexion', () => ({
   query: jest.fn(),
+  getConnection: jest.fn(),
 }));
 
 const bcrypt = require('bcrypt');
@@ -10,6 +11,7 @@ const db = require('../sql/connexion');
 const accueilController = require('../controllers/accueil.controllers');
 const adminController = require('../controllers/admin.controllers');
 const produitController = require('../controllers/produit.controllers');
+const ordersController = require('../controllers/orders.controllers');
 const usersController = require('../controllers/users.controllers');
 const { createAdminToken, requireAdmin } = require('../middleware/auth.middleware');
 const app = require('../app');
@@ -36,6 +38,7 @@ describe('Backend controllers and middleware', () => {
 
   beforeEach(() => {
     db.query.mockReset();
+    db.getConnection.mockReset();
   });
 
   describe('app configuration', () => {
@@ -196,6 +199,81 @@ describe('Backend controllers and middleware', () => {
         expect.arrayContaining(['Table', 100, 'Bois', 'uploaded-table.jpg', 'mobilier']),
       );
       expect(db.query).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('orders controller', () => {
+    const createConnection = () => ({
+      beginTransaction: jest.fn(),
+      commit: jest.fn(),
+      rollback: jest.fn(),
+      release: jest.fn(),
+      query: jest.fn(),
+    });
+
+    it('recalculates prices and creates an order in a transaction', async () => {
+      const connection = createConnection();
+      connection.query
+        .mockResolvedValueOnce([
+          [{ id: 5, title: 'Buffet', sku: 'VH-5', price: '120.00', stock: 3, status: 'published' }],
+        ])
+        .mockResolvedValueOnce([{ insertId: 42 }])
+        .mockResolvedValueOnce([{}])
+        .mockResolvedValueOnce([{}]);
+      db.getConnection.mockResolvedValueOnce(connection);
+      const res = createResponse();
+
+      await ordersController.createOrder(
+        {
+          body: {
+            customerName: 'Client Test',
+            customerEmail: 'CLIENT@example.com',
+            promoCode: 'ADATECH',
+            items: [{ productId: 5, quantity: 2 }],
+          },
+        },
+        res,
+      );
+
+      expect(connection.beginTransaction).toHaveBeenCalled();
+      expect(connection.query.mock.calls[1][1].slice(2)).toEqual([
+        'Client Test',
+        'client@example.com',
+        240,
+        10,
+        230,
+      ]);
+      expect(connection.query.mock.calls[2][1]).toEqual([42, 5, 'VH-5', 'Buffet', 120, 2, 240]);
+      expect(connection.query.mock.calls[3][1]).toEqual([2, 2, 5]);
+      expect(connection.commit).toHaveBeenCalled();
+      expect(connection.release).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.send.mock.calls[0][0]).toMatchObject({ total: 230 });
+    });
+
+    it('rolls back when product stock is insufficient', async () => {
+      const connection = createConnection();
+      connection.query.mockResolvedValueOnce([
+        [{ id: 5, title: 'Buffet', sku: 'VH-5', price: '120.00', stock: 1, status: 'published' }],
+      ]);
+      db.getConnection.mockResolvedValueOnce(connection);
+      const res = createResponse();
+
+      await ordersController.createOrder(
+        {
+          body: {
+            customerName: 'Client Test',
+            customerEmail: 'client@example.com',
+            items: [{ productId: 5, quantity: 2 }],
+          },
+        },
+        res,
+      );
+
+      expect(connection.rollback).toHaveBeenCalled();
+      expect(connection.commit).not.toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(409);
+      expect(res.send).toHaveBeenCalledWith({ message: 'Stock insuffisant pour Buffet' });
     });
   });
 

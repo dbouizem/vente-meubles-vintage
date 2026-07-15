@@ -165,6 +165,7 @@ Une contribution ne doit pas être fusionnée si l'une de ces vérifications éc
 - Recherche, catégories, filtres de prix, tri et pagination du catalogue
 - Panier conservé dans le navigateur
 - Quantités du panier limitées par le stock, sous-totaux et total automatiques
+- Réservations transactionnelles avec contrôle du stock et confirmation
 - Création, modification et suppression de produits par un administrateur
 
 Le paiement en ligne, le profil utilisateur, les favoris et les filtres avancés ne sont pas encore finalisés.

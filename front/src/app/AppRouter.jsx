@@ -10,6 +10,7 @@ import ModifAdmin from '../pages/ModifAdmin/ModifAdmin';
 import Panier from '../pages/Panier/Panier';
 import Produit from '../pages/Produit/Produit';
 import Signup from '../pages/Signup/Signup';
+import Confirmation from '../pages/Commande/Confirmation';
 
 function AppRouter() {
   return (
@@ -21,6 +22,7 @@ function AppRouter() {
         <Route path="/accueil" element={<Accueil />} />
         <Route path="/produit/:id" element={<Produit />} />
         <Route path="/panier" element={<Panier />} />
+        <Route path="/commande/:token" element={<Confirmation />} />
       </Route>
 
       <Route element={<ProtectedAdminRoute />}>
