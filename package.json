@@ -18,6 +18,8 @@
     "test": "npm run test --workspace=back -- --runInBand",
     "test:integration": "npm run test:integration --workspace=back",
     "test:e2e": "npm run e2e --workspace=front",
+    "audit:lh": "npm run audit:lh --workspace=front",
+    "start": "node back/serveur.js",
     "check": "npm run lint && npm run build && npm test"
   },
   "engines": {

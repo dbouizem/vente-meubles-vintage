@@ -46,13 +46,15 @@ function CatalogEditorial() {
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.8 }}
           className="min-h-[270px] bg-cover bg-center"
-          style={{ backgroundImage: 'url(/assets/atelier-heritage/atelier-panel.png)' }}
+          style={{ backgroundImage: 'url(/assets/atelier-heritage/atelier-panel.webp)' }}
         />
       </section>
 
       <div className="mx-auto mt-6 max-w-7xl overflow-hidden border border-[#d8c5a7] bg-[#17100b]">
         <img
-          src="/assets/atelier-heritage/paris-band.png"
+          src="/assets/atelier-heritage/paris-band.webp"
+          loading="lazy"
+          decoding="async"
           alt="Ambiance Atelier Héritage"
           className="h-28 w-full object-cover object-center sm:h-36"
         />

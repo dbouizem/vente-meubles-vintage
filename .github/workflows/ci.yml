@@ -35,3 +35,6 @@ jobs:
 
       - name: Build frontend
         run: npm run build
+
+      - name: Verify formatting
+        run: npm run format:check

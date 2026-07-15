@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: atelier-heritage
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: DB_HOST
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: USER_BDD
+        sync: false
+      - key: PASSWORD
+        sync: false
+      - key: PORT_BDD
+        value: 3306

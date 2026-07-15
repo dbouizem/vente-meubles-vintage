@@ -138,6 +138,8 @@ function Compte() {
                 <img
                   src={imageUrl(item.photo)}
                   alt={item.titre}
+                  loading="lazy"
+                  decoding="async"
                   className="h-40 w-full object-contain"
                 />
                 <h3 className="mt-3 font-serif uppercase">{item.titre}</h3>

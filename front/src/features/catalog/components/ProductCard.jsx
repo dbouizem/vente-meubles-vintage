@@ -24,6 +24,8 @@ function ProductCard({ id, nom, prix, photo, categorie, epoque, index = 0 }) {
           <img
             src={photo}
             alt={nom}
+            loading="lazy"
+            decoding="async"
             className="h-full w-full object-contain transition duration-700 group-hover:scale-105"
           />
         </div>

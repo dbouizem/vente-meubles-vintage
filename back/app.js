@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 const app = express();
 const router = require('./routes/users.routes.js');
 const accueil = require('./routes/accueil.routes.js');
@@ -62,9 +63,13 @@ if (process.env.NODE_ENV !== 'test') {
   );
 }
 
-app.use('/images', express.static('./Assets/img_meubles/'));
+app.use('/images', express.static(path.resolve(__dirname, 'Assets', 'img_meubles')));
 
 app.use(express.json());
+
+app.get('/health', (req, res) => {
+  res.status(200).send({ status: 'ok' });
+});
 
 app.use('/', router);
 app.use('/', accueil);
@@ -72,5 +77,11 @@ app.use('/', produit);
 app.use('/', admin);
 app.use('/', orders);
 app.use('/', account);
+
+if (process.env.NODE_ENV === 'production') {
+  const frontendDirectory = path.resolve(__dirname, '..', 'front', 'dist');
+  app.use(express.static(frontendDirectory, { maxAge: '1h' }));
+  app.get('*', (req, res) => res.sendFile(path.join(frontendDirectory, 'index.html')));
+}
 
 module.exports = app;

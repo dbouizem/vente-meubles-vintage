@@ -126,7 +126,9 @@ function Produit() {
 
             <div className="relative min-h-[270px] overflow-hidden border border-[#dccbbd] bg-[#17100b] p-8 text-[#f8ecd4]">
               <img
-                src="/assets/atelier-heritage/paris-band.png"
+                src="/assets/atelier-heritage/paris-band.webp"
+                loading="lazy"
+                decoding="async"
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover opacity-45"
               />

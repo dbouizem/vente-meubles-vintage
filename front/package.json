@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
-    "audit:lh": "lhci autorun",
+    "audit:lh": "npm run build && lhci autorun",
     "ux:check": "start-server-and-test dev http://127.0.0.1:5173 e2e"
   },
   "dependencies": {

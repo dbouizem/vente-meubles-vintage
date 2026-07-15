@@ -1,6 +1,6 @@
 import './catalog-hero.css';
 import { motion } from 'motion/react';
-import heroImage from '../../../assets/bg_header.png';
+import heroImage from '../../../assets/bg_header.webp';
 
 function CatalogHero() {
   return (
