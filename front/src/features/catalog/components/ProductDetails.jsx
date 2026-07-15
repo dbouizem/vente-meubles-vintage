@@ -22,11 +22,14 @@ const ProductDetails = ({
   stock,
   sku,
 }) => {
-  const { setPanier } = useContext(CartContext);
+  const { panier, addItem } = useContext(CartContext);
   const isAvailable = disponibilite !== false && disponibilite !== 0;
+  const cartQuantity = panier.find((item) => item.id === Number(id))?.quantity || 0;
+  const parsedStock = Number.parseInt(stock, 10);
+  const availableStock = Number.isInteger(parsedStock) ? Math.max(0, parsedStock) : 1;
+  const hasReachedStock = cartQuantity >= availableStock;
   const addToPanier = () => {
-    const cartItem = { id, nom, prix, photo };
-    setPanier((currentPanier) => [...currentPanier, cartItem]);
+    addItem({ id, nom, prix, photo, stock: availableStock });
   };
 
   const dimensions = [hauteur, largeur, longueur].filter(Boolean).join(' x ');
@@ -94,11 +97,15 @@ const ProductDetails = ({
 
       <div className="mt-8 grid gap-3">
         <button
-          disabled={!isAvailable}
+          disabled={!isAvailable || hasReachedStock}
           className="w-full cursor-pointer bg-[#17100b] px-5 py-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#f8ecd4] transition hover:bg-[#4a2b18] disabled:cursor-not-allowed disabled:opacity-45"
           onClick={addToPanier}
         >
-          {isAvailable ? `Ajouter au panier — ${prix} €` : 'Produit indisponible'}
+          {!isAvailable
+            ? 'Produit indisponible'
+            : hasReachedStock
+              ? 'Stock maximum déjà dans le panier'
+              : `Ajouter au panier — ${prix} €`}
         </button>
         <button
           type="button"

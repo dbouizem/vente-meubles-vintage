@@ -15,7 +15,7 @@ const CustomBadge = styled(Badge)(() => ({
 }));
 
 function Navbar() {
-  const { panier } = useContext(CartContext);
+  const { itemCount } = useContext(CartContext);
   const isAdmin = Boolean(localStorage.getItem('adminToken'));
 
   return (
@@ -75,9 +75,9 @@ function Navbar() {
           <Link
             to="/panier"
             className="text-[#24160e] transition hover:text-[#7c2d12]"
-            aria-label={`Voir le panier, ${panier.length} article${panier.length > 1 ? 's' : ''}`}
+            aria-label={`Voir le panier, ${itemCount} article${itemCount > 1 ? 's' : ''}`}
           >
-            <CustomBadge badgeContent={panier.length}>
+            <CustomBadge badgeContent={itemCount}>
               <LocalMallIcon className="text-[24px]" />
             </CustomBadge>
           </Link>
