@@ -17,6 +17,8 @@ import ProtectedAccountRoute from './ProtectedAccountRoute';
 import Compte from '../pages/Compte/Compte';
 import MotDePasseOublie from '../pages/Compte/MotDePasseOublie';
 import ReinitialiserMotDePasse from '../pages/Compte/ReinitialiserMotDePasse';
+import InformationPage from '../pages/Informations/InformationPage';
+import { INFORMATION_PAGES } from '../pages/Informations/information-pages';
 
 function AppRouter() {
   return (
@@ -33,6 +35,9 @@ function AppRouter() {
         <Route path="/commande/:token" element={<Confirmation />} />
         <Route path="/commande/livraison" element={<Livraison />} />
         <Route path="/commande/paiement" element={<Paiement />} />
+        {Object.keys(INFORMATION_PAGES).map((path) => (
+          <Route key={path} path={path} element={<InformationPage />} />
+        ))}
       </Route>
 
       <Route element={<ProtectedAccountRoute />}>

@@ -1,3 +1,34 @@
+import { Link } from 'react-router-dom';
+
+const GROUPS = [
+  [
+    'Boutique',
+    [
+      ['Nouveautés', '/accueil#main'],
+      ['Assises', '/accueil#main'],
+      ['Tables', '/accueil#main'],
+      ['Rangement', '/accueil#main'],
+    ],
+  ],
+  [
+    'Informations',
+    [
+      ['Livraison & retours', '/livraison-retours'],
+      ['Paiement', '/paiement'],
+      ['FAQ', '/faq'],
+      ['Contact', '/contact'],
+    ],
+  ],
+  [
+    'L’atelier',
+    [
+      ['Notre histoire', '/notre-histoire'],
+      ['Engagements', '/engagements'],
+      ['Mon compte', '/compte'],
+    ],
+  ],
+];
+
 function Footer() {
   return (
     <footer className="border-t border-[#d8c5a7] bg-[#f8ecd4] px-4 py-10 text-[#24160e]">
@@ -10,32 +41,30 @@ function Footer() {
           </p>
           <div
             className="mt-5 flex gap-5 text-[10px] uppercase tracking-[0.14em] text-[#5f4a35]"
-            aria-label="Réseaux sociaux bientôt disponibles"
+            aria-label="Réseaux sociaux"
           >
             <span>Instagram</span>
             <span>Pinterest</span>
             <span>Facebook</span>
           </div>
         </div>
-
-        {[
-          ['Boutique', ['Nouveautés', 'Assises', 'Tables', 'Rangement']],
-          ['Informations', ['Livraison & retours', 'Paiement', 'FAQ', 'Contact']],
-          ['L’atelier', ['Notre histoire', 'Savoir-faire', 'Engagements']],
-        ].map(([title, links]) => (
+        {GROUPS.map(([title, links]) => (
           <div key={title}>
             <p className="mb-4 text-[11px] uppercase tracking-[0.16em]">{title}</p>
-            <p className="mb-3 text-[10px] text-[#7c2d12]">Pages bientôt disponibles</p>
             <ul className="space-y-2 text-sm text-[#5f4a35]">
-              {links.map((link) => (
-                <li key={link}>
-                  <span>{link}</span>
+              {links.map(([label, to]) => (
+                <li key={label}>
+                  <Link
+                    to={to}
+                    className="transition-colors hover:text-[#7c2d12] focus-visible:outline-[#7c2d12]"
+                  >
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
         ))}
-
         <div>
           <p className="mb-1 text-[11px] uppercase tracking-[0.16em]">Recevoir l’actualité</p>
           <p className="mb-3 text-[10px] text-[#7c2d12]">Bientôt disponible</p>
@@ -46,23 +75,32 @@ function Footer() {
               placeholder="Votre email"
               disabled
             />
-            <button type="button" disabled className="cursor-not-allowed px-2 text-xl">
+            <button
+              type="button"
+              disabled
+              className="cursor-not-allowed px-2 text-xl"
+              aria-label="Inscription bientôt disponible"
+            >
               →
             </button>
           </label>
         </div>
       </div>
-
-      <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-4 pt-5 text-[10px] uppercase tracking-[0.14em] text-[#5f4a35]">
+      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 pt-5 text-[10px] uppercase tracking-[0.14em] text-[#5f4a35] lg:flex-row">
         <p>© 2026 Atelier Héritage. Tous droits réservés.</p>
-        <div className="flex gap-6">
-          <span>Mentions légales — bientôt</span>
-          <span>CGV — bientôt</span>
-          <span>Confidentialité — bientôt</span>
-        </div>
+        <nav aria-label="Liens juridiques" className="flex flex-wrap gap-x-6 gap-y-3">
+          <Link to="/mentions-legales" className="hover:text-[#7c2d12]">
+            Mentions légales
+          </Link>
+          <Link to="/cgv" className="hover:text-[#7c2d12]">
+            CGV
+          </Link>
+          <Link to="/confidentialite" className="hover:text-[#7c2d12]">
+            Confidentialité
+          </Link>
+        </nav>
       </div>
     </footer>
   );
 }
-
 export default Footer;
